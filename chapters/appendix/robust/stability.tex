@@ -1,0 +1,27 @@
+\section{Stability of list-decoding algorithms}
+\label{app:stability}
+In this section we discuss two of the existing list-decodable mean estimation algorithms for identity-covariance Gaussian distributions and show that they also work when a $\wmin^2$-fraction of the inliers is adversarially removed.
+
+First, we consider the algorithm in Theorem 3.1 in~\cite{diakonikolas2018list}.
+A central object in their analysis is an ``$\alpha$-good multiset", which is a multiset of samples such that all are within distance $O(\sqrt{d})$ of each other and at least an $\alpha$-fraction of them come from a $(1-\Omega(\alpha))$-fraction of an i.i.d. set of samples from a Gaussian distribution $N(\mu, I_d)$.
+Then their algorithm essentially works as long as the input contains an $\alpha$-good multiset.
+For our case, after the removal of a $\wmin^2$-fraction of inliers, the input  essentially continues to contain a $(1-\wmin^2)\alpha$-good multiset, so the algorithm continues to work in our corruption model.
+
+Second, we consider the algorithm in Theorem 6.12 in~\cite{diakonikolas2023algorithmic}.
+The main distributional requirement of their algorithm is that $\mathbb{E}_{x,y \sim S^*} [p^2(x-y)] \leq 2\mathbb{E}_{g, h\sim N(0, I_d)}[p^2(g-h)]$ for all degree-$(t/2)$ polynomials $p$, where $S^*$ is the set of inliers.
+Concentration arguments give with high probability that $\mathbb{E}_{x,y \sim C^*} [p^2(x-y)] \leq 1.5\mathbb{E}_{g, h\sim N(0, I_d)}[p^2(g-h)]$.
+Furthermore, the distribution over $x, y \sim S^*$ can be seen as a $(1-\wmin^2)^2$-fraction of the distribution over $x, y \sim C^*$. 
+Then~\Cref{fact:stability}, which follows by standard probability calculations, also gives that any event under the former distribution can be bounded in terms of the second distribution:
+
+\begin{fact}
+\label{fact:stability}
+    For any event \(A\), 
+    \begin{equation}
+        \Pr_{x, y \sim S^{\ast}}(A) \leq \Pr_{x, y \sim C^{\ast}}(A) / (1 - \wmin^2)^2,
+    \end{equation}
+    where probabilities are taken over a uniform sample from \(S^{\ast}\) and \(C^{\ast}\) respectively.
+\end{fact}
+
+Overall we obtain
+\[\mathbb{E}_{x,y \sim S^*} [p^2(x-y)] \leq 1.5/(1-\wmin^2)^2\mathbb{E}_{g, h\sim N(0, I_d)}[p^2(g-h)],\]
+so for $\wmin$ small enough we have $\mathbb{E}_{x,y \sim S^*} [p^2(x-y)] \leq 2\mathbb{E}_{g, h\sim N(0, I_d)}[p^2(g-h)]$ and their algorithm continues to work in our corruption model.

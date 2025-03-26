@@ -1,0 +1,25 @@
+
+\emph{Continual observation} under \Gls{dp}~\citep{dwork2010boosting} is the process of releasing statistics continuously on a stream of data while preserving~\Gls{dp} over the stream. One of simplest problems in this setting is~\Gls{dp}-Continual counting where a counter \(\cC: \bc{0,1}^T\to\bN_{+}^T\) is used.
+We say \(\cC\) is deemed a \(\br{T,\alpha,\beta,\epsilon}\)-\Gls{dp} continual counter if \(\cC\) is \(\e\)-\Gls{dp} with respect to its input and with probability at least \(1-\beta\) satisfies
+\begin{equation}\label{eq:continual-counter}
+\max_{t\leq T} \abs{\cC\br{\tau}_t - \sum_{i\leq t}\tau_i}\leq \alpha.
+\end{equation}
+The proof of~\Cref{prop:continual} illustrates a straightforward method to convert~\Gls{dp} continual counters to~\Gls{dp} online learners for the \(\point_N\) hypothesis class, thereby transferring upper bounds from~\Gls{dp} continual counting to ~\Gls{dp} online learning. 
+More precisely, the reduction results in a~\Gls{dp} online learning algorithm for \(\point_N\) with an additional \(\sqrt{N}\) factor to the privacy parameter and number of mistakes bounded by \(\alpha\). 
+We believe this argument can also be extended to other finite classes by adjusting the mistake bound with an additional factor that depends on the size of the class.
+
+ % \begin{restatable}{proposition}{continual}
+ \begin{proposition}
+ \label{prop:continual}
+    For sufficiently small \(\epsilon,\beta\geq 0\) and any \(\alpha\geq 0\), let \(\cC\) be a \(\br{T,\alpha,\beta,\epsilon}\)-\Gls{dp} continual counter. 
+    Then, for any \(\delta>0\), an~\(\br{\epsilon',\delta}\)-\Gls{dp} online learner \(\cA\) for \(\point_N\) exists ensuring \(\bE\bs{\cM_{\alg}}\leq \alpha\) with \(\epsilon'=\epsilon\sqrt{3N\log\br{1 /\delta}}\) .
+    % \end{restatable}
+\end{proposition}
+
+Several works~(see~\citet{chan2011private}) have identified counters with \(\alpha=\bigO{\br{\log T}^{1.5}/\epsilon}\) which immediately implies a mistake bound that also scales as \(\poly\log \br{T}/\epsilon\) using~\Cref{prop:continual}. 
+Ignoring\footnote{We do not optimise this as this dependence is not the focus of this work, for this argument consider \(N=\bigO{1}\). 
+However, we believe it can be reduced using a~\Gls{dp} continual algorithm for~\textrm{MAXSUM}; see~\citet{jain2023price}} the dependence on~\(N\), this almost matches the lower bound proposed in~\Cref{thm:main-finite}. 
+On the other hand,~\citet{dwork2010differential} have shown a lower bound of \(\Omega\br{\frac{\log T}{\epsilon}}\) for \(\alpha\) for any pure~\Gls{dp}-continual counter. 
+However it is not clear how to convert the lower bound for~\Gls{dp}-continual learning to~\Gls{dp} online learning. 
+This is because 1)~\Cref{eq:continual-counter} asks for a uniformly~(across \(t\)) accurate counter whereas the mistake bound in~\Cref{eq:mistake-bound} is a global measure and 2) this lower bound is for pure~\Gls{dp} whereas our setting is approximate~\Gls{dp}. 
+We leave this question for the future work.

@@ -1,0 +1,194 @@
+% absolute value
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\Abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\bigabs}[1]{\big\lvert#1\big\rvert}
+\newcommand{\Bigabs}[1]{\Big\lvert#1\Big\rvert}
+% cardinality
+\newcommand{\card}[1]{\lvert#1\rvert}
+\newcommand{\Card}[1]{\left\lvert#1\right\rvert}
+\newcommand{\bigcard}[1]{\big\lvert#1\big\rvert}
+\newcommand{\Bigcard}[1]{\Big\lvert#1\Big\rvert}
+% set
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\Set}[1]{\left\{#1\right\}}
+\newcommand{\bigset}[1]{\big\{#1\big\}}
+\newcommand{\Bigset}[1]{\Big\{#1\Big\}}
+
+\newcommand{\norm}[1]{\lVert#1\rVert}
+\newcommand{\braket}[1]{\left\langle #1 \right\rangle}
+\newcommand{\suchthat}{\;\middle\vert\;}
+
+\newcommand{\Esymb}{\mathbb{E}}
+
+\DeclareMathOperator*{\E}{\Esymb}
+
+\DeclareMathOperator{\argmax}{argmax}
+\DeclareMathOperator{\poly}{poly}
+
+
+% number sets
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\N}{\mathbb N}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+
+
+\newcommand{\vcdimop}{\mathrm{VCdim}}
+\newcommand{\ldimop}{\mathrm{Ldim}}
+%DP operators
+\newcommand{\vcdim}[1]{\vcdimop\br{#1}}
+\newcommand{\ldim}[1]{\ldimop\br{#1}}
+\newcommand{\soa}{\operatorname{SOA}}
+\newcommand{\dpsoa}{\operatorname{DP-SOA}}
+% \newtheorem{assumption}{Assumption}
+\newcommand{\hyp}{\cH}
+
+%Game notation
+\newcommand{\point}
+{\mathrm{Point}}
+\renewcommand{\line}{\mathrm{Line}}
+\newcommand{\upoint}
+{\mathrm{UPoint}}
+\newcommand{\alg}
+{\cA}
+\newcommand{\regret}
+{M}
+\newcommand{\inpseq}{\bm{c}}
+
+\newcommand{\xeq}{x_{\mathrm{eq}}}
+\newcommand{\xdif}{x_{\mathrm{dif}}}
+\newcommand{\conc}[1]{#1\operatorname{-concentrated}}
+
+
+% {{{ alphabet }}}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cM}{\mathcal M}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cR}{\mathcal R}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cU}{\mathcal U}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cX}{\mathcal X}
+\newcommand{\cY}{\mathcal Y}
+\newcommand{\cZ}{\mathcal Z}
+
+% slanted lower/greater equal signs
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\le}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+\renewcommand{\ge}{\geqslant}
+% {{{ varepsilon }}}
+\let\epsilon=\varepsilon
+%%% setup/equations
+\numberwithin{equation}{section}
+
+\newcommand{\e}{\epsilon}
+\newcommand{\eps}{\epsilon}
+
+%% ROBUST MIXTURE LEARNING PAPER
+
+\newcommand{\wtilde}{\tilde{w}}
+\newcommand{\fracsymb}{c}
+\newcommand{\cuLDA}{\mathcal{A}_{\mathrm{aLD}}}
+\newcommand{\csLDA}{\mathcal{A}_{\mathrm{sLD}}}
+\newcommand{\csLD}{\mathrm{sLD}}
+\newcommand{\ckLDA}{\mathcal{A}_{\mathrm{kLD}}}
+\newcommand{\mustar}{\mu^*}
+\newcommand{\muhat}{\hat{\mu}}
+\newcommand{\alphahat}{\hat{\alpha}}
+\newcommand{\innerstage}{\operatorname{InnerStage}}
+
+\newcommand{\ds}{\gamma}
+\newcommand{\tth}{^{\mathrm{th}}}
+\newcommand{\amin}{\alpha_{\mathrm{low}}}
+\newcommand{\algmean}{\cA_{\textrm{mean}}}
+\newcommand{\erme}{\varepsilon_{\mathrm{rme}}}
+\newcommand{\ceil}[1]{\lceil #1 \rceil}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+\newcommand{\chck}{\mathrm{check}}
+\newcommand{\gd}{\text{good}}
+\newcommand{\wmin}{w_{\mathrm{low}}}
+\newcommand{\ld}{\mathrm{LD}}
+\newcommand{\mmid}{\mathrm{mid}}
+\newcommand{\rme}{\mathrm{RME}}
+\newcommand{\hLD}[1]{{#1}\operatorname{-hLD}}
+\newcommand{\cLD}{\operatorname{cor-aLD}}
+\newcommand{\sLD}{\mathrm{sLD}}
+\newcommand{\ckLD}{\operatorname{cor-kLD}}
+
+\newcommand{\setfirst}{T}
+\newcommand{\setsecond}{X}
+\newcommand{\data}{X}
+
+%% ONLINE DP PAPER
+\usepackage[acronym]{glossaries}
+\renewcommand*{\glstextformat}[1]{\textcolor{black}{#1}} 
+\newacronym{dp}{DP}{Differential Privacy}
+\newacronym{ml}{ML}{Machine Learning}
+\newacronym{pac}{PAC}{Probably Approximately Correct}
+\newacronym{erm}{ERM}{Empirical Risk Minimisation}
+\newacronym{dpsoa}{DP-SOA}{Differentially Private Standard Optimal Algorithm}
+\newacronym{soa}{SOA}{Standard Optimal Algorithm}
+\newacronym{ldim}{\(\ldimop\)}{Littlestone dimension}
+
+
+%% GREEDY PAPER
+
+\def\mvch{\texttt{MVCH}\xspace}
+\def\hs{\texttt{Hitting Set}\xspace}
+\def\ip{\texttt{IP}\xspace}
+\def\lp{\texttt{LP}\xspace}
+\def\csp{\texttt{CSP}\xspace}
+\def\mvc{\texttt{MVC}\xspace}
+\def\greedy{\texttt{Greedy}\xspace}
+\def\bgreedy{\texttt{BlockGreedy}\xspace}
+\def\valip{\text{val}\textsubscript{\ip}\xspace}
+\def\vallp{\text{val}\textsubscript{\lp}\xspace}
+\def\valgr{\text{\text{val}\textsubscript{\texttt{Gr}}}\xspace}
+\def\valbgr{\text{val}\textsubscript{\texttt{Alg}}\xspace}
+\def\dmax{d_{\mathtt{max}}}
+\def\edmax{\mathbb{E} \dmax}
+\def\x{{\boldsymbol x}}
+
+\def\X{{\boldsymbol X}}
+\def\A{{\boldsymbol A}}
+\def\x{{\boldsymbol x}}
+\def\c{{\boldsymbol c}}
+\def\b{{\boldsymbol b}}
+\def\w{{\boldsymbol w}}
+\def\z{{\boldsymbol z}}
+\def\y{{\boldsymbol y}}
+\def\u{{\boldsymbol u}}
+\def\v{{\boldsymbol v}}
+\def\V{{\boldsymbol V}}
+\def\V{{\boldsymbol A}}
+\def\I{{\boldsymbol I}}
+
+%% LOVASZ PAPER
+
+
+\newcommand{\ltn}{\vartheta}
+\DeclareFontFamily{U}{mathx}{}
+\DeclareFontShape{U}{mathx}{m}{n}{<-> mathx10}{}
+\DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
+\DeclareMathAccent{\wh}{0}{mathx}{"70}
+\DeclareMathAccent{\wc}{0}{mathx}{"71}
+\DeclareMathAccent{\wt}{0}{mathx}{"72}
+
+\DeclareMathOperator{\Tr}{Tr}

@@ -1,0 +1,109 @@
+\section{Lower bound for a non-concentrated algorithm}
+\label{app:uniform_lb}
+
+{\color{red} rewrite with new technique.}
+% Consider the problem of learning function class \(\point_3\), 
+% such that \(f^{\ast} \in \Set{f^{(1)}, f^{(2)}}\).
+% Let \(x^\ast\) be such that \(f^\ast = f^{(x^\ast)}\) and assume that the adversary only considers sequences consisting of \((x^\ast, 1)\) and \((3, 0)\). In this section, we show a lower bound for one special type of non-concentrated algorithm:~\emph{firing algorithms}. 
+
+% At each round \(t\), the algorithm computes \(p_t = p_t\br{\#\text{mistakes up until }t} \in [0, 1]\) with \(p_t(0) = 0\), and samples \(\xi_t \sim \mathrm{Bern}(p_t)\). If \(\xi_t = 1\), from this point on, the  algorithm always outputs the correct hypothesis. In this case, we say that \(\alg\)  has `fired' at step \(t\). Otherwise, it outputs \(f_t \sim \mathrm{Unif}\{f^{(1)}, f^{(2)}\}\). We call such learners \emph{uniform firing algorithms}.
+% Note that \(\alg\) never errs on points \((3, 0)\), since both \(f^{(1)}\) and \(f^{(2)}\) are equal to zero at \(x = 3\).
+% Essentially, we analyze a distinguishing tuple \((f^{(1)}, f^{(2)}, 3, x^{\ast})\).
+
+% \begin{proof}[of~\Cref{prop:firing-lb}]
+% WLOG, we assume \(\delta > 1/T^2\).
+% For the elements of the input sequence, we denote \(0 \coloneqq (3, 0)\) and \(1 \coloneqq (x^\ast, 1)\).
+% Similar to the proof of~\cref{thm:main-finite}, we proceed by creating sequences \(\tau_i\), with \(\tau_0 = (0, \ldots, 0)\) and \(\tau_i\) containing exactly \(i\) copies of \(1\).
+
+% Assume that there is a scalar sequence \((r_i)\) and a sequence of subset of events \((G_i)\), such that
+% \begin{enumerate}
+%     \item \(\Pr(G_i) \geq 1 - \bigO{i \delta} \geq 1/2\),
+%     \item \(\Pr(\alg(\tau_i)\text{ outputs only }f^\ast \text{ starting from }r_i \mid G_i) = \bigO{\delta}\).
+% \end{enumerate}
+% This implies that we can upper bound the probability that \(\alg\) outputs \(f^*\) for any \(t \leq r_i\) as follows (we denote \(\Pr_i (A) \coloneqq \Pr(A \mid G_i)\), \(F_i \coloneqq \Set{\alg \text{ 'fired' before } r_i}\), and for a subset of events \(A\), we denote its complement by \(\overline{A}\)):
+% \begin{equation}\label{eq:marginal}
+% \begin{aligned}
+%     \Pr(\alg(\tau_i)_t = f^\ast) & = \Pr_i(\alg(\tau_i)_t = f^\ast)\Pr(G_i) + \Pr(\alg(\tau_i)_t = f^\ast \mid \overline{G_i})\Pr(\overline{G_i}) \\
+%     & \leq \Pr_i(\alg(\tau_i)_t = f^\ast) + O(i \delta) \\
+%     &= O(i\delta) + \Pr_i(\alg(\tau_i)_t = f^\ast \mid F_i)\Pr_i(F_i) \\
+%     &\qquad + \Pr_i(\alg(\tau_i)_t = f^\ast \mid\overline{F_i})\Pr_i(\overline{F_i})  \\
+%     &\leq \Pr_i(\alg(\tau_i) \text{ `fired' before }r_i) + \frac{1}{2} + O(i\delta) \\
+%     &\leq \Pr_i(\alg(\tau_i)\text{ outputs only~}f^\ast\text{ starting from }r_i) + \frac{1}{2} + O(i\delta)\\
+%     &= \frac{1}{2} + O(i \delta).
+% \end{aligned}
+% \end{equation}
+% For \(i = O(1 / \delta)\), we obtain that \(\Pr(\alg(\tau_i)_t \neq f^*) = \Omega(1)\).
+% If \(\tau_i\) contains exactly \(i\) points \((x^\ast, 1)\) on the prefix \([1, r_i]\), then, by picking \(i = \Omega(\log T)\) (recall that \(\log T = O(1 / \delta))\) and summing the latter probabilities, we obtain that \(\E \bs{M_\alg} = \Omega(\log T)\).
+
+% We now construct sequences \((r_i), (G_i), (\tau_i)\), also including a scalar sequence \((l_i)\), such that \([l_i, r_i]\) are nested segments and \((r_i), (G_i)\) satisfy the aforementioned requirements. We proceed by induction. First, define \(l_0 = 1\), \(r_0 = T/2\), \(\tau_0 = (0, \ldots, 0)\), and \(G_0 = \Omega\), i.e., so that \(\Pr(G_0) = 1\). Note that \(\Pr(\alg(\tau_0)\text{ outputs only }f^\ast \text{ starting from }r_0) = 2^{-T/2} \leq \delta\).
+% Next, assume that we already defined \(l_i, r_i, G_i\).
+% We divide a segment \([l_i, r_i]\) into three parts \([l_i, lm_i], [lm_i, rm_i], [rm_i, r_i]\), with \(lm_i = l_i + (r_i - l_i) / 3\) and \(rm_i = l_i + 2(r_i - l_i) / 3\). We have the following decomposition:
+% \begin{equation}
+%     \begin{aligned}
+%         &\Pr_i(\alg(\tau_i)\text{ outputs only }f^\ast \text{ starting from }r_i) \\
+%         &\quad = \Pr_i(\alg(\tau_i)\text{ outputs only }f^\ast \text{ starting from }r_i \textbf{ and } \text{ outputs only }f^\ast \text{ starting from }[lm_i, rm_i]) \\
+%         &\qquad+\Pr_i(\alg(\tau_i)\text{ outputs only }f^\ast \text{ starting from }r_i \textbf{ and } \text{does not only output }f^\ast \text{ on }[lm_i, rm_i]).
+%     \end{aligned}
+% \end{equation}
+
+% As long as \(rm_i - lm_i \geq \sqrt{T}\), we obtain
+% \begin{equation}
+%     \begin{aligned}
+%         &\bP_i(\alg(\tau_i)\text{ outputs only }f^\ast \text{ on }[lm_i, rm_i]) \\
+%         &\quad = \bP_i(\alg(\tau_i)\text{ fires before }lm_i) + \sum_{t=1}^{rm_i - lm_i}2^{-t} \bP_i(\alg(\tau_i)\text{ fires on }lm_i+t) + 2^{-(lm_i - rm_i)}  \\
+%         &\quad \leq 2\bP_i(\alg(\tau_i)\text{ outputs only }f^\ast \text{ starting from }r_i) + 2^{-\sqrt{T}}.
+%     \end{aligned}
+% \end{equation}
+
+% We let \(\tau_{i+1} = \tau_i\), except that \((\tau_{i+1})_{l_i} = 1\). Then, using DP property we have that 
+% \begin{equation}
+% \begin{aligned}
+%     &\bP_i(\alg(\tau_{i+1})\text{ outputs only }f^\ast \text{ starting from }r_i) \\
+%     &\quad \leq \exp(\varepsilon) \bP_i(\alg(\tau_{i})\text{ outputs only }f^\ast \text{ starting from }r_i) + \delta / \Pr(G_i) \\
+%     &\quad \leq \exp(\varepsilon) \bP_i(\alg(\tau_{i})\text{ outputs only }f^\ast \text{ starting from }r_i) + 2\delta.
+% \end{aligned}
+% \end{equation}
+% Therefore, either
+% \begin{equation}
+% \begin{aligned}
+% &\Pr(\alg(\tau_{i+1})\text{ outputs only }f^\ast \text{ starting from }r_i \textbf{ and } \text{ outputs only }f^\ast \text{ on }[lm_i, rm_i])\\
+% &\quad \leq \frac{1}{2}(\exp(\varepsilon) \Pr(\alg(\tau_{i})\text{ outputs only }f^\ast \text{ starting from }r_i) + \delta),
+% \end{aligned}
+% \end{equation}
+% or 
+% \begin{equation}
+% \begin{aligned}
+% &\Pr(\alg(\tau_{i+1}\text{ outputs only }f^\ast \text{ starting from }r_i \textbf{ and } \text{does not only output }f^\ast \text{ on }[lm_i, rm_i])\\
+% &\quad \leq \frac{1}{2}(\exp(\varepsilon) \Pr(\alg(\tau_{i})\text{ outputs only }f^\ast \text{ starting from }r_i) + \delta).
+% \end{aligned}
+% \end{equation}
+% In the former case, we can reiterate with \(l_{i+1} = l_i + 1\), \(r_{i+1} = lm_i\), and \(G_{i+1} = G_i\), using that 
+% \begin{equation}
+%     \Pr(\alg(\tau_{i+1})\text{ outputs only }f^\ast \text{ starting from }lm_i) \leq \Pr(\alg(\tau_{i+1})\text{ outputs all ones on }[lm_i, rm_i]).
+% \end{equation}
+% In the latter case, we set \(G_{i+1} = G_i \cap \Set{\alg(\tau_{i+1})\text{ does not only output }f^\ast \text{ on }[lm_i, rm_i]}\).
+% Note that \(\Pr(G_{i+1}) = \Pr(G_i) \bP_i (\alg(\tau_{i+1})\text{ does not only output }f^\ast \text{ on }[lm_i, rm_i]) \geq 1 - O((i+1)\delta)\).
+% We reiterate with \(l_{i+1} = rm_i\) and \(r_{i+1} = r_i\). 
+
+% Altogether, as long as \(rm_i - lm_i \geq \sqrt{T}\), we can always maintain that 
+% \begin{enumerate}
+%     \item \(\Pr(G_{i+1}) \geq 1 - O(i \delta)\),
+%     \item \(\Pr(\alg(\tau_i)\text{ outputs only }f^\ast \text{ starting from }r_i \mid G_i) = O(\delta).\)
+% \end{enumerate}
+% We can therefore continue this process at least \(\Omega(\log T)\) times, which implies a large number of mistakes as discussed before.
+% \end{proof}
+
+% Proof of~\Cref{prop:firing-lb} resembles the proof of~\cref{thm:main-finite} with several important differences.
+% The main difficulty comes from the fact that by just looking at the output of the algorithm, it is impossible to say with certainty, whether it `fired' or not.
+% And we need to do this, in order to bound the marginal probability of outputting \(f^\ast\) (which is \(1/2\) if \(\alg\) did not fire and \(1\) if it fired), see~\cref{eq:marginal}.
+
+% To overcome this issue, instead of splitting the segment into two parts and reiterating in either left or right,
+% we split into three parts and reiterate in the first or the third.
+% Second segment plays a special role, to 'detect' whether algorithm fired or not.
+% From the properties of the algorithm, if the full segment is equal to all \(f^\ast\),
+% we can confidently say that algorithm fired before this segment.
+% Event \(G_i\) corresponds to a 'good' event, meaning that \(\alg\) did not fire and \emph{did not look like it fired}, i.e., in the middle segment there exist one output not equal to \(f^\ast\).
+
+% Finally, we would like to highlight that there is nothing specific about the choice \(\cD = \mathrm{Unif}(f^{(1)}, f^{(2)})\).
+% The main property we needed for the proof is that \[\Pr(\alg \text{ outputs all } f^\ast \text{ on a specific subsequence of large enough length }\mid \alg \text{ did not fire }) \leq \delta.\]
+% Therefore, we expect that similar technique works for other choices of \(\cD\), beyond a uniform distribution.

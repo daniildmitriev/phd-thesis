@@ -1,6 +1,9 @@
 % File encoding
 \usepackage[utf8]{inputenc}
 
+\usepackage[T1]{fontenc}    % Ensures proper font encoding
+\usepackage{textcomp}       % Additional text symbols
+
 % Languages
 \usepackage[main=english,ngerman]{babel}
 
@@ -19,6 +22,9 @@
   a5paper,%
 }{classicthesis}
 
+
+
+
 % Meta
 \input{preamble/meta}
 
@@ -29,12 +35,6 @@
 \newcounter{dummy}
 \newlength{\abcd}
 
-% Common abbreviations
-\newcommand{\ie}{i.\,e.\xspace}
-\newcommand{\Ie}{I.\,e.\xspace}
-\newcommand{\eg}{e.\,g.\xspace}
-\newcommand{\Eg}{E.\,g.\xspace}
-
 % Handy packages
 \usepackage{csquotes}  % smart quotes
 \usepackage[T1]{fontenc}
@@ -42,6 +42,14 @@
 \usepackage{textcomp}
 \usepackage{mparhack}
 \usepackage{relsize}
+
+% Common abbreviations
+\newcommand{\ie}{i.\,e.\xspace}
+\newcommand{\Ie}{I.\,e.\xspace}
+\newcommand{\eg}{e.\,g.\xspace}
+\newcommand{\Eg}{E.\,g.\xspace}
+
+
 
 % Biblatex
 \input{preamble/biblatex}
@@ -53,9 +61,9 @@
 
 % Math stuff
 \usepackage{amsmath}
-%\usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{isomath}
+
 
 % Figures, tables, and captions
 \usepackage{tabularx}
@@ -68,6 +76,17 @@
 \captionsetup{format=hang,font=small,labelfont={sc},margin=5pt}
 \usepackage{subcaption}
 \captionsetup[sub]{margin=0pt,font=small,labelfont={rm}}
+
+%ADDED BY ME
+\usepackage{amssymb}
+\usepackage{nicefrac}
+\usepackage{amsfonts}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\algnewcommand{\IfThen}[2]{% \IfThenElse{<if>}{<then>}{<else>}
+  \State \algorithmicif\ #1\ \algorithmicthen\ #2}
 
 % Blind text
 \usepackage{blindtext}
@@ -102,10 +121,10 @@
 % Graphics
 \usepackage{graphicx}
 \usepackage{rotating}
-\usepackage{tikz}
 \usepackage{pgfplots}
+\usepackage{fncychap}
 \pgfplotsset{compat=newest}
-\usetikzlibrary{shapes.geometric}
+\usepgfplotslibrary{fillbetween}
 
 % Circled numbers
 \newcommand*\circled[1]{
@@ -134,7 +153,10 @@
 \usepackage{acronym}
 
 % List items
-\usepackage{enumitem}
+\usepackage[shortlabels,inline]{enumitem}
+\newlist{condenum}{enumerate}{1} 
+\setlist[condenum]{label=(\roman*), ref=(\roman*)}
+\crefname{condenumi}{Assumption}{Assumptions}
 
 % Load classicthesis style
 \usepackage{scrhack}
@@ -252,3 +274,18 @@
 \clubpenalty = 10000
 \widowpenalty = 10000
 %\displaywidowpenalty = 10000
+
+\usepackage{bm}
+\usepackage{amsthm}
+\usepackage{mdframed}
+\usepackage{preamble/daniil_ltx}
+\input{preamble/macros.tex}
+\sloppy
+
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric}
+\usetikzlibrary{intersections, fillbetween}
+\usetikzlibrary{matrix}
+

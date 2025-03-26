@@ -1,0 +1,42 @@
+\section{Discussion}
+\label{sec:discussion}
+\subsection{Connection to~\Gls{dp} under continual observation}\label{sec:continual}
+\input{chapters/dp/content/continual}
+
+\subsection{Beyond concentration assumption}
+\label{sec:beyond_conc}
+\input{chapters/dp/content/firing}
+
+\subsection{Pure differentially private online learners}
+\input{chapters/dp/content/puredp}
+
+\subsection{Open problems}
+
+This work relies on assumptions about properties~(Concentrated Assumption in~\Cref{defn:beta-conc} or uniform firing Assumption in~\Cref{sec:beyond_conc}) of the learning algorithms to show a lower bound for any hypothesis class. On the other hand,~\citet{cohen2024lower} do not need any assumption on their algorithm but their result only holds for large \(\point\) classes~(and it cannot immediately be transferred to small \(\point\) classes, e.g. \(\point_3\)). To fully settle the problem of lower bounds for online~\Gls{dp} learners, the limitations of both this work and that of~\citet{cohen2024lower} need to be addressed. We propose the following conjecture which we believe is true.
+\begin{conjecture}[Lower bound for Approximate DP]
+\label{conj:approx-dp-lower}
+For any \(\e, \delta > 0\) and any \((\e, \delta)\)-\Gls{dp} learner \(\cA\) of \(\point_3\), there exists an adversary \(\cB\), such that \(\E \bs{M_{\cA}} = \Omega\br{\min\br{\frac{\log T / \delta}{\e}, 1 / \delta}}\).
+\end{conjecture}
+
+A straightforward implication of our main result is that the \(\log T\) lower bound also holds for pure~\Gls{dp} online learners under the same assumptions on the algorithm. In~\Cref{sec:continual}, we showed a generic reduction from~\Gls{dp} continual counters to~\Gls{dp} online learners for \(\point_N\) with regret \(\poly\log \br{T}\). This reduction can be extended to  pure~\Gls{dp} online learner by using basic composition in~\Cref{prop:continual}, with an additional cost of \(\sqrt{N}\). In~\Cref{conj-puredp-ub-lb}, we raise the question whether for small \(N\), the dependence on \(T\) can be lowered to \(\log T\) and shown to be tight.
+
+
+% \begin{conjecture}[Upper bound for Pure DP]\label{conj-puredp-ub}
+%     For any \(\e > 0\) there exists an \(\e\)-\Gls{dp} learner \(\cA\) of \(\point_3\), such that for any adversary \(\cB\), \(\E \bs{M_{\cA}} = O\br{\frac{\log T}{\e}}\).
+% \end{conjecture}
+
+
+% \begin{conjecture}[Lower bound for Pure DP]\label{conj-puredp-lb}
+%     For any \(\e > 0\) and 
+% \end{conjecture}
+
+\begin{conjecture}[Upper and lower bounds for Pure DP]\label{conj-puredp-ub-lb}
+    For any \(\e > 0\),\begin{enumerate}
+        \item \emph{Upper bound: } 
+        there exists  \(\e\)-\Gls{dp} learner of \(\point_3\), s.t. for any adversary, \(\E \bs{M} = O\br{\frac{\log T}{\e}}\).
+        \item \emph{Lower bound:} for any \(\e\)-\Gls{dp} learner of \(\point_3\), there exists an adversary, s.t. \(\E \bs{M} = \Omega\br{\frac{\log T}{\e}}\).
+    \end{enumerate} 
+\end{conjecture}
+
+Note that the lower bound part of~\Cref{conj-puredp-ub-lb} follows from~\Cref{conj:approx-dp-lower}, but can also be viewed through connection to the continual observation model. In the latter regime, an \(\Omega(\log T)\) lower bound was shown in~\citet{dwork2014algorithmic}.
+

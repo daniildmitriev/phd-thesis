@@ -1,0 +1,31 @@
+\paragraph{Gaussian case}
+
+\label{sec:comparison_prev_work}
+For Gaussian inlier distributions, LD-ME and RME base learners with guarantees for~\Cref{asm:algs} have already been developed in prior work. We can thus readily use them in the meta-algorithm to arrive at the following statement with the relative proportions defined in~\Cref{eq:rel_weights}.
+\begin{corollary}[Gaussian case]
+\label{cor:gaussian}
+  Let $d, k, \wmin$ and t be as in \cref{thm:informal}.
+    Let \(\cX\) be as in~\Cref{eq:gen_model} with \(D_i(\mu_i) = \cN(\mu_i, I_d)\) with \(\mu_i\)'s satisfying 
+    \(\norm{\mu_i - \mu_j} \gtrsim \sqrt{\log 1 / \wmin}\) for all $i \neq j \in [k]$. There exists an algorithm that for \(t = O(\log 1 / \wmin)\), given \(N =  \poly(d^t, (1 / \wmin)^t)\) i.i.d. samples from \(\cX\) and \(\wmin\), runs in \(\poly(N)\) time and outputs a list \(L\) such that with high probability \(\Card{L} = k + O(\varepsilon / \wmin)\) and, for all \(i \in [k]\), there exists \(\muhat \in L\) such that
+    \[\norm{\muhat - \mu_i} 
+    =  \bigO{\sqrt{\log 1 / \tilde w_i}}\,.
+    \]
+If the relative weight of the $i$-th cluster is large, i.e. \(\tilde \e_i \leq 0.001\), then the error is further bounded by  \[\norm{\muhat - \mu_i} = O\left(\tilde\e_i\sqrt{\log 1 / \tilde \e_i}\right).\] 
+\end{corollary}
+
+\begin{proof}
+    Theorem 6.12 from~\citep{diakonikolas2023algorithmic} provides an LD-ME algorithm \(\ckLDA\)  achieving error \(f(\alpha) \le O(\sqrt{t'} (1 / \alpha)^{1/t'})\) for all \(t'\le t\). The sample and time complexity scale as \(\poly(d^t, (1/\alpha)^t)\).
+    Also, Theorem 5.1 from~\citep{diakonikolas2019robust} provides a robust mean estimation algorithm \(\cA_{R}\) such that for a small enough constant fraction of outliers $\epsilon = 1-\alpha$ it achieves error \(g(\alpha) = O((1 - \alpha) \sqrt{\log 1 / (1 - \alpha)})\) with sample complexity \(\tilde \Omega(d / \varepsilon^2)\). 
+    Using these \(\ckLDA\) and \(\cA_R\), we recover the desired bounds. 
+\end{proof}
+
+\paragraph{Comparison with prior work} We now compare our result with the only previous method that can achieve guarantees in the LD-ML setting with unknown $w_i$. % that is list-decodable mean estimation.  
+As discussed in~\cite{diakonikolas2018list}, algorithms for the simple list-decoding model with $\alpha = \wmin$ 
+can be used for LD-ML by viewing a single mixture component as the ``ground truth''  distribution and effectively treating all other inlier components and original outliers as outliers.
+Besides requiring a much larger list size of \(O(1 / \wmin) \gg k+O(\epsilon/\wmin) \) and error \(O(\sqrt{\log 1 / \wmin})\), this approach has two drawbacks that manifest in the suboptimal guarantees: 1) 
+For larger clusters $i$ with $w_i \gg \wmin$, LD-ME only achieves an error $\bigO{\sqrt{\log 1 / \wmin}}$. Our result, even without separation assumption, achieves a sharper error bound \(\bigO{\sqrt{\log 1 / w_i}}\).
+2) When the mixture is separated, LD-ME cannot exploit the structure since it still models the data as \(\wmin \cN(\mu_i, I_d) + (1 - \wmin) Q\) for each $i$, so that the algorithm inevitably treats all other true components as outliers.
+This results in the error 
+$\bigO{\sqrt{\log 1 / \wmin}} \gg \bigO{\sqrt{\log 1/\wtilde_i}} = O(1)$ (when \(\e \sim w_i \ll 1\)).
+We refer to~\Cref{app:examples} for further illustrative examples.
+As a simple example, consider the uniform inlier mixture with \(\e = w_i = 1/(k + 1)\), where \(k\) is large. In this case, previous results have error guarantees \(O(\sqrt{\log k})\), while we obtain error \(O(1)\).

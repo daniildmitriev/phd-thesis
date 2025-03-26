@@ -1,0 +1,101 @@
+\section{Introduction}
+Estimating the mean of a distribution from empirical data is one of the most fundamental problems in statistics.
+The mean often serves as the primary summary statistic of the dataset or is the ultimate %of a 
+quantity of interest that is often not precisely measurable.
+In practical applications, data frequently originates from a mixture of multiple groups (also called subpopulations) and a natural goal is to estimate the distinct means of each group separately. 
+For example, we might like to use representative individuals to study how a complex decision or procedure would impact different subpopulations.
+In other applications, such as genetics~\cite{bickel2003robust} or astronomy~\cite{feigelson2012statistical} research, finding the means themselves
+can be a crucial first step towards scientific discovery.
+In both scenarios, the algorithm should output a list of estimates that are close to the unobservable true means. 
+
+
+However, in practice,
+the data may also contain outliers, for example due to measurement errors or abnormal events. 
+We would like to find good mean estimates for all inlier groups even 
+when the proportion  of such  \emph{additive adversarial contaminations} is larger than some smaller groups that we want to properly represent. %in the presence of a large proportion
+The central open question that motivates our work is thus:
+\begin{center}
+\textit{What is the cost of efficiently recovering small groups that may be outnumbered by outliers?}
+\end{center}
+
+More specifically, consider a scenario where the practitioner would like to recover the means of small but significant enough inlier groups which constitute at least $\wmin \in (0,1)$ proportion of the (corrupted) data.
+If $k$ is 
+the number of such inlier groups, for all $i\in [k]$, we then denote by $w_i\geq \wmin$ the unknown weight of the $i-$th group with mean $\mu_i$.
+Further, we use \(\e\) to refer to the
+proportion of additive contamination -- the data that comes from an unknown adversarial distribution. The goal is to estimate the unknown means $\mu_i$ for all $i \in [k]$.
+
+Existing works on robust mixture learning such as \cite{diakonikolas2018list,bakshi2022robustly}
+consider the problem when the fraction of additive adversarial outliers is smaller than the weight of the smallest subgroup, i.e. \(\e < \wmin\).
+However, for large outlier proportions where $\e \geq \wmin$, these algorithms are not guaranteed to recover small clusters with  \(w_i \leq \e\). 
+In this case, outliers can form additional spurious clusters
+that are indistinguishable 
+from small inlier groups. As a consequence, generating a list of size equal to the number of components would possibly lead to neglecting the means of small groups.
+In order to ensure that the output contains 
+a precise estimate for each of the small group means, 
+it is thus necessary  
+the estimation algorithm to provide a list whose size is strictly larger than the number of components.
+We call this paradigm \emph{list-decodable mixture learning} (LD-ML),
+following the footsteps of a long line of work on list-decodable learning (see \Cref{sec:prelims,sec:relatedwork}). 
+
+Specifically, the main challenge in LD-ML is to provide a \emph{short} list that contains good mean estimates for all inlier groups.
+We first note that there is a minimum list size the algorithm necessarily has to output to guarantee that all groups are recovered. For example, consider an outlier distribution that includes several copies of the smallest inlier group distribution with means spread out throughout the domain. Since inlier groups are indisntinguishable from spurious outlier ones, the shortest list that includes means of all inlier groups must be of size at least $|L| \geq k + \frac{\epsilon}{\min_i w_i}$. Here, $\frac{\epsilon}{\min_i w_i}$ can be interpreted as the minimal list-size overhead that is necessary due to "caring" about groups with weight smaller than $\epsilon$.
+The key question is hence how good the error guarantees of an LD-ML algorithm can be when the list size overhead stays close to $\frac{\epsilon}{\min w_i}$,
+while being agnostic to $w_i$ aside from the knowledge of $\wmin$.
+Furthermore, we are interested in \textit{computationally efficient} algorithms for LD-ML, especially when dealing with high-dimensional data.
+
+To the best of our knowledge, the only existing efficient algorithms that are guaranteed to recover inlier groups with weights \(w_i \leq \e\) are \emph{list-decodable mean estimation} (LD-ME) algorithms. 
+LD-ME algorithms model the data as a mixture of one inlier and outlier distribution with weights \(\alpha \leq 1/2\) and \(1 - \alpha\) respectively. Provided with the weight parameter \(\alpha\), they output a list that contains an estimate
+close to the inlier mean with high probability. However, for the LD-ML setting,
+the inlier weights $w_i$ are not known and we would have to use LD-ME algorithms
+with $\wmin$ as weight estimates for each group.
+This leads to suboptimal error in particular for 
+large groups, that hence (somewhat counter intuitively) would have to "pay" for
+the explicit constraint to recover small groups.
+Furthermore, even if LD-ME were provided with \(w_i\), by design it would treat inlier points from other components also as outliers, unnecessarily inflating the fraction of outliers to \(1 - w_i\)
+instead of \(\e\). 
+\paragraph{Contributions}
+In this paper, we propose an algorithm that (i) correctly estimates the weight of each component only given a lower bound and (ii) does not overestimate proportion of outliers when components are well-separated. 
+In particular, we construct a meta-algorithm that uses mean estimation algorithms as base learners that are designed to deal with adversarial corruptions.
+This meta-algorithm inherits guarantees from the base learner and any improvement of the latter translates to better results for LD-ML. For example, if the base learner runs in polynomial time, so does our meta-algorithm.
+Our approach of using the output of weak base learners to achieve better performance is reminiscent of the \emph{boosting} paradigm that is common in machine learning practice. 
+
+\begin{table}[tp]
+\begin{center}
+\setlength{\tabcolsep}{2.4pt}
+\begin{tabular}{l|l|l|l}
+    \toprule
+    \textbf{Type of inlier mixture} & \textbf{Best prior work} & \textbf{Ours} & \textbf{Inf.-theor.} \\[-0.5ex]
+     & & & \textbf{lower bound} \\ \hline
+    Large groups & \begin{tabular}{@{}c@{}}\rule{0pt}{3ex}\(\widetilde O(\e / w_i)\)\end{tabular} & \begin{tabular}{@{}c@{}}\rule{0pt}{3ex}\(\widetilde O(\e / w_i)\)\end{tabular} & \begin{tabular}{@{}c@{}}\rule{0pt}{3ex}\(\Omega(\e / w_i)\)\end{tabular} \\ 
+    Small groups & \begin{tabular}{@{}c@{}}\rule{0pt}{3ex}\(O\left(\sqrt{\log \frac{1}{\wmin}}\right)\)\end{tabular} & \begin{tabular}{@{}c@{}}\rule{0pt}{3ex}\(O\left(\sqrt{\log\frac{\e + w_i}{w_i}}\right)\)\end{tabular} & \begin{tabular}{@{}c@{}}\rule{0pt}{3ex}\(\Omega\left(\sqrt{\log\frac{\e + w_i}{w_i}}\right)\)\end{tabular} \\ 
+    Non-separated groups & \begin{tabular}{@{}c@{}}\rule{0pt}{3ex}\(O\left(\sqrt{\log\frac{1}{\wmin}}\right)\)\end{tabular} & \begin{tabular}{@{}c@{}}\rule{0pt}{3ex}\(O\left(\sqrt{\log\frac{1}{w_i}}\right)\)\end{tabular} & \begin{tabular}{@{}c@{}}\rule{0pt}{3ex}\(\Omega\left(\sqrt{\log\frac{1}{w_i}}\right)\)\end{tabular}\\
+    \bottomrule
+    \end{tabular}
+
+\caption{
+\small{For a mixture of Gaussian components \(\cN(\mu_i, I_d)\), we show upper and lower bounds for the \textbf{error of the $i$-component} given a output list $L$ (of the respective algorithm) \(\min_{\muhat \in L} \norm{\muhat - \mu_i}\).
+When the error doesn't depend on $i$, all means have the same error guarantee irrespective of their weight. 
+Note that depending on the type of inlier mixture, different methods in~\cite{diakonikolas2018list} are used as the 'best prior work': robust mixture learning for the first row and list-decodable mean estimation for the rest. 
+'Large groups' means that \(\forall j: \: \e \leq w_j\), 'small groups' means \(\exists j: \: \e \geq w_j\). 
+In both cases, mixture components are assumed to be separated. For lower bounds, see~\cite{diakonikolas2023algorithmic, regev2017learning}, and~Prop.~\ref{lemma:it_lb_ours}
+}
+}
+\label{tab:method_comparison_two}
+\end{center}
+\end{table}
+
+Our algorithm achieves significant improvements in error and list-size guarantees for multiple settings. For ease of comparison, we summarize error improvements for inlier Gaussian mixtures in~\Cref{tab:method_comparison_two}. 
+The main focus of our contributions is represented in the second row; that is the  setting where outliers outnumber some inlier groups with weight $w_j \leq \epsilon$
+and the inlier components are \emph{well-separated}, i.e., \(\norm{\mu_i - \mu_j} \gtrsim\)\footnote{We adopt the following standard notation: \(f \lesssim g\), \(f = O(g)\), and \(g = \Omega(f)\) mean that \(f \leq Cg\) for some universal constant \(C > 0\). \(\widetilde O\)-notation hides polylogarithmic terms.} \(\sqrt{\log \frac{1}{\wmin}}\), where \(\mu_i\)'s are the inlier component means.
+As we mentioned before, robust mixture learning algorithms, such as~\cite{bakshi2022robustly, ivkov2022list}, are not applicable here and the best error guarantees in prior work is achieved by an LD-ME algorithm, e.g. from~\cite{diakonikolas2018list}. While its error bounds are of order \(O(\sqrt{\log \frac{1}{\wmin}})\) for a list size of \(O(\frac{1}{\wmin})\), 
+our approach guarantees error \(O(\sqrt{\log \frac{\e}{w_i}})\)
+for a list size of \(k + O(\frac{\e}{\wmin})\).
+Remarkably, we obtain the same error guarantees as if an oracle would run LD-ME on each inlier group \emph{with the correct weight \(w_i\)} separately (with outliers).
+Hence, the only cost for recovering small groups is the increased list-size overhead of order \(O(\frac{\e}{\wmin})\).
+Further, a sub-routine in our meta-algorithm also obtains novel guarantees under \emph{no} separation assumption,
+as shown in the third row of~\Cref{tab:method_comparison_two}.
+This algorithm achieves the same error guarantees for similar list size as a base learner that knows 
+the correct weights of the inlier components.
+
+Based on a reduction argument from LD-ME to LD-ML, we also provide information-theoretic (IT) lower bounds for LD-ML. If the LD-ME base learners achieve the IT lower bound (possible for inlier Gaussian mixtures), so does our LD-ML algorithm. 
+In synthetic experiments, we implement our meta-algorithm with the LD-ME base learner from~\cite{diakonikolas2022clustering} and show clear improvements compared to the only prior method with guarantees, while being comparable or better than popular clustering methods such as k-means and DBSCAN for various attack models.

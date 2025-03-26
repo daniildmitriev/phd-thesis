@@ -1,0 +1,24 @@
+\section{Related work}
+\label{sec:relatedwork}
+
+\paragraph{List-decodable mean estimation} Inspired by the list-decoding paradigm that was first introduced for error-correcting codes for large error rates~\cite{elias1957list}, list-decodable mean estimation has become a popular approach for robustly learning the mean of a distribution when the majority of the samples are outliers. 
+A long line of work has proposed efficient algorithms with theoretical guarantees.
+These algorithms are either based on convex optimization \cite{charikar2017learning,kothari2018robust}, a filtering approach~\cite{diakonikolas2018list, diakonikolas2020list}, or low-dimensional projections \cite{diakonikolas2021list}.
+Near-linear time algorithms were obtained in~\cite{cherapanamjeri2020list} and~\cite{diakonikolas2022clustering}.
+The list-decoding paradigm is not only used for mean estimation but also other statistical inference problems.
+Examples include sparse mean estimation~\citep{diakonikolas2022list, zeng2022list}, linear regression~\cite{karmalkar2019list, raghavendra2020alist, diakonikolas2021statistical}, subspace recovery~\cite{bakshi2021list, raghavendra2020blist}, clustering~\citep{balcan2008discriminative}, stochastic block models and crowd sourcing~\cite{charikar2017learning, meister2018data}.
+
+
+\paragraph{Robust mean estimation and mixture learning}
+When the outliers constitute a minority,
+algorithms typically achieve significantly better error guarantees than in the list-decodable setting.
+Robust mean estimation algorithms output a single vector close to the mean of the inliers.
+In a variety of corruption models, efficient algorithms are known to achieve (nearly) optimal error under adversarial corruptions \cite{diakonikolas2019robust,lai2016agnostic,charikar2017learning,diakonikolas2017being,hopkins2018mixture,kothari2018robust}.
+
+Robust mixture learning tackles the model in~\Cref{eq:gen_model} with $\varepsilon \ll \min_i w_i$
+and aims to output exactly $k$ vectors with an accurate estimate for the population mean of each component \cite{diakonikolas2018list,hopkins2018mixture,kothari2018robust,bakshi2020outlier,liu2021settling,bakshi2022robustly,ivkov2022list}.
+These algorithms do not enjoy error guarantees for clusters with weights $w_i < \e$.
+To the best of our knowledge, our algorithm is the first to achieve non-trivial guarantees in this larger noise regime.
+
+\paragraph{Robust clustering}
+Robust clustering~\cite{garcia2010} also addresses the presence of small fractions of outliers in a similar spirit to robust mixture learning, conceptually implemented in the celebrated DBScan algorithm~\citep{ester1996density}. Assuming the output list size is large enough to capture possible outlier clusters, these methods may also be used to tackle list-decodable mixture learning - however, they do not come with an inherent procedure to determine the right choice of hyperparameters that ultimately output a list size that adapts to the problem. 

@@ -1,0 +1,59 @@
+\section{Proof of ~\Cref{lemma:it_lb_ours}}
+\label{app:lbs}
+
+We now prove lower bounds for the case of Gaussian distributions and distributions with \(t\)-th sub-Gaussian moments.
+
+\subsection{Case b): For the Gaussian inliers  }
+
+We first focus on the case when \(D_i(\mu_i) = \cN(\mu_i, I)\).
+
+The proof goes through an efficient reduction from the problem considered by~\Cref{prop:book_lb_gaus} to the problem solved by algorithm $\mathcal{A}$.
+\begin{proposition}[\cite{diakonikolas2023algorithmic}, Proposition 5.11]
+\label{prop:book_lb_gaus}
+    Let \(\cD\) be the class of identity covariance Gaussians on \(\R^d\) and let \(0 < \alpha \leq 1/2\). Then any list-decoding algorithm that learns the mean of an element of \(\cD\) with failure probability at most \(1/2\), given access to \((1 - \alpha)\)-additively corrupted samples, must either have error bound \(\beta = \Omega(\sqrt{\log 1 / \alpha})\) or return \(\min(2^{\Omega(d)}, (1/\alpha)^{w(1)})\) many hypotheses.
+\end{proposition}
+
+
+First, we describe the means of the components in the input distribution to algorithm $\mathcal{A}$.
+Let $\bar\mu_1, \ldots, \bar\mu_{k-1} \in \R^{d}$ be any set of $k-1$ points with pairwise separation larger than $2C\sqrt{\log1/\wmin}$.
+Then let $\mu_k = (\bar\mu, 0) \in \R^{d+1}$ and $\mu_i = (\bar\mu_i, 2C\sqrt{\log 1/\wmin} + 1) \in \R^{d+1}$ for all $i \in [k-1]$.
+Then $\mu_1, \ldots, \mu_k$ also have pairwise separation larger than $2C\sqrt{\log 1/\wmin}$.
+
+Then, given $n$ points $y_1, \ldots, y_n \in \R^d$ as in the input to the problem in~\Cref{prop:book_lb_gaus} (i.e. \((1-\alpha)\)-additively corrupted samples), we generate $n$ points that we give as input to algorithm $\mathcal{A}$ as follows: let $S = \{1, \ldots, n\}$, and then for each of the $n$ points, draw $i \sim \mathrm{Unif}\{1, \ldots, k\}$ and generate the point as follows:
+\begin{enumerate}
+    \item if $i \in [k-1]$, sample the point from $N(\mu_i, I_{d+1})$,
+    \item if $i = k$, sample $j \sim S$ uniformly at random, remove $j$ from $S$, sample $g \sim N(0, 1)$, and let the point be $(y_j, g) \in \R^{d+1}$.
+\end{enumerate}
+
+We note that this construction simulates an input sampled i.i.d. according to the mixture $\frac{1}{k} N(\mu_1, I_{d+1}) + \ldots + \frac{1}{k} N(\mu_{k-1}, I_{d+1}) + \frac{\alpha}{k} N(\mu_k, I_{d+1}) + \frac{1-\alpha}{k} Q'$ for some $Q'$.
+Then with success probability at least $1/2$ running $\mathcal{A}$ on this input with $\wmin = \frac{\alpha}{k}$ returns a list $L$ such that there exists $\muhat \in L$ with $\norm{\muhat - \mu_k} \leq \beta_k$.
+Note that this implies that $\norm{(\muhat)_{1:d} - \bar\mu} \leq \beta_k$.
+Finally, we create a pruned list $L'$ as follows: initialize $L' = L$ and then for each $i \in [k - 1]$ remove all $\muhat \in L'$ such that $\norm{\muhat - \mu_i} \leq C\sqrt{\log 1/\wmin}$.
+Then we return $L'$ as the output for the original problem in~\Cref{prop:book_lb_gaus}.
+
+Let us analyze now this output.
+The separation between the means ensures that any hypothesis $\muhat \in L$ that is $C\sqrt{\log1/\wmin}$-close to $\mu_k$ is not removed in the pruning. 
+Therefore $L'$ continues to contain a hypothesis $\muhat$ such that $\norm{(\hat\mu)_{1:d} - \bar\mu} \leq \beta_k$.
+Then, if $\beta_k \neq \Omega(\sqrt{\log 1/\alpha})$ and $|L'| < \min\{2^{\Omega(d)}, \left((w_k+\varepsilon) / w_k\right)^{\omega(1)}\}$, this reduction violates the lower bound of~\Cref{prop:book_lb_gaus}.
+Therefore we must have either $\beta_k = \Omega(\sqrt{\log 1/\alpha})$ or $|L'| \geq \min\{2^{\Omega(d)}, \left(1/\tilde{w}_k\right)^{\omega(1)}\}$.
+
+Finally, we show that these lower bounds on $\beta_k$ and $|L'|$ imply the desired lower bound for $\cA$. 
+Consider first the case: $\beta_k = \Omega(\sqrt{\log 1/\alpha})$.
+Note that in the input to algorithm $\mathcal{A}$ we have $\tilde{w}_k = \alpha$.
+Therefore $\beta_k = \Omega(\sqrt{\log 1/\alpha})$ corresponds to the desired lower bound in the lemma statement.
+Consider second the case: $|L'| \geq \min\{2^{\Omega(d)}, \left(1/\tilde{w}_k\right)^{\omega(1)}\}$.
+We note that, for each $i \in [k - 1]$, the original list $L$ must contain some $\muhat \in L$ such that $\norm{\muhat - \mu_i} \leq C\sqrt{\log1/\wmin}$.
+Furthermore, because the means $\mu_i$ have pairwise separation larger than $2C\sqrt{\log1/\wmin}$, the original list $L$ must contain at least $k-1$ means of this kind.
+However, all of these means are removed in the pruning procedure, so $|L| \geq k-1+|L'|$, so $|L| \geq k - 1 + \min\{2^{\Omega(d)}, \left(1/\tilde{w}_k\right)^{\omega(1)}\}$.
+This matches the desired lower bound in the lemma statement.
+(The choice to make the hidden mean the $k$-th mean was without loss of generality, as the distribution is invariant to permutations of the components.)
+
+\subsection{Case a): For distributions with \(t\)-th sub-Gaussian moments}
+The proof for the case when \(D_i(\mu_i)\) has sub-Gaussian \(t\)-th central moments employs the same reduction scheme, but reduces from~\Cref{prop:book_lb_bounded}. 
+\begin{proposition}[\cite{diakonikolas2023algorithmic}, Proposition 5.12]
+\label{prop:book_lb_bounded}
+    Let \(\cD\) be the class of distributions on \(\R^d\) with bounded \(t\)-th central moments for some positive even integer \(t\), and let \(0 < \alpha < 2^{-t - 1}\). Then any list-decoding algorithm that learns the mean of an element of \(\cD\) with failure probability at most \(1/2\), given access to \((1-\alpha)\)-additively corrupted samples, must either have error bound \(\beta = \Omega(\alpha^{-1/t})\) or return a list of at least \(d\) hypotheses. 
+\end{proposition}
+
+Furthermore, in~\cite{diakonikolas2018list}, formal evidence of computational hardness was obtained (see their Theorem 5.7, which gives a lower bound in the statistical query model introduced by~\cite{kearns1998efficient}) that suggests obtaining error $\Omega_t((1/\wtilde_s)^{1/t})$ requires running time at least $d^{\Omega(t)}$.
+This was proved for Gaussian inliers and the running time matches ours up to a constant in the exponent.

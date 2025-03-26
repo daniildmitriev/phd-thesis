@@ -1,0 +1,361 @@
+\section{Inner and outer stage algorithms and guarantees}
+
+Our meta-algorithm~\Cref{alg:full_alg} assumes black-box access to a list-decodable mean estimation algorithm and a robust mean estimation algorithm for sub-Gaussian (up to the $t\tth$ moment) distributions.
+From these we obtain stronger mean estimation algorithms when the fraction of outliers is unknown, and finally stronger algorithms for learning separated mixtures when the fraction of outliers can be arbitrarily large.
+Our algorithm achieves guarantees with polynomial runtime and sample complexity if the black-box learners achieve the guarantees for their corresponding mean estimation setting. In this section we discuss the corruption model and inner and out stage of the meta-algorithm in detail and prove properties needed for the proof of the main~\Cref{thm:informal}.
+\subsection{Detailed setting}
+
+In order to achieve these guarantees, our black-box algorithms need to work
+under a model in which an adversary is allowed to remove a small fraction of the inliers and to add arbitrarily many outliers.
+In our proofs, for simplicity of exposition, we require the algorithms to have mean estimation guarantees for a small adversarially removed fraction of $\wmin^2$. Formally, the corruption model as defined as follows.
+
+\begin{definition}[Corruption model]
+\label{def:cor-model}
+Let $d \in \N_+$, and $\alpha \in [\wmin, 1]$. 
+Let $D$ be a $d$-dimensional distribution.
+An input of size $n$ according to our corruption model is generated as follows:
+\begin{itemize}
+    \item 
+    Draw a set  $C^*$ of $n_1= \ceil{\alpha n}$ i.i.d. samples from the distribution $D$.
+    \item An adversary is allowed to arbitrarily remove
+    $\floor{\wmin^2n_1}$ samples from $C^*$. We refer to the resulting set as $S^*$ with size $n_2 = |S^*|$.
+    \item An adversary is allowed to add $n-n_2$ arbitrary points to $S^*$. We refer to the resulting set as $S_{\textrm{adv}}$ with size  $n_3 = |S_{\textrm{adv}}|$.% be its size.
+    \item If $n_3 < n$, pad $S_{\textrm{adv}}$ with $n-n_3$ arbitrary points and call the resulting set $S$.
+    \item Return $S$.
+\end{itemize}
+We call \(\ckLD\) the model when \(\wmin\) and \(\alpha\) are given to the algorithm and \(\cLD\) the model when \(\wmin\) and lower bound \(\amin \geq \wmin\) are given to the algorithm, such that \(\alpha \geq \amin\). Note that \(\alpha\) is \textbf{not} provided in \(\cLD\) model.
+\end{definition}
+
+Note that in~\Cref{def:cor-model} $|S| = n$ and $S^*$ constitutes at least an $\alpha(1-\wmin^2)$-fraction of $S$.
+
+
+\subsection{Inner stage algorithm and guarantees}
+
+The algorithm consists of three steps: (1) Constructing a list of hypotheses, (2) Filtering the hypotheses, and (3) Improving the hypotheses if $\alpha \geq 1-\epsilon_{\rme}$. For convenience, we restate the \(\innerstage\) algorithm introduced in the main text.
+
+\begin{algorithm}[t]
+\caption{\(\innerstage\)}
+    \begin{algorithmic}[1]
+        \Require Samples \(S = \Set{x_1, \ldots, x_{n}}, \amin \in [\wmin, 1]\), 
+    $\ckLDA$, and $\cA_{R}$.
+        \Ensure List \(L\).
+        \State \(\amin \gets \min(1/100, \amin)\)
+        \State \(M \gets \emptyset\)
+        \For{$\hat\alpha \in \Set{\amin, 2\amin, \ldots, \floor{1/(3\amin)}\amin}$} 
+        \State run $\ckLDA$ on $S$ with fraction of inliers set to $\hat\alpha$
+        \State add the pair $(\muhat, \hat\alpha)$ to $M$ for each output \(\muhat\)
+        \EndFor
+        \State Let \(L\) be the output of~\(\operatorname{ListFilter}\)~(\Cref{alg:constructing_output}) run on \(S\), \(\amin\), and $M$
+        \For{$(\muhat, \hat\alpha) \in L$}
+        \State replace $\muhat$ by the output of~\(\operatorname{ImproveWithRME}\)~(\Cref{alg:improve_rme}) run on $S$, $\muhat$, $\tau = 40\psi_t(\hat\alpha)+4f(\hat\alpha)$, and $\cA_{R}$
+        \EndFor
+    \State \Return \(L\)
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[t]
+\caption{\(\operatorname{ListFilter}\)}
+\label{alg:constructing_output}
+    \begin{algorithmic}[1]
+        \Require Samples \(S = \Set{x_1, \ldots, x_{n}}, \amin \in [\wmin, 1/100]\), and
+    \(M = \Set{(\muhat_1, \hat\alpha_1), \ldots, (\muhat_m, \hat \alpha_m)}\)
+    \Ensure List \(L\)
+    \State define $\beta(\alpha) = 10 \psi_t(\alpha) + f(\alpha)$
+    \State let \(v_{ij}\) be a unit vector in the direction of \(\muhat_i - \muhat_j\) for \(\muhat_i \neq \muhat_j \in \Set{\muhat, \text{ for }(\muhat, \hat \alpha) \in M}\)
+    \State \(J \gets \emptyset\)
+    \For {\((\muhat_i, \hat \alpha_i) \in M\) in decreasing order of \(\hat \alpha_i\)}
+    \If {exists \(j \in J\), such that \(\norm{\muhat_i - \muhat_j} \leq 4\beta(\hat\alpha_i)\)} {\textbf{continue}}
+    \EndIf
+    \State \(T_i \gets \bigcap_{j \in J}\{x \in S, \text{ s.t. } \abs{v_{ij}^{\top}(x - \muhat_i)} \leq \beta(\hat\alpha_i)\}\).
+    \If {\(\Card{T_i} < 0.9\hat\alpha_i n\)} remove  \((\muhat_i, \hat\alpha_i)\) from \(M\) and \textbf{continue}
+    \EndIf
+    \State add \(i\) to \(J\)
+    \For {\(j \in J \setminus \Set{i}\)}
+    \State  \(T_j \gets T_j \bigcap \Set{x \in S, \text{ s.t. } \abs{v_{ij}^{\top}(x - \muhat_j)} \leq \beta(\hat\alpha_i)}\)
+    \If {\(\Card{T_j} < 0.9\hat\alpha_j n\)}: 
+    \State remove  \((\muhat_j, \hat\alpha_j)\) from \(M\) 
+    \State rerun~\(\operatorname{ListFilter}\)~(\Cref{alg:constructing_output})~with the new \(M\)
+    \EndIf
+    \EndFor
+    \EndFor
+    \State \Return \(\Set{(\muhat_i, \hat \alpha_i), \text{ for } i \in J}\)
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[t]
+\caption{\(\operatorname{ImproveWithRME}\)}
+\label{alg:improve_rme}
+    \begin{algorithmic}[1]
+        \Require Samples \(S = \Set{x_1, \ldots, x_{n}}\), vector $\muhat$, threshold $\tau$, and $\cA_R$
+        \Ensure A vector $\tilde\mu \in \R^d$
+        \State \(\tilde\beta \gets \tau\)
+        \State let $\tilde{\alpha}$ be the smallest value in $[1-\epsilon_{\rme}, 1]$ that satisfies $g(\tilde\alpha) \leq \tilde{\beta}/2$. If none exists, \Return $\hat\mu$
+        \State $\tilde\mu \gets \muhat$ and let $\mu_{\rme}$ be the output of $\cA_R$ run on $S$ with inlier fraction set to $\tilde\alpha$.
+        \While{$\norm{\tilde\mu - \mu_{\rme}} \leq 3\tilde\beta/2$}
+        \State $\tilde\mu \gets \mu_{\rme}$
+        \State $\tilde{\beta} \gets g(\tilde\alpha)$
+        \State let $\tilde{\alpha}'$ be the smallest in $[\tilde\alpha + \wmin^2, 1]$ such that $g(\tilde\alpha') \leq \tilde{\beta}/2$. If none exists, \textbf{break}
+        \State $\tilde\alpha \gets \tilde\alpha'$
+        \State let $\mu_{\rme}$ be the output of $\cA_R$ on $S$ with inlier fraction set to $\tilde\alpha$
+        \EndWhile
+    \State \Return \(\tilde \mu\)
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{theorem}[Inner stage guarantees]
+\label{thm:inner_stage_guarantees}
+Let $d \in \N_+$, $\wmin \in (0, 10^{-4}]$, $\wmin \leq \amin \leq \alpha \leq 1$, and $t$ be an even integer.
+Let $D(\mu^*)$ be a $d$-dimensional distribution with mean $\mu^* \in \R^d$ and sub-Gaussian $t$-th central moments.
+
+Consider the \(\cLD\) corruption model in~\Cref{def:cor-model} with parameters $d$, $\wmin$, $\alpha$ and distribution $D = D(\mu^*)$.
+Let \(\ckLDA\) and \(\cA_R\) satisfy~\Cref{asm:algs} with high success probability (see~\Cref{rem:succ_prob}).
+
+Then \(\innerstage\)~(\Cref{alg:first_stage_high_level}), given an input of ${\poly(d, 1/\wmin) \cdot (N_{LD}(\wmin)+N_R(\wmin))}$ samples from the \(\cLD\) corruption model, and access to the parameters $d$, $\wmin$, $\amin$, and $t$, runs in time ${\poly(d, 1/\wmin) \cdot (T_{LD}(\wmin) + T_R(\wmin))}$ 
+and outputs a list $L$ of size ${|L| \leq 1 + O((1-\alpha)/\amin)}$ such that, with probability $1-\wmin^{O(1)}$,
+\begin{enumerate}
+    \item There exists \(\muhat \in L\) such that 
+    \[\norm{\muhat-\mu^{\ast}} \leq O(\psi_t(\alpha/4) + f(\alpha/4)).\]
+    \item If \(\alpha \geq 1-\epsilon_{\rme}\), then there exists \(\muhat \in L\) such that
+    \[\norm{\muhat-\mu^{\ast}} \leq O(g(\alpha - \wmin^2)).\]
+\end{enumerate}
+\end{theorem}
+Proof of~\Cref{thm:inner_stage_guarantees} can be found in~\Cref{sec:inner_stage_appendix}.
+\begin{remark}
+\label{rem:succ_prob}
+For any \(r \in \N\), we can increase probabilities of success of \(\ckLDA\) and \(\cA_R\) from \(1/2\) to \(1 - 2^{-r}\) in the following way: we increase number of samples by a factor of \(r\), randomly split $S$ into $r$ subsets of equal size, apply $\ckLDA$ and $\cA_R$ to these subsets and concatenate their outputs. In the proofs we assume that the success probabilities are $1-\wmin^C$ for large enough constant $C$. This increases the size of the list returned by $\ckLDA$, the number of samples, and the running time by a factor $O(\log(1/\wmin))$. In particular, we assume that the size of the list returned by $\ckLDA$ is much smaller than the inverse 
+failure probability.
+\end{remark}
+\begin{remark}
+\label{rem:alpha_smaller_amin}
+    In the execution of the meta-algorithm, it may happen that~\Cref{alg:first_stage_high_level} is run on set \(T\) with \emph{almost no} inliers, i.e., \(\alpha < \amin\). We note that from the analysis (see~\Cref{sec:inner_stage_appendix}, or~\cite{diakonikolas2018list}, Proposition B.1), we always have upper bound \(\Card{L} = O(1 / \amin)\).
+\end{remark}
+
+An immediate consequence of~\Cref{thm:inner_stage_guarantees} are the following guarantees of directly applying~\Cref{alg:first_stage_high_level} to the mixture learning case with no separation.
+Here we present upper bounds for~\Cref{alg:first_stage_high_level}, when no separation assumptions are imposed.
+
+\begin{corollary}[]
+    \label{thm:no-sep-technical}
+Let $d, k \in \N_+$, $\wmin \in (0, 10^{-4}]$, and $t$ be an even integer. 
+For all $i = 1, \ldots, k$, let $D_i(\mu_i)$ be a $d$-dimensional distribution with mean $\mu_i \in \R^d$ and sub-Gaussian $t$-th central moments.
+Let $\epsilon > 0$ and, for all $i = 1, \ldots, k$, let $w_i \in [\wmin, 1]$, such that $\sum_{i=1}^k w_i + \epsilon = 1$.
+Let $\cX$ be the $d$-dimensional mixture distribution 
+\[\cX = \sum_{i=1}^k w_i D_i(\mu_i) + \varepsilon Q,\]
+where $Q$ is an unknown adversarial distribution that can depend on all the other parameters. Let \(\ckLDA\) and \(\cA_R\) satisfy~\Cref{asm:algs}.
+
+Then there exists an algorithm that, given ${\poly(d, 1/\wmin) \cdot (N_{LD}(\wmin) + N_R(\wmin))}$ i.i.d. samples from $\cX$, and given also $d$, $k$, $\wmin$, and $t$, runs in time ${\poly(d, 1/\wmin) \cdot (T_{LD}(\wmin) + T_R(\wmin))}$ and outputs a list \(L\) of size \(\Card{L} = O(1 / \wmin)\), such that, with probability at least \(1 - \wmin^{O(1)}\):
+\begin{enumerate}
+    \item For each $i \in [k]$, there exists $\hat\mu \in L$ such that
+    \[\norm{\muhat - \mu_i} \leq O(\psi_t(w_i/4)+f(w_i/4)).\]
+    \item For each $i \in [k]$, if $w_i \geq 1-\epsilon_{\rme}$, then there exists $\hat\mu \in L$ such that
+    \[\norm{\muhat - \mu_i} \leq O(g(w_i -\wmin^2)).\]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+    Proof follows by applying~\Cref{thm:inner_stage_guarantees} to \(\cX\) with \(\amin = \wmin\) and treating each component as a corresponding inlier distribution with \(\alpha = w_i\). This gives error upper bound for all inlier components, furthermore, since \(\amin = \wmin\), list size can be bounded as \(\Card{L} \leq 1 + O((1 - \alpha) / \amin) = O(1 / \wmin)\).
+\end{proof}
+
+\subsection{Outer stage algorithm and guarantees}
+\label{sec:outer_stage_formulated}
+In the outer stage, presented in~\Cref{alg:second_stage_pruning}, we make use of the list-decodable mean estimation algorithm in~\Cref{thm:inner_stage_guarantees} in order to solve list-decodable mixture estimation with separated means. We now present results on the outer stage algorithm. 
+For ease of notation, when it's clear from the context, we drop the indices and refer to elements $\mu_j \in M$ for some $j\in [|M|]$ as $\mu$ and their corresponding sets $S_j^{(1)}, S_j^{(2)}$, as defined in lines 6--7 in~\Cref{alg:second_stage_pruning}, as $S^{(1)}, S^{(2)}$. 
+Further, for \(i \in [k]\), let \(C_i^*\) denote the set of points corresponding to the \(i\)-th inlier component, also called the $i$-th inlier cluster.
+
+\begin{algorithm}[t]
+\caption{\(\operatorname{OuterStage}\)}
+\label{alg:second_stage_pruning}
+    \begin{algorithmic}[1]
+        \Require Samples $S = \Set{x_1, \ldots, x_{n}}$, \(\wmin\), \(\csLDA\)
+        \Ensure Collection of sets \(\cT\)
+        \State run~\(\csLDA\) on $S$ with $\alpha=\wmin$ and let $M=\{\mu_1,\dots,\mu_{|M|}\}$ be the returned list
+        \State let \(v_{ij}\) be a unit vector in the direction of \(\mu_i - \mu_j\) for \(i \neq j \in [|M|]\)
+        \State $\cT \gets \emptyset$ and $R \gets \{1, \ldots, |M|\}$
+        \While {$R \neq \emptyset$}
+            \For {all $i \in R$}
+                \State $S_{i}^{(1)} \gets \bigcap_{j \in [|M|], j \neq i}\Set{x \in S \text{, s.t. } \abs{v_{ij}^{\top}(x - \mu_i)} \leq \ds+\ds'}$
+                \State $S_{i}^{(2)} \gets \bigcap_{j \in [|M|], j \neq i}\Set{x \in S \text{, s.t. } \abs{v_{ij}^{\top}(x - \mu_i)} \leq  3\ds + 3\ds'}$
+            \EndFor
+            \State remove all $i \in R$ for which $|S_i^{(1)}| \leq 100 \wmin^4 n$
+            \If {$R = \emptyset$} \textbf{break}
+            \EndIf
+            \If {there exists $i \in R$ such that $|S_i^{(2)}| \leq 2|S_i^{(1)}|$}
+                \State select the $i \in R$ with $|S_i^{(2)}| \leq 2|S_i^{(1)}|$ for which $|S_i^{(1)}|$ is largest
+                \State \(\cT \gets \cT \cup \Set{S_i^{(2)}}\)
+                \State $S \gets S \setminus S_i^{(1)}$
+                \State $R \gets R \setminus \{i\}$
+            \Else
+                \State \(\cT \gets \cT \cup \{S\}\)
+                \State \textbf{break}
+            \EndIf
+        \EndWhile
+        \State \Return \(\cT\)
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{theorem}[Outer stage guarantees, beginning of execution]
+    \label{thm:outer-stage-init-guarantees}
+    Let \(S\) consist of \(n\) i.i.d. samples from \(\cX\) as in the statement of~\Cref{thm:main-technical}. 
+    Run~\(\operatorname{OuterStage}\)~(\Cref{alg:second_stage_pruning})~on \(S\) and consider the first iteration of the while-loop and for each $\mu \in M$, denote the corresponding sets as $S^{(1)}, S^{(2)}$. 
+    Then, with probability at least \(1 - \wmin^{O(1)}\), we have that
+    \begin{enumerate}[label=(\roman*),ref={\theassumption~(\roman*)}]
+        \item \label{item:M_small} the list $M$ that \(\csLDA\) outputs has size \(\Card{M} \leq 2 / \wmin\), 
+        \item \label{item:outer_stage_large_S_mi} for each \(i \in [k]\), there exists \(m_i \in [\Card{M}]\)
+        such that \(\Card{S_{m_i}^{(1)} \cap C_i^*} \geq (1 - \frac{\wmin^2}{2}) \Card{C_i^*}\),
+        \item \label{item:first_iter_small_or_large} for each \(i \in [k]\) and \( \mu \in M\), we have $\Card{S^{(1)} \cap C^*_i} < \wmin^4 \Card{C_i^*}$ or $\Card{S^{(2)} \cap C_i^*} \geq (1-\frac{\wmin^2}{2}) \Card{C_i^*}$,
+        \item \label{item:outer_stage_S_mi_no_others} for each \(i \in [k]\) and \( \mu \in M\) such that $\Card{S^{(2)} \cap C^*_i} \geq \wmin^4 \Card{C^*_i}$, we have  \(\sum_{i' \in [k] \setminus \Set{i}}\Card{S^{(2)} \cap C^*_{i'}} \leq \wmin^4 n\),
+        \item \label{item:outer_stage_S_mi_nonitersect} for \(i \neq i' \in [k]\) and for \(j, j' \in [\Card{M}]\), if $|S_j^{(2)} \cap C^*_i| \geq \wmin^4|C^*_i|$ and $|S_{j'}^{(2)} \cap C^*_{i'}| \geq \wmin^4 |C^*_{i'}|$, then $S_j^{(2)} \cap S_{j'}^{(2)} = \emptyset$.
+    \end{enumerate}
+\end{theorem}
+
+In words,~\Cref{thm:outer-stage-init-guarantees} (ii) states that \emph{at initialization}, \(\operatorname{OuterStage}\) represents each inlier cluster well, i.e., for each $i$, the \(i\)-th cluster is almost entirely contained in some set \(S^{(1)}_{j}\) for some $j\in[|M|]$. Next, (iii) states that either \(S^{(1)}_j\) intersects negligibly some true component, or \(S^{(2)}_j\) contains almost entirely the same component. Further, (iv) and (v) state that sets that sufficiently intersect with some true component
+must be separated from other components and each other.
+
+We now introduce some notation to present the next theorem that establishes further guarantees for the algorithm output during execution.  For \(\cT\), a collection of sets that is the output of~\Cref{alg:second_stage_pruning}, we define
+\begin{equation}
+\label{eq:set-G-def}
+G \coloneqq \Set{i \in [k] \text{, such that there exists } T = S_j^{(2)} \in \cT \text{ with } \Card{S_{j}^{(1)} \cap C^*_i} \geq \wmin^4 \Card{C^*_i} \text{, for some }j}. 
+\end{equation}
+In words, it is the set of inlier components for which a corresponding set with "sufficiently many" points from the $i$-th component was added to $\cT$.
+It may happen that for a given index \(i \in G\), several \(j \in [\Card{M}]\) satisfy \(S_j^{(2)} \in \cT\) and \(\Card{S_{j}^{(1)} \cap C^*_i} \geq \wmin^4 \Card{C^*_i}\). We define \(g_i \in [\Card{M}]\) to denote the index of the \emph{first} such set \(S_{g_i}^{(2)}\) added to \(\cT\). 
+
+Further, we define \(U_i \coloneqq (C^*_i \cap S^{(2)}_{g_i}) \setminus S^{(1)}_{g_i}\) to be the set of inlier points from the \(i\)-th component, which were \emph{not} removed from $S$ at the iteration corresponding to \(g_i\). Let \(U \coloneqq \cup_{i \in G} U_i\) denote the union of such `left-over' inlier points.
+
+\begin{theorem}[Outer stage guarantees, during execution]
+\label{thm:outer_stage_guarantees}
+Let \(S\) consist of \(n\) i.i.d. samples from \(\cX\) as in the statement of~\Cref{thm:main-technical}. Run~\(\operatorname{OuterStage}\)~(\Cref{alg:second_stage_pruning})~on \(S\) and consider the moment when the sets \(S_i^{(2)}\) are added to \(\cT\).
+     We have that, with probability at least \(1 - \wmin^{O(1)}\), all of the following are true: 
+     \begin{enumerate}[label=(\roman*),ref={\theassumption~(\roman*)}]
+             \item \label{item:outer_stage_U_small}\(\Card{U} \leq (2\e + O(\wmin^2))n\),
+        \item \label{item:outer_stage_S_gi} for \(i \in G\), we have that \(\Card{S_{g_i}^{(2)} \cap C^*_i} \geq (1 - \frac{\wmin^2}{2} - O(\wmin^3)) \Card{C^*_i} \geq (1 - \wmin^2) w_i n\),
+
+        \item \label{item:outer_stage_not_S_gi_small}for \(j \in [\Card{M}] \setminus \{g_i\, |\, i \in G\}\) 
+        , either \(\Card{S_j^{(2)}} \leq O(\wmin^2) n\), or at least half of the samples in \(S_j^{(1)}\) are either adversarial samples or lie in \(U\), 
+        \item \label{item:outer_stage_else}
+        if when the else statement is triggered,
+        $|S| \geq 0.1 \wmin n$, then at least a $0.4$-fraction of the samples in $S$ are adversarial, or equivalently, $\Card{S} \leq 2.5 \epsilon n$.
+     \end{enumerate}
+\end{theorem}
+Note that the else statement of \(\operatorname{OuterStage}\) can only be triggered once, at the end of the execution.
+In words,~\Cref{thm:outer_stage_guarantees} (i) states that, for \(i \in G\), samples from \(i\)-th cluster that remained in \(S\) after \(S_{g_i}^{(1)}\) was removed, constitute a small (comparable with \(\e\)) fraction. Further, (ii) states that the sets \emph{added to} \(\cT\), corresponding to \(i \in G\), almost entirely contain \(C_i^*\). Finally, (iii) describes the sets that do not correspond to any \(g_i, i \in G\). These sets must either be small, or contain a significant amount of outlier points in the neighborhood.
+The proofs of~\Cref{thm:outer-stage-init-guarantees,thm:outer_stage_guarantees} can be found in~\Cref{sec:outer-stage}.
+
+\section{Proof of~\Cref{thm:informal}}
+\label{sec:main_result_appendix}
+
+In this section, we state and prove a refined version of our main result,~\Cref{thm:main-technical}, from which the statement of~\Cref{thm:informal} directly follows.
+
+\subsection{General theorem statement}
+\label{sec:fulltheorem}
+We define 
+
+\begin{equation}
+\label{eq:psifunction}
+    \psi_t(\alpha) = \begin{cases}
+    \sqrt{t}(1/\alpha)^{1/t} & \text{ if } t \leq 2 \log 1/\alpha,\\
+    \sqrt{2e \log 1/\alpha} & \text{ else},
+\end{cases}
+\end{equation}
+which captures a tail decay of a distribution with sub-Gaussian \(t\)-th central moments: \(\Pr_{x \sim \cD} \left(\braket{x - \mu, v}^t  \geq \psi_t(\alpha) \right) \lesssim \alpha \).
+
+We now state our main result for list-decodable mixture learning. Recall that \(\e_{\rme}\) is defined in~\Cref{asm:algs}.
+
+\begin{theorem}[Main mixture model result]
+    \label{thm:main-technical}
+Let $d, k \in \N_+$, $\wmin \in (0, 10^{-4}]$, and $t$ be an even integer. 
+For all $i = 1, \ldots, k$, let $D_i(\mu_i)$ be a $d$-dimensional distribution with mean $\mu_i \in \R^d$ and sub-Gaussian $t$-th central moments.  
+Let $\epsilon > 0$ and, for all $i = 1, \ldots, k$, let $w_i \in [\wmin, 1]$, such that $\sum_{i=1}^k w_i + \epsilon = 1$.
+Let $\cX$ be the $d$-dimensional mixture distribution 
+\[\cX = \sum_{i=1}^k w_i D_i(\mu_i) + \varepsilon Q,\]
+where $Q$ is an unknown adversarial distribution that can depend on all the other parameters. Let \(\ckLDA\) and \(\cA_R\) satisfy~\Cref{asm:algs}.
+Further, suppose that $\norm{\mu_i - \mu_j} \geq 200\psi_t(\wmin^4) + 200f(\wmin)$ for all $i \neq j \in [k]$.
+
+Then there exists an algorithm~(\Cref{alg:full_alg})~that, given ${\poly(d, 1/\wmin) \cdot (N_{LD}(\wmin) + N_R(\wmin))}$ i.i.d. samples from $\cX$, and given also $d$, $k$, $\wmin$, and $t$, runs in time ${\poly(d, 1/\wmin) \cdot (T_{LD}(\wmin) + T_R(\wmin))}$ and with probability at least $1-\wmin^{O(1)}$ outputs a list $L$ of size ${|L| \leq k + O(\epsilon/\wmin)}$ such that, for each \(i \in [k]\), there exists \(\muhat \in L\) such that:
+    \[\norm{\muhat - \mu_i} \leq O(\psi_t(\tilde{w}_i/10)+f(\tilde{w}_i/10)), \qquad \text{where} \quad \tilde w_i = w_i / (w_i + \e + \wmin^2).\]
+If the relative weight of the \(i\)-th inlier cluster is large, i.e., 
+ $\tilde{w}_i \geq 1-\epsilon_{\rme} + 2\wmin^2$, then there exists $\hat\mu \in L$ such that
+    \[\norm{\muhat - \mu_i} \leq O(g(\tilde{w}_i - 3\wmin^2)).\]
+\end{theorem}
+
+Further, we assume $\wmin \in (0, 1/10000]$, since this simplifies some of the proofs. We note that in a mixture with $k$ components we necessarily have $\wmin \leq 1/k$. Furthermore, when \(\wmin \in (1/10000, 1/2]\), then we obtain the same result by replacing \(\wmin\) with \(\wmin / 5000\) throughout the statements and the proof. This would only affect both list size and error guarantees by at most a multiplicative constant, which is absorbed in the Big-O notation.
+
+\begin{proof}[Proof of~\Cref{thm:informal}]
+Proof follows directly from~\Cref{thm:main-technical}, by noticing that~\Cref{asm:well-behaved} allows to replace \(f(\tilde w_i / 10)\) by \(C f(\tilde w_i)\) and \(g(\tilde w_i - 3 \wmin^2)\) by \(C g(\tilde w_i)\) for some constant \(C > 0\) large enough.
+\end{proof}
+
+\subsection{Proof of~\Cref{thm:main-technical} }
+We now show how to use the results on the inner and outer stage,~\Cref{thm:inner_stage_guarantees} and~\Cref{thm:outer_stage_guarantees} respectively,
+to arrive at the guarantees for the full algorithm~\Cref{alg:full_alg} in~\Cref{thm:main-technical}.
+For simplicity of the exposition, we split the proof of~\Cref{thm:main-technical} into two separate parts, proving that (i) the output list contains an estimate with small error and that (ii) the size of the output list is small.
+In what follows we condition on the event $E'$ from the proof of~\Cref{thm:outer_stage_guarantees}.
+
+\paragraph{(i) Proof of error statement}
+
+We now prove that, conditioned on the event $E$, the list \(L\) output by~\Cref{alg:full_alg}  for each \(i \in [k]\) contains  an estimate \(\muhat \in L\), such that,
+\begin{enumerate}[(1)]
+    \item $\norm{\muhat - \mu_i} \leq O(\psi_t(\tilde{w_i} / 10)+f(\tilde{w_i} / 10))$,
+    \item if $\tilde{w_i} \geq 1-\epsilon_{\rme} + 2\wmin^2$, then $\norm{\muhat - \mu_i} \leq O(g(\tilde{w_i} - 3\wmin^2))$.
+\end{enumerate}
+We start by showing that list-decoding error guarantees as in (1) are achievable for all inlier clusters and proceed by improving the error to (2) with \textrm{RME} base learner. Recall that \(G\) is as defined in~\Cref{eq:set-G-def}.
+
+\emph{Proof of (1)}
+We now show how the output of the base learner and filtering procedure lead to the error in (1).
+Fix \(i \in [k]\).  Recall that \(C_i\) denotes the set of \(w_i n\) points from \(i\)-th inlier component with mean \(\mu_i\).
+
+If \(i \in G\), then on event $E$,
+we have 
+\(\Card{S_{g_i}^{(2)} \cap C^*_i} \geq (1 - \wmin^2) w_i n\) by~Theorem~\ref{item:outer_stage_S_gi}, \(\sum_{j \neq i}\Card{S_{g_i}^{(2)} \cap C^*_j} \leq \wmin^4 n\) by~Theorem~\ref{item:outer_stage_S_mi_no_others}, and that the total number of adversarial points is at most \((\e + \wmin^4)n\). 
+
+Therefore, the fraction of points from \(C^*_i\) in \(S_{g_i}^{(2)}\) is at least
+\(
+\frac{(1 - \wmin^2) w_i }{w_i + \e + \wmin^3},
+\)
+which implies \(\alpha \geq \tilde w_i\) as in~\Cref{def:cor-model}.
+Then, by~\Cref{thm:inner_stage_guarantees}, the \(\innerstage\) algorithm applied to \(T\) leads to error $\norm{\muhat - \mu_i} \leq O(\psi_t(\tilde{w_i}/4 )+f(\tilde{w_i}/4))$. 
+Otherwise, if $i \not \in G$, when the \(\operatorname{OuterStage}\) algorithm 
+reaches the else statement, $S$ contains at least $(1-O(\wmin^3)) |C^*_i|$ samples from $C^*_i$. Indeed, since \(i \notin G\), each time we remove points from \(S\), we remove at most \(\wmin^4 n\) points from \(C^*_i\). By~Theorem~\ref{item:M_small}, we do at most \(O(1 / \wmin)\) removals, so when the \(\operatorname{OuterStage}\) algorithm reaches the else statement, \(S\) contains at least \((1 - O(\wmin^3))\Card{C^*_i}\) samples from \(C^*_i\).
+
+We showed that samples from $C^*_i$ make up at least a $(1-\wmin^2)w_i n/|S|$ fraction of $S$. 
+Based on this fact we can then use~Theorem~\ref{item:outer_stage_else} and the assumption on the range of $\wmin$ to conclude that  $|S| \leq 2.5 \epsilon n$ and that the fraction of inliers is at least $(1-\wmin^2)w_i/(2.5 \epsilon)$. 
+Therefore, $S$ can be seen as containing samples from the corruption model \(\cLD\) with 
+$\alpha$ at least $w_i/(2.5 \epsilon) \geq w_i/(2.5 (w_i+\epsilon))$. Since \(S\) is added to \(\cT\) in the else statement, applying~\(\innerstage\) yields the error bound as in (1).\\
+
+\emph{Proof of (2):}
+Next, we prove that for all inlier components $i$ with large weight, i.e., such that 
+$w_i/(w_i+\epsilon) \geq 1 - \epsilon_{\rme}$, there exists a set  \(T \in \cT\) that consists of samples from the corruption model \(\cLD\) with $\alpha \geq w_i/(w_i+\epsilon)-2\wmin^2$.
+Then, running \(\innerstage\), in particular the RME base learner, results in the error bound as in (2) by~\Cref{thm:inner_stage_guarantees}~(ii).
+If \(i \in G\), in the previous paragraph we showed that there exists \(T \in \cT\), such that the corresponding \(\alpha \geq \frac{w_i}{w_i + \e + \wmin^3} \geq \frac{w_i}{w_i + \e} - 2\wmin^2\). 
+We now prove by contradiction that the case \(i \notin G\) does not occur.
+Now assume \(i \notin G\) so that as we argued before
+when the else statement is triggered, $S$ contains at least $(1-O(\wmin^3)) |C^*_i|$ samples from $C^*_i$.
+By~Theorem~\ref{item:outer_stage_large_S_mi}, 
+for some \(m_i \in [\Card{M}]\), we have that $|S_{m_i}^{(1)} \cap C^*_i| \geq (1-\wmin^2/2-O(\wmin^3))|C^*_i|$ and by~Theorem~\ref{item:outer_stage_S_mi_no_others}, $S_{m_i}^{(2)}$ contains at most $\wmin^{4}n$ samples from other true clusters.
+Then, since $|S_{m_i}^{(2)}| > 2|S_{m_i}^{(1)}|$, we have that $|S_{m_i}^{(2)}|$ contains at least 
+\[(1-\wmin^2-O(\wmin^3))|C^*_i|-\wmin^4n \geq (1-1.5\wmin^2)|C^*_i|\] 
+adversarial samples.
+Therefore, $\epsilon \geq (1-1.5\wmin^2)|C^*_i|/n$, and using that $|C^*_i| \geq w_i n-\wmin^{10}n$, we have $\epsilon \geq (1-1.5\wmin^2)w_i - \wmin^{10}$.
+However, this contradicts $w_i / (w_i+\epsilon) \geq 1-\epsilon_{\rme}$ unless $\epsilon_{\rme} \geq 1/2-2\wmin^2$, which is prohibited by the assumptions in~\Cref{thm:main-technical}. Therefore whenever $w_i/(w_i+\epsilon) \geq 1 - \epsilon_{\rme}$ we are in the case $i \in G$.
+
+\paragraph{(ii) Proof of small list size}
+We now prove that on the set $E$, 
+we have that $\Card{L} \leq k+O(\epsilon/ \wmin)$.
+Here, we need to carefully analyze iterations in the while loop where an inlier component is "selected" for the first time in order to obtain a tight list size bound. Recall that \(g_i\) corresponds to the index in \(R\) that is first selected for the \(i\)-th inlier cluster. \\
+
+\emph{First selection of a component:}
+    For any \(i \in [k]\), if \(i \in G\), then~Theorem~\ref{item:outer_stage_S_gi} implies that running~\(\innerstage\) on \(S_{g_i}^{(2)}\) produces a list of size at most $1+O((|S_{g_i}^{(2)} \setminus C_i^*|)/(\wmin n))$.
+Then, over all $i \in G$, these sets $S_{g_i}^{(2)}$ contribute to the list size $\Card{L}$ at most $k + \bigO{\sum_{i =1}^k |S_{g_i}^{(2)} \setminus C_i^*| / (\wmin n)}$.
+Furthermore, by~Theorem~\ref{item:outer_stage_S_mi_nonitersect}, all these sets $S_{g_i}^{(2)}$ are disjoint and each of them contains at most $\wmin^{4}n$ samples from other true clusters.
+Therefore $\sum_{i =1}^k |S_{g_i}^{(2)} \setminus C_i^*| \leq \epsilon n + O(\wmin^3) n$.
+Then the contribution to $\Card{L}$ of all these \(S_i\)'s corresponding to true clusters is at most $k + \bigO{(\epsilon + \wmin^3)/\wmin}$.
+Note that if $\epsilon \leq \wmin^3$ and $\wmin$ is small enough,~\Cref{alg:first_stage_high_level} actually produces a list of size $1$ in each run considered above, so the contribution is exactly $k$; otherwise we can bound the contribution by $k+O(\epsilon/\wmin)$. \\
+
+\emph{Samples left over from a component:}
+Next, all inlier samples that were not removed, i.e., constituting \(U\), can be considered outlier points for the future iterations, which, by~Theorem~\ref{item:outer_stage_U_small},  only increases the outlier fraction to \(\tilde \e = 3\e + O(\wmin^2)\).
+For the same reason as above, without loss of generality, we can consider $\epsilon > \wmin^2$ since otherwise, the corresponding list size overhead (for small enough $\wmin^2$) would again amount to zero.\\
+
+\emph{Clusters of adversarial samples:}
+For iterations where a set \(S_j^{(2)}\) was added to the final list, which does not correspond to some \(g_i, i \in G\),~Theorem~\ref{item:outer_stage_not_S_gi_small}, states that either (i) at least half of the samples in \(S_j^{(2)}\)  were adversarial, or (ii) the cardinality of the set on which~\Cref{alg:first_stage_high_level} was executed
+is small. In both cases the set \(S_j^{(2)}\) contributes at most \(O(\e / \wmin)\) to the final list size \(\Card{L}\).\\
+
+\emph{List size in the else statement:}
+Finally, when the algorithm reaches the else statement, as argued in the first part, by~Theorem~\ref{item:outer_stage_else}, at that iteration \(\Card{S} \leq O(\e) n\). Since~\Cref{alg:first_stage_high_level} always produces a list of size bounded by $O(\Card{S}/(\wmin n))$ (see~\Cref{rem:alpha_smaller_amin}), the contribution to $\Card{L}$ at this iteration is bounded by $O(\epsilon/\wmin)$.
+
+Overall, we obtain the desired bound on $|L|$ of $k + O(\epsilon/\wmin)$.

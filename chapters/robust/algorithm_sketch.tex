@@ -1,0 +1,143 @@
+\section{Algorithm sketch}
+\label{sec:proof_sketch}
+
+We now sketch our meta-algorithm specialized to the case of separated Gaussian components $\cN(\mu_i,I_d)$ and provide intuition for how it achieves the guarantees in~\Cref{cor:gaussian}.
+In this section, we only discuss how to obtain an error of $O(\sqrt{\log 1/\tilde{w}_i})$ for each mean when  %assume that 
+\(\e \gtrsim \min_i w_i\).
+We refer to~\cref{sec:inner_stage_appendix} for how to achieve the refined error guarantee of $O(\tilde{\e}_i\sqrt{\log 1/\tilde{\e}_i})$ when $\tilde{\e}_i$ is small.
+
+As discussed in \cref{sec:comparison_prev_work}, running an out-of-the-box LD-ME algorithm for the sLD problem on our input with parameter $\alpha = \wmin$ would give sub-optimal guarantees.
+In contrast, our two-stage~\Cref{alg:full_alg}, equipped with the appropriate $\ckLD$ and $\rme$ base learners as depicted in \Cref{fig:alg_diagram}, obtains for each component an error guarantee that is as good as if we had access to the samples \textit{only} from this component and from the outliers. 
+We now give more details about the outer stage,~\Cref{alg:first_stage_techniques}, and inner stage,~\Cref{alg:first_stage_high_level}, and describe on a high-level how they contribute to a short output list with optimal error bound in~\cref{cor:gaussian} for large outlier fractions. 
+
+
+\begin{algorithm}[t]
+\caption{\(\operatorname{FullAlgorithm}\)}
+    \label{alg:full_alg}
+    \begin{algorithmic}[1]
+    \Require Samples $S = \Set{x_1, \ldots, x_{n}}$, \(\wmin\), algorithms $\ckLDA$, and $\cA_{R}$.
+    \Ensure List \(L\).
+    \State Run~\(\operatorname{OuterStage}\)~(\Cref{alg:second_stage_pruning})~on \(S\) and let \(\cT\) be the returned list.
+    \State \(L \gets \emptyset\).
+    \For{\(T \in \cT\)}
+        \State Run~\(\innerstage\)~(\Cref{alg:first_stage_high_level})~on \(T\) with \(\amin = \wmin \cdot \frac{n}{\Card{T}}\).
+        \State Add the elements of the returned list to \(L\).
+    \EndFor
+    \State \Return \(L\).
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[t]
+\caption{Outer stage, informal (see~\Cref{alg:second_stage_pruning})}\label{alg:first_stage_techniques}
+    \begin{algorithmic}[1]
+        \Require $\data$, $\wmin$, \(\Delta\), and \(\csLD\) algorithm \(\csLDA\).
+        \Ensure Collection of sets $\cT$.
+    \State \(L \gets (\muhat_1, \ldots, \muhat_M) \coloneqq \csLDA(\data)\) with \(\wmin\);
+    \While{\(L \neq \emptyset\)}
+    \For{\(\muhat \in L\)}
+    \State compute for \textit{an appropriate distance function $d$} \[S_{\muhat}^{(1)} = \Set{x \in \data \suchthat d(x,\muhat)\leq \Delta}, \quad {S_{\muhat}^{(2)} = \Set{x \in \data \suchthat d(x,\muhat)\leq 3\Delta}}\]
+    \EndFor
+    \If{for all $\muhat$, $\card{S_{\muhat}^{(2)}} > 2 \card{S_{\muhat}^{(1)}}$} add $\data$ to $\cT$ and update $L \leftarrow \emptyset$
+    \Else {} 
+    \State $\tilde{\mu} \gets \argmax_{\card{S_{\muhat}^{(2)}} \leq 2 \card{S_{\muhat}^{(1)}}} \card{S_{\muhat}^{(1)}}$
+    \State add $S_{\tilde{\mu}}^{(2)}$ to $\cT$
+    \State $\data \gets \data \setminus S_{\tilde{\mu}}^{(1)}$
+    \EndIf
+    \EndWhile
+\State \Return \(\cT\)
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[t]
+\caption{\(\innerstage\)}
+\label{alg:first_stage_high_level}
+    \begin{algorithmic}[1]
+        \Require Samples \(S = \Set{x_1, \ldots, x_{n}}, \amin \in [\wmin, 1]\), 
+    $\ckLDA$, and $\cA_{R}$.
+        \Ensure List \(L\).
+        \State \(\amin \gets \min(1/100, \amin)\)
+        \State \(M \gets \emptyset\)
+        \For{$\hat\alpha \in \Set{\amin, 2\amin, \ldots, \floor{1/(3\amin)}\amin}$} 
+        \State run $\ckLDA$ on $S$ with fraction of inliers set to $\hat\alpha$
+        \State add the pair $(\muhat, \hat\alpha)$ to $M$ for each output \(\muhat\)
+        \EndFor
+        \State Let \(L\) be the output of~\(\operatorname{ListFilter}\)~(\Cref{alg:constructing_output}) run on \(S\), \(\amin\), and $M$
+        \For{$(\muhat, \hat\alpha) \in L$}
+        \State replace $\muhat$ by the output of~\(\operatorname{ImproveWithRME}\)~(\Cref{alg:improve_rme}) run on $S$, $\muhat$, $\tau = 40\psi_t(\hat\alpha)+4f(\hat\alpha)$, and $\cA_{R}$
+        \EndFor
+    \State \Return \(L\)
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{Inner stage: list-decodable mean estimation with unknown inlier fraction}
+\label{sec:inner-stage}
+
+We now describe how to use a black-box $\ckLD$ algorithm to obtain a list-decoding algorithm $\cuLDA$ for the $\cLD$ mean-estimation setting with access only to $\amin \leq \alpha$.
+\(\cuLDA\) is used in the proof of~\Cref{thm:no-sep-technical}  and plays a crucial role (see~\Cref{fig:alg_diagram}) in our meta-algorithm. In particular, it deals with the unknown weight of the inlier distribution in each set returned by the outer stage.
+Note that 
+estimating $\alpha$ from the input samples is impossible by nature. Indeed, we cannot distinguish between potential outlier clusters of arbitrary proportion $\leq 1-\alpha$ and the inlier component.
+Underestimating the size of a large component would inevitably lead to a suboptimal error guarantee.
+We now show how  to overcome this challenge and achieve an error guarantee
+\(O(\sqrt{\log 1 / \alpha})\) for a list size \(1 + O((1 - \alpha) / \amin)\) for the $\cLD$ setting. Here we only outline our algorithm and refer to~\cref{sec:inner_stage_appendix} for the details.
+
+\Cref{alg:first_stage_high_level} first produces a large list of estimates corresponding to many potential values of $\alpha$ and then prunes it while maintaining a good estimate in the list.
+In particular, for each $\alphahat \in A \coloneqq \set{\amin,2\amin, \ldots,\lfloor 1/(3\amin) \rfloor \amin}$, we run \(\ckLDA\) with parameter $\alphahat$ to obtain a list of means.
+We append $\alphahat$ to each mean in the list and obtain a list of pairs $(\muhat,\alphahat)$.
+We concatenate these lists of pairs for all $\alphahat$ and obtain a list $L$ of size $O(1 / \amin^2)$.
+By design, one element of $A$ is close to the true $\alpha$,
+so the list $L$ contains at least one $\muhat$ that is $O(\sqrt{\log 1/\alpha})$-close ---  the error guarantee that we aim for --- and there is indeed at least an \(\alpha\)-fraction of samples near \(\muhat\).
+We call such a hypothesis ``nearby".
+
+Finally, we prune this concatenated list by verifying for each \(\muhat\) whether there is indeed an \(\alphahat\)-fraction of samples ``not too far" from it.
+This is similar to pruning procedures with known $\alpha$ proposed in prior work (see Proposition B.1 in~\cite{diakonikolas2018list}).
+Our procedure
+(i) never discards a ``nearby" hypothesis, and outputs a list where (ii) every hypothesis contains a sufficient number of points close to it and (iii) all hypotheses are separated.
+Property (i) implies that the final error is \(O(\sqrt{\log 1 / \alpha})\) and properties (ii) and (iii) imply list size bound \(1 + O((1 - \alpha) / \amin)\). Note that when $\alpha < \amin$, the list size can be simply upper bounded by $O(1/\amin)$, see~\Cref{rem:alpha_smaller_amin}.
+
+\subsection{Two-stage meta-algorithm}
+\label{sec:optimal_two_stage}
+
+Note that even though we could run $\cuLDA$ directly on the entire dataset with $\amin = \wmin$, we would only achieve  an error for the $i\tth$ inlier cluster mean of
+$O(\sqrt{\log 1/w_i})$ -- which can be much larger than $O(\sqrt{\log 1/\tilde{w}_i})$ -- for a list of size $O(1 / \wmin)$.
+While $\cuLDA$ takes into account the unknown weight of the clusters, it still treats other inlier clusters as outliers.
+We now show that if the outer stage~\Cref{alg:first_stage_techniques} of our meta-algorithm~\Cref{alg:full_alg}
+separates the samples into a not-too-large collection  $\mathcal T$ of sets with certain properties, running $\cuLDA$ separately on each of the sets can lead to the desired guarantees.
+In particular, let us assume that 
+\(\cT\) consists of potentially overlapping sets such that:
+\begin{enumerate}[(1)
+]
+\item For each inlier cluster $C^*$, there exists one set $T \in \cT$ such that $T$ contains (almost) all points from $C^*$ and at most $O(\epsilon n)$ other points,
+\item It holds that $\sum_{T\in \cT} |T| \leq n + O(\e n)$.
+\end{enumerate}
+
+By (1), for every inlier cluster $C^*$  with a corresponding true weight 
+$w^*$, there exists a set $T$ such that the points from $C^*$ constitute at least an $\tilde w$-fraction of $T$ with $\tilde w := \Omega(w^* / (w^*+\e))$.
+By~\Cref{sec:inner-stage}, applying $\cuLDA$ with ${\amin = \wmin \cdot n / \Card{\setfirst}}$ on such a $T$ then yields a list of size  %$1 + O((1-\alpha)/\amin) = 
+$1 +O((1-\tilde{w}) / \wmin)$ with an estimation error at most $O(\sqrt{\log 1/ {\tilde{w}}})$.
+If $T$ contains (almost) no inliers, that is, there is no inlier component that should recovered, 
+then $\ckLDA$ returns a list of size $O(|T| / (\wmin n))$. %we can rewrite this as $O(o_T / (\wmin n))$.
+
+Now, by the two properties, (almost) all inlier points lie in at most $k$ sets of $\cT$, and all other sets of $\cT$ contain in total at most $O(\e n)$ points.
+Hence, concatenating all lists outputted by $\cuLDA$ applied to all $\setfirst \in \cT$ 
+leads to a final list size bounded by $k + O(\e / \wmin)$.
+
+\subsection{Outer stage: separating inlier clusters}
+\label{sec:outer_stage}
+We now informally describe the outer stage that produces the collection of sets $\cT$ with the desiderata described in~\Cref{sec:optimal_two_stage}, leaving the details to~\Cref{sec:outer-stage}. The main steps are outlined in pseudocode in~\Cref{alg:first_stage_techniques}.
+
+Given a set \(\data\) of  \(N=\poly(d^t, 1/\wmin)\) i.i.d.~input samples from the distribution~\Cref{eq:gen_model} with Gaussian inlier components, the first step of the meta-algorithm is to run~\Cref{alg:first_stage_techniques} on \(\data\) and \(\wmin\)  
+with \(\Delta = O(\sqrt{\log 1 / \wmin})\).
+\Cref{alg:first_stage_techniques} runs an $\sLD$ algorithm on the samples and produces a (large) list of estimates $L$ such that, for each mean, at least one estimate is $O(\sqrt{\log 1/\wmin})$-close to it.
+It then add sets to $\cT$ that correspond to these estimates via a dynamic ``two-scale" process.
+
+
+
+Specifically, for each $\hat\mu \in L$, we construct \emph{two sets} $S_{\hat\mu}^{(1)} \subseteq S_{\hat\mu}^{(2)}$ consisting of samples close to $\hat\mu$.
+By construction, we guarantee that if $S_{\hat\mu}^{(1)}$ contains a non-negligible fraction of samples from any inlier cluster $C^*$, then $S_{\hat\mu}^{(2)}$ contains (almost) all samples from $C^*$ (see~Theorem~\ref{item:outer_stage_S_gi}).
+
+Now we very briefly illustrate how this process could be helpful in proving properties (1) and (2).
+Observe that, as long as there exists some $\muhat$ with $|S_{\hat\mu}^{(2)}| \leq 2|S_{\hat\mu}^{(1)}|$, we add $S_{\hat\mu}^{(2)}$ to $\cT$ and remove the samples from $S_{\muhat}^{(1)}$.
+Consider one such $\muhat$.
+For property (1), we merely note that if $S_{\muhat}^{(1)}$ contains a part of an inlier cluster $C^*$, then $S_{\muhat}^{(2)}$ contains (almost) all of $C^*$, so we add to $\cT$ a set that contains (almost) all of $C^*$; otherwise, when we remove $S_{\muhat}^{(1)}$ we remove (almost) no points from $C^*$, so (almost) all the points from $C^*$ remain in play.
+For property (2), we merely note that whenever we add $S_{\muhat}^{(2)}$ to $\cT$, increasing the number of points in it by $|S_{\muhat}^{(2)}|$, we also remove the samples from $S_{\muhat}^{(1)}$, reducing the number of samples by $|S_{\muhat}^{(1)}| \geq |S_{\muhat}^{(2)}|/2$.
+The proof of the properties uses some additional arguments of a similar flavor, and we defer it to~\Cref{sec:outer-stage}.

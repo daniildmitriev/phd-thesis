@@ -1,0 +1,40 @@
+\begin{tikzpicture}
+        % Adjust the opacity value as needed (between 0 and 1)
+        \def\opacityValue{0.5}
+    
+        % Start a scope with rotation
+        \begin{scope}[rotate=45]
+            % uniform noise covering both circles
+            \draw[fill=gray, fill opacity=\opacityValue] (0.75, 0) ellipse (0.8cm and 0.5cm);
+            
+            % Green circles (Good Gaussian Clusters)
+            \node[draw, circle, fill=green, minimum size=0.8cm, fill opacity=\opacityValue] (green1) at (0.5,0) {};
+    
+            % Red circles (Bad Gaussian Clusters) - Overlapping
+            \node[draw, circle, fill=red, minimum size=0.8cm, fill opacity=\opacityValue] at (1,0) {};
+
+        \end{scope}
+
+        \begin{scope}[shift={(-2, -2)}, rotate=45]
+            % uniform noise covering both circles
+            \draw[fill=gray, fill opacity=\opacityValue] (0.75, 0) ellipse (0.8cm and 0.5cm);
+            
+            % Green circles (Good Gaussian Clusters)
+            \node[draw, circle, fill=green!60, minimum size=0.8cm, fill opacity=\opacityValue] (green1) at (0.5,0) {};
+
+            \node[draw, circle, fill=green, minimum size=0.8cm, fill opacity=\opacityValue] (green1) at (2,2.5) {};
+    
+            % Red circles (Bad Gaussian Clusters) - Overlapping
+            \node[draw, circle, fill=red!60, minimum size=0.8cm, fill opacity=\opacityValue] at (1,0) {};
+
+        \end{scope}
+    
+        % Legend
+        \node[draw, circle, fill=green, minimum size=0.3cm, fill opacity=\opacityValue] (legend1) at (3.7,1) {};
+        \node[draw, circle, fill=red, minimum size=0.3cm, fill opacity=\opacityValue] (legend2) at (3.7,0.3) {};
+        \node[draw, circle, fill=gray, minimum size=0.3cm, fill opacity=\opacityValue] (legend3) at (3.7, -0.4){};
+        \node[right] at (4,1) {True Cluster};
+        \node[right] at (4,0.3) {Fake Cluster};
+        \node[right] at (4, -0.4) {Uniform noise};
+        
+\end{tikzpicture}

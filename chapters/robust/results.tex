@@ -1,0 +1,105 @@
+\section{Main results}
+\label{sec:main_results}
+
+We now present our main results for list-decodable and robust mixture learning defined in~\Cref{sec:prelims}. %\fy{The algorithm also provides guarantees for robust mixture learning}
+In~\Cref{sec:ub_lb_sep}, we provide algorithmic upper bounds and information-theoretic lower bounds. For the special case of spherical Gaussian mixtures, we show in~\Cref{sec:comparison_prev_work} that we achieve optimality. 
+Our results are constructive as we provide a meta-algorithm for which these bounds hold. 
+
+As depicted in~\cref{fig:alg_diagram}, our meta-algorithm (\Cref{alg:full_alg}) is a two-stage process. The outer stage (\Cref{alg:second_stage_pruning}) reduces the problem to mean estimation by leveraging the mixture structure and splitting the data into a small collection $\cT$ of sets $T$.
+Each set $T \in \cT$ should (i) contain at most one inlier cluster (and few samples from other clusters) and (ii) the total number of outliers across all sets should be at most \(O(\e n)\).
+We then run the inner stage (\Cref{alg:first_stage_high_level}) on sets \(T\), which outputs a mean estimate for the inlier cluster in $T$. First, a \(\cLD\) algorithm identifies the weight of the inlier cluster and returns the result of a \(\ckLD\) base learner with this weight. Then, if the weight is large, we improve the error via an \(\rme\) base learner. 
+A careful filtering procedure in both stages achieves the significantly reduced list size and better error guarantees. 
+We require the base learners to satisfy the following set of assumptions.
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[
+    arrow/.style={-Latex, line width=1pt},
+    smallblock/.style={draw, rectangle, rounded corners, line width=1pt, minimum height=1cm, text width=2.5cm, align=center, fill=gray!30},]
+    % Outer Stage Box
+    \node[rounded corners, draw=blue, line width=1pt, fill=blue!10, align=center, minimum width=6cm, minimum height=3.5cm, text width=7cm, text depth=15.0ex] (outer) at (0,0) {\textbf{Outer stage} (\Cref{alg:second_stage_pruning}): \\ creates collection \(\cT\) of sets \(T\)};
+
+    % Inner Stage Box (container)
+    \node[rounded corners, draw=magenta, line width=1pt, fill=magenta!10, minimum width=4cm, minimum height=2.0cm, text width=5cm, text depth=7.0ex] at ([shift={(3.8cm,-0.5cm)}]outer.west) (inner) {\textbf{Inner stage} (\Cref{alg:first_stage_high_level}): \\ for each \(T\) in \(\cT\):};
+
+    % Inner Stage Box contents
+    % Item 1
+    \node[align=left] at ([shift={(0cm,-0.3cm)}]inner.center) (item1) {
+           \begin{tabular}{@{}l@{}}
+            1. Run algorithm for \(\cLD\)
+        \end{tabular}
+    };
+    % Item 2
+    \node[align=left] at ([shift={(-0.11cm,-0.7cm)}]inner.center) (item2) {
+               \begin{tabular}{@{}l@{}}
+            2. Improve errors if possible
+        \end{tabular}
+        };
+
+    % Algorithm Boxes
+    \node[smallblock, left=0.5cm and 1.5cm of inner.west, yshift=0.8cm] (algo1) {Base \(\ckLD\) Algorithm};
+    \node[smallblock, below=0.2cm of algo1] (algo2) {Base \(\rme\) Algorithm};
+
+    % Arrows to Algo Boxes
+    \draw[arrow] (algo1.east) to [out=0,in=180]([yshift=-0.35cm]inner.west);
+    \draw[arrow] (algo2.east) to [out=0,in=180]([yshift=-0.75cm]inner.west);
+\end{tikzpicture}
+\caption{Schematic of the meta-algorithm (\Cref{alg:full_alg}) underlying \cref{thm:informal}}
+\label{fig:alg_diagram}
+\end{figure}
+
+
+
+\begin{assumption}[Mean-estimation base learners for mixture learning]
+\label{asm:algs}
+Let \(t\) be an even integer and consider the corruption setting defined in~\Cref{def:cor-model}. Further, let the inlier distribution \(D(\mu^{\ast}) \in \cD\) where \(\cD\) is the 
+the family of distributions satisfying~\Cref{def:bounded} for \(t\).
+We assume that 
+\begin{enumerate}[(a)]
+    \item \label{asm:alg-ld} %for  
+    for \(\alpha \in [\wmin, 1/3]\) in the \(\ckLD\) regime, there exists an algorithm $\ckLDA$ 
+    that uses $N_{LD}(\alpha)$ samples and $T_{LD}(\alpha)$ time to output a list of size bounded by $1/\alpha^{O(1)}$  that with probability at least $1/2$ contains some $\muhat$ with $\norm{\muhat-\mu^*} \leq f(\alpha)$, where \(f\) is non-increasing.
+    
+    \item \label{asm:alg-rme} for $\alpha \in [1 - \e_{\rme}, 1]$, with \(0 \leq \e_{\rme} \leq 1/2 - 2\wmin^2 \) in the \(\rme\) regime, there exists an \(\rme\) algorithm $\cA_R$ 
+    that uses $N_R(\alpha)$ samples and $T_{R}(\alpha)$ time to output with probability at least $1/2$ some $\muhat$ with $\norm{\muhat-\mu^*} \leq g(\alpha)$,
+    where \(g\) is non-increasing. 
+\end{enumerate}
+\end{assumption}
+
+Note that the sample and time-complexity functions such as \(N_{LD}\) and \(T_{LD}\), might depend on \(t\), for example growing as \(d^t\).
+We emphasize that (i) the guarantees of our meta-algorithm depend on the guarantees of the base learners and
+(ii) we only require the base learners to work in the well-studied setting with \emph{known} fraction of inliers.
+Corollary~\ref{cor:gaussian} uses known base learners for Gaussian distributions achieving information-theoretically optimal error bounds.
+There  also exists base learners for distributions beyond Gaussians, such as bounded covariance or log-concave distributions, see, e.g.~\cite{kothari2018robust}.
+\subsection{Upper bounds for list-decodable mixture learning}
+\label{sec:ub_lb_sep}
+Key quantities that appear in our error bounds are the relative proportion of inliers $\tilde w_i$ and outliers  $\tilde \varepsilon_i$:
+\begin{equation}
+\label{eq:rel_weights}
+\tilde w_i = \frac{w_i}{w_i + \varepsilon + \wmin^2} \quad \text{and} \quad \tilde \varepsilon_i = 1 - \tilde w_i.
+\end{equation}
+These quantities reflect that each set \(T\) in the inner stage contains at most one inlier cluster and a small (\(\lesssim \wmin^2\)) fraction of points from other inlier clusters.
+We now present a simplified version of our main result in~\Cref{thm:informal}~(see~\cref{thm:main-technical} for the detailed result) 
+that allows for a more streamlined presentation of the results using 
+the following `well-behavedness' of \(f\) and \(g\).
+\begin{assumption}
+    \label{asm:well-behaved} 
+    Let \(f\), \(g\) be as defined in~\Cref{asm:algs}. For some \(C > 0\), we assume (i) \(\e_{\rme} \geq 0.01\), (ii) $\forall x \in (0, 1/3]$, $f(x/2) \leq C f(x)$, and (iii) $\forall x \in [0.99, 1]$, $g(x - (1-x)^2) \leq C g(x)$.
+\end{assumption}
+We are now ready to state the main result of the paper.
+\begin{theorem}
+\label{thm:informal}
+    Let $d, k \in \N_+$, $\wmin \in (0, 1/2]$, and $t$ be an even integer. 
+Let $\cX$ be a $d$-dimensional mixture distribution following~\Cref{eq:gen_model}.
+Let \(\ckLDA\) and \(\cA_R\) satisfy~\Cref{asm:algs,asm:well-behaved} for some even \(t\). 
+Further, suppose that $\norm{\mu_i - \mu_j} \gtrsim \sqrt{t}(1/\wmin)^{4/t} + f(\wmin)$ for all $i \neq j \in [k]$.
+
+Then there exists an algorithm that, given ${\poly(d, 1/\wmin) \cdot (N_{LD}(\wmin) + N_R(\wmin))}$ i.i.d. samples from $\cX$ as well as $d$, $k$, $\wmin$, and $t$, runs in time ${\poly(d, 1/\wmin) \cdot (T_{LD}(\wmin) + T_R(\wmin))}$ and with probability at least $1-\wmin^{O(1)}$ outputs a list $L$ of size ${|L| \leq k + O(\epsilon/\wmin)}$ where, for each $i \in [k]$, there exists $\hat\mu \in L$ such that
+    \[\norm{\muhat - \mu_i} = \bigO{\min_{1\le t'\le t}\sqrt{t'} (1 / \tilde w_i)^{1/t'}+f(\min(\tilde{w}_i, 1/3))}.\]
+    If the relative weight of the \(i\)-th cluster is large, i.e., \(\tilde \e_i \leq 0.001\), then the error is further bounded by
+    \[\norm{\muhat - \mu_i} = \bigO{g(\tilde{w}_i)}.\]
+\end{theorem}
+The proof together with a more general statement,~\Cref{thm:main-technical}, can be found in~\Cref{sec:main_result_appendix}.
+
+Note that for a mixture setting with $k\geq 2$, the assumption \(\wmin \leq 1 / k \leq 1/2 \) is automatically fulfilled.
+Also, for large weights $\tilde w_i$ such that $\log(1 / \tilde w_i) \ll t$, the $t'$ that minimizes $\sqrt{t'} (1 / \tilde w_i)^{1/t'}$ is smaller than $t$, and for small weights the minimizer is $t'=t$.

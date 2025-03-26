@@ -1,0 +1,36 @@
+% Theorem Environments
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{remark}[theorem]{Remark}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\crefname{assumption}{assumption}{assumptions}
+\newtheorem{algorithm_hack}[theorem]{Algorithm}
+\newtheorem*{algorithm_hack*}{Algorithm}
+\Crefname{equation}{Eq.}{Eqs.}
+\crefname{equation}{eq.}{eqs.}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem*{fact*}{Fact}
+
+
+
+\def\LatinUpper{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z}
+
+% Blackboard fonts
+\newcommand{\genBb}[1]{\expandafter\newcommand\csname b#1\endcsname{{\mathbb #1}}}
+\@for\q:=\LatinUpper\do{%
+	\expandafter\genBb\q
+}
+
+% Parentheses
+\newcommand{\bc}[1]{\left\{{#1}\right\}}
+\newcommand{\br}[1]{\left({#1}\right)}
+\newcommand{\bs}[1]{\left[{#1}\right]}
+
+\newcommand{\bigO}[1]{O\left(#1\right)}

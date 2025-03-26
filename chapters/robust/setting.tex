@@ -1,0 +1,58 @@
+\section{Settings}
+\label{sec:prelims}
+We now introduce the learning settings that appear in the paper.
+Let \(d \in \N_+\) be the ambient dimension of the data and \(k \in \N_+\) be the number of mixture components (inlier groups/clusters). 
+\subsection{List-decodable mixture learning under adversarial corruptions}
+\label{sec:mixld}
+We focus on mixtures that consist of distributions that are sufficiently bounded in the following sense.
+\begin{definition}
+\label{def:bounded}
+    Let \(t \in \N_+\) be even and let \(D(\mu)\) be a distribution on \(\R^d\) with mean \(\mu\).
+    We say that \(D(\mu)\) has \emph{sub-Gaussian \(t\)-th central moments} if for all even \(s \leq t\) and for every \(v \in \R^d\) with \(\norm{v} = 1\), \(\E_{x \sim D} \braket{x - \mu, v}^s \leq (s-1)!!.\)
+\end{definition}
+This class of distributions
+is closely related to commonly studied distributions in the literature
+(see, e.g.,~\cite{diakonikolas2023algorithmic}) with bounded 
+ \(t\)-th moment. Our requirement for the boundedness of all moments \(s \leq t\) stems from the fact that our algorithm should adapt to unknown and possibly non-uniform mixture weights.
+
+We assume that we are given samples from a corrupted $d$-dimensional mixture of $k$ inlier distributions \(D_i(\mu_i)\) satisfying ~\Cref{def:bounded}, where the mixture is defined as
+\begin{equation}
+\label{eq:gen_model}
+    \cX = \sum_{i=1}^k w_i D_i(\mu_i) + \varepsilon Q,
+\end{equation}
+and $\sum_{i=1}^k w_i + \epsilon = 1$, where for all $i = 1, \ldots, k$, it holds that $w_i \geq \wmin$. Further, an
+$\epsilon>0$ proportion of the data comes from an \emph{outlier} distribution \(Q\)
+chosen by the adversary with full knowledge of our algorithm and inlier mixture.
+Samples drawn from \(D_i(\mu_i)\) constitute the \(i^{\mathrm{th}}\) \textit{inlier cluster}.
+The goal in mixture learning under corruptions  as in \Cref{eq:gen_model}, is to design an algorithm that takes in i.i.d. samples from $\cX$ and outputs a list $L$, such that for each \(i \in [k]\), there exists \(\muhat \in L\) with small estimation error \(\norm{\mu_i - \muhat}\).
+
+
+
+To the best of our knowledge, we are the first to study the \emph{list-decodable mixture learning} problem (LD-ML)
+that considers the case of large fractions of outliers \(\varepsilon \geq \min_{i} w_i\) and the goal is to achieve small estimation errors while the %the goal is that the 
+list size \(\card{L}\) remains small.
+While in robust estimation problems, the fractions of inliers and outliers are usually provided to the algorithm, in  mixture learning, 
+the mixture proportions are explicit quantities of interest.
+Throughout the paper, we hence assume that \emph{both} the true weights \(w_i\)  of the mixture and the fraction of outliers \(\varepsilon\) are \emph{unknown}. Instead, by definition in \Cref{eq:gen_model}, we assume knowledge of %do know 
+a valid lower bound $\wmin\leq \min_{i} w_i$. 
+
+Note that when \(\epsilon \lesssim \min_i w_i\), the problem is known as robust mixture learning and can be solved with list size $|L|=k$ as discussed in ~\cite{diakonikolas2018list, bakshi2022robustly, ivkov2022list}.
+However, algorithms for robust mixture learning fail when the fraction of outliers becomes comparable to the inlier group size. 
+In the presence of ``spurious'' adversarial clusters, it is information-theoretically impossible to output a list \(L\), such that (i) \(\Card{L} = k\) and (ii) \(L\) contains precise estimate for each true mean.
+
+\subsection{Mean estimation under adversarial corruptions}
+\label{sec:list-decodable}
+
+In order to solve LD-ML, we use mean estimation procedures that have provable guarantees under adversarial contamination. Mean estimation can be viewed as a particular case of the mixture learning problem in~\Cref{eq:gen_model} with \(k = 1\), the fraction of inliers \(\alpha = w_1\) and the fraction of outliers \(\e = 1 - \alpha\).
+The mean estimation algorithms we use to solve LD-ML with $\wmin$ need to exhibit guarantees under a stronger adversarial model, where the adversary can also replace a small fraction (depending on \(\wmin\)) of the inlier points; see details in~\Cref{def:cor-model}. This is a special case of the general contamination model as opposed to the slightly more benign additive contamination model in~\Cref{eq:gen_model}. For different regimes of $\alpha$ we use black-box learners that solve corresponding regime when \emph{provided with} \(\alpha\).
+
+\paragraph{Robust mean estimation}
+
+When the majority of points are inliers, we are in the \(\rme\) setting. Robust statistics has studied this setting with different corruption models and efficient algorithms are known to achieve information-theoretically optimal error guarantees (see~\Cref{sec:relatedwork}).
+\paragraph{List-decodable mean estimation}
+When inliers form a minority, we are in the list-decodable setting and are required to return a list instead of a single estimate. 
+We refer to this setting as \(\ckLD\) (\textit{corrupted known list-decoding}). For mixture learning, $\alpha$ is usually unknown and we need to solve the \(\cLD\) (\emph{corrupted agnostic list-decoding}) problem (i.e., \(\alpha\) is \emph{not provided}, but instead a lower bound \(\amin \in [\wmin, \alpha]\) is given to the algorithm).
+Finally, when only additive adversarial contamination is present, as in~\Cref{eq:gen_model}, 
+we recover the standard list-decoding setting studied in prior works (see~\Cref{sec:relatedwork}) that we call \(\sLD\) (\textit{simple list-decoding}).
+In~\cref{app:stability} we show that two
+algorithms designed for \(\sLD\) also exhibit guarantees for \(\ckLD\) for any $\wmin$. 

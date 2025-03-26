@@ -1,0 +1,40 @@
+\begin{tikzpicture}
+        % Adjust the opacity value as needed (between 0 and 1)
+        \def\opacityValue{0.5}
+    
+        % Start a scope with rotation
+        \begin{scope}[rotate=45]
+            % Green circles (Good Gaussian Clusters)
+            \node[draw, circle, fill=green, minimum size=0.8cm, fill opacity=\opacityValue] (green1) at (0,0) {};
+            % \node[draw, circle, fill=green, minimum size=0.8cm, fill opacity=\opacityValue] (green2) at (2.5,0) {};
+    
+            % Red circles (Bad Gaussian Clusters) - Overlapping
+            % Adjust the number of red circles and their positions as needed
+            \foreach \x in {1,2,3}
+                \node[draw, circle, fill=red, minimum size=0.8cm, fill opacity=\opacityValue] at (\x * 0.5,0) {};
+        \end{scope}
+    
+        \def\horizontalShift{1.5}
+    
+        % Adjust the x-coordinate for each node using the parameter
+        \node[draw, circle, fill=red, minimum size=0.8cm, fill opacity=\opacityValue] (green1) at ({3.9 + \horizontalShift}, -0.1) {};
+        \node[draw, circle, fill=red, minimum size=0.8cm, fill opacity=\opacityValue] (green2) at ({3.5 + \horizontalShift}, 0.5) {};
+        \node[draw, circle, fill=red, minimum size=0.8cm, fill opacity=\opacityValue] (green3) at ({3.0 + \horizontalShift}, 0) {};
+        \node[draw, circle, fill=red, minimum size=0.8cm, fill opacity=\opacityValue] (green4) at ({4.0 + \horizontalShift}, 0.2) {};
+        
+        \node[draw, circle, fill=red, minimum size=0.8cm, fill opacity=\opacityValue] (green6) at ({3.2 + \horizontalShift}, -0.2) {};
+        \node[draw, circle, fill=red, minimum size=0.8cm, fill opacity=0.7] (green7) at ({3.5 + \horizontalShift}, 0) {};
+        \node[draw, circle, fill=green, minimum size=0.8cm, fill opacity=\opacityValue] (green5) at ({3.7 + \horizontalShift}, -0.3) {};
+    
+        % \draw[decoration={brace, amplitude=5mm, mirror}, decorate, rotate=45, line width=2pt]
+        % (0.5,-0.5) -- (2.5,-0.5);
+    
+        % Add labels or content inside the curly braces if needed
+        % \node at (2.1,0.2) {\Large\(\Delta\)};
+    
+        % Legend
+        \node[draw, circle, fill=green, minimum size=0.3cm, fill opacity=\opacityValue] (legend1) at (4.7,2.2) {};
+        \node[draw, circle, fill=red, minimum size=0.3cm, fill opacity=\opacityValue] (legend2) at (4.7,1.5) {};
+        \node[right] at (5,2.2) {True Cluster};
+        \node[right] at (5,1.5) {Fake Cluster};
+\end{tikzpicture}

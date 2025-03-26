@@ -1,0 +1,37 @@
+\subsection{Information-theoretical lower bounds and optimality}
+
+Next, we present information-theoretical lower bounds for list-decodable mixture learning on well-separated distributions $\cX$ as defined in~\Cref{eq:gen_model}. 
+We show that our error is optimal as long as the list size is required to be small. Our proof uses a simple reduction technique and leverages established lower bounds in \cite{diakonikolas2018list}  for the list-decodable mean estimation model (\(\sLD\) in~\cref{sec:prelims}).
+
+
+\begin{proposition}[Information-theoretic lower bounds]
+\label{lemma:it_lb_ours}
+Let \(\mathcal{A}\) be an algorithm that, 
+given access to $\cX$, outputs
+a list \(L\) that, with probability \(\geq 1/2\), for each \(i \in [k]\) contains  \(\muhat \in L\) with $\norm{\muhat - \mu_i} \leq \beta_i$.
+\begin{enumerate}[(a)]
+
+\item Consider the case with \(\norm{\mu_i - \mu_j} \gtrsim (1 / \wmin)^{4/t}\) for \(i \neq j \in [k]\), \(D_i(\mu_i)\) having \(t\)-th bounded sub-Gaussian central moments and $\beta_i \leq C (1/\wmin)^{1/t}$ for each $i \in [k]$. If for some \(s \in [k]\) it holds that \(w_s \leq \varepsilon\), then 
+algorithm $\cA$ must either have error bound $\beta_s = \Omega((1 / \tilde w_i)^{1/t})$
+or $\Card{L} \geq k+d - 1$.
+
+    \item Consider the case with \(\norm{\mu_i - \mu_j} \gtrsim \sqrt{\log 1 / \wmin}\) for \(i \neq j \in [k]\), \(D_i(\mu_i) = \cN(\mu_i, I_d)\) and $\beta_i \leq C \sqrt{\log 1/\wmin}$ for each $i \in [k]$.
+    If for some \(s \in [k]\) 
+it holds that \(w_s \leq \varepsilon\), then
+algorithm $\cA$ must either have error bound $\beta_s = \Omega(\sqrt{\log 1 / \tilde w_i})$
+or $\Card{L} \geq k+\min\{2^{\Omega(d)}, (1 / \tilde w_i)^{\omega(1)}\}$.
+\end{enumerate}
+
+\end{proposition}
+In the Gaussian inlier case,
+\Cref{cor:gaussian} together with~\Cref{lemma:it_lb_ours} imply optimality of our meta-algorithm. Indeed, if one plugs in optimal base learners (as in the proof of~\Cref{cor:gaussian}), we obtain error guarantee that matches lower bound. 
+In particular, ``exponentially'' larger list size is necessary for asymptotically smaller error. For inlier components with bounded sub-Gaussian moments,~\cite{diakonikolas2018list} obtains information-theoretically (nearly-)optimal LD-ME base learners. 
+
+We remark that for the problem of learning mixture models, the separation assumption is common in the literature~\cite{diakonikolas2018list, hopkins2018mixture, kothari2018robust, liu2022clustering}.
+Without the separation assumption, even in the \emph{noiseless} uniform case \(w_i = 1/k\),~\cite{regev2017learning} shows that no efficient algorithm can obtain error asymptotically better than \(\Omega(\sqrt{\log 1 / w_i})\).
+In~\Cref{thm:no-sep-technical}, we prove that the inner stage~\Cref{alg:first_stage_high_level} of our algorithm, without knowledge of $w_i$ and separation assumption, achieves with high probability 
+matching error guarantees \(O(\sqrt{\log 1 / w_i})\)
+with a list size upper bound \(O(1 / \wmin)\).
+
+Furthermore, in~\cite{diakonikolas2018list}, formal evidence of computational hardness was obtained (see their Theorem 5.7, which gives a lower bound in the statistical query model introduced by~\cite{kearns1998efficient}) that suggests obtaining error $\Omega_t((1/\wtilde_s)^{1/t})$ requires running time at least $d^{\Omega(t)}$.
+This was proved for Gaussian inliers and the running time matches ours up to a constant in the exponent.

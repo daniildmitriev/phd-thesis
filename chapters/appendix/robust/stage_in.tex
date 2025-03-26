@@ -1,0 +1,230 @@
+\section{Proof of~\Cref{thm:inner_stage_guarantees}}
+\label{sec:inner_stage_appendix}
+
+\paragraph{(i) Proof of error statement} We now prove that, with probability \(1 - \wmin^{O(1)}\), for the output list \(L\) of~\Cref{alg:second_stage_pruning}, 
+\begin{enumerate}
+    \item there exists \(\muhat \in L\) such that 
+        \[\norm{\muhat-\mu^{\ast}} \leq O(\psi_t(\alpha/4) + f(\alpha/4)),\]
+        \item if \(\alpha \geq 1-\epsilon_{\rme}\), then there exists \(\muhat \in L\) such that
+        \[\norm{\muhat-\mu^{\ast}} \leq O(g(\alpha - \wmin^2)).\]
+\end{enumerate}
+By~\Cref{lemma:list_init} we have $|M| \leq 1/\wmin^{O(1)}$ and, with probability at least $1-\wmin^{O(1)}$, there exists \((\muhat, \hat \alpha) \in M\) such that \(\hat \alpha \geq \alpha/4\) and \(\norm{\muhat - \mu^{\ast}} \leq f(\hat\alpha)\).
+Then \cref{lemma:not_remove_good} implies that, with probability at least $1-|M|^2\wmin^{O(1)}$, \((\muhat, \hat \alpha)\) will not be removed from \(M\).
+Therefore, either \((\muhat, \hat \alpha) \in L\), or there exists \((\tilde \mu, \tilde \alpha) \in L\)
+such that (i) \(\tilde \alpha \geq \hat \alpha\) and (ii) \(\norm{\tilde \mu-\muhat} \leq 4 \beta(\hat \alpha)\).
+The latter case implies that \(\norm{\tilde \mu - \mu^{\ast}} \leq 40 \psi_t(\alpha/4) + 4f(\alpha/4)\).
+
+For the second part, set first $\tilde\mu = \hat\mu$.
+Then, in the $i\tth$ iteration, $\tilde\mu$ moves away by at most $(3\tau/2)/2^{i-1}$.
+Since $\sum_{i=1}^\infty 1/2^{i} \leq 1$, the distance between $\tilde\mu$ and $\hat\mu$ is always bounded by $3\tau$. Now, assume that indeed $\alpha \geq 1-\epsilon_{\rme}$ and $\norm{\muhat - \mu^*} \leq \tau$. Whenever $\tilde{\alpha} \leq \alpha$, with high probability $\cA_R$ produces some $\mu_{\rme}$ such that $\norm{\mu_{\rme} - \mu^*} \leq g(\tilde\alpha) \leq \tilde{\beta}/2$.
+Furthermore, as long as $\tilde\alpha \leq \alpha$, at the moment of the while statement check we have $\norm{\tilde\mu - \mu^*} \leq \tilde{\beta}$: in the first iteration this is by assumption, and in later iterations it follows because $\tilde\mu$ is the former $\mu_{\rme}$.
+Therefore the while statement check passes as long as $\tilde\alpha \leq \alpha$.
+
+There exists the possibility that the algorithm returns or breaks even though $\tilde\alpha \leq \alpha$.
+If the algorithm returns early, then the error $\tau$ achieved by $\muhat$ is already within a factor of two of the optimal.
+If the algorithm breaks, either $\tilde{\alpha} + \wmin^2 > 1$, case in which $\tilde{\mu}$ already satisfies $\norm{\tilde{\mu} - \mu^*} \leq g(1-\wmin^2)$, or else $\norm{\tilde{\mu} - \mu^*}$ is already within a factor of two of the optimal.
+Therefore these cases do not affect the error negatively.
+
+Finally, let us consider what happens when $\tilde\alpha > \alpha$ and the while statement check continues to pass.
+The first time we reach some $\tilde\alpha > \alpha$, we must have $\norm{\tilde\mu - \mu^*} \leq \tilde\beta \leq 2g(\alpha - \wmin^2)$.
+Then, in later iterations, $\tilde\mu$ can move from this estimate by a distance of most $3\tilde\beta \leq 6g(\alpha - \wmin^2)$, by the same argument as the argument that $\norm{\tilde\mu-\hat\mu} \leq 3\tau$. Overall, at the end we have \[\norm{\tilde\mu-\hat\mu} \leq \max(2g(1), g(1-\wmin^2), 8g(\alpha)) \leq 8g(\alpha-\wmin^2).\] The number of runs is at most $1/\wmin^2$, so with probability $1-\wmin^{O(1)}$ all runs of $\cA_{R}$ succeed.
+
+We showed that there exists \((\muhat, \hat \alpha) \in L\) such that \(\hat \alpha \geq \alpha / 4\) and $\norm{\muhat - \mu^{\ast}} \leq 40 \psi_t(\hat\alpha) + 4f(\hat\alpha)$.
+This error can increase by running~\(\operatorname{ImproveWithRME}\)~with $\tau=40 \psi_t(\hat\alpha) + 4f(\hat\alpha)$ to at most \[\norm{\muhat - \mu^{\ast}} \leq 160 \psi_t(\hat\alpha) + 16f(\hat\alpha) = O(\psi_t(\alpha) + f(\alpha)).\] 
+
+Furthermore, if \(\alpha \geq 1-\tau_{\min}\),
+this \((\muhat, \hat \alpha) \in L\) satisfies the conditions of~\(\operatorname{ImproveWithRME}\), so with high probability the error is reduced by running~\(\operatorname{ImproveWithRME}\) with $\tau=40 \psi_t(\hat\alpha) + 4f(\hat\alpha)$ to $\norm{\muhat-\mu^{\ast}} \leq 8g(\alpha-\wmin^2)$.
+\paragraph{(ii) Proof of list size} We now prove that \(\Card{L} \leq  1 + O((1 - \alpha) / \amin)\).
+
+First, assume that \(\alpha \leq 9/10\).
+Since all $\hat\alpha_s \geq \amin$, we have that \(\Card{L} \leq 10 / (9\amin) \leq 12 (1 - \alpha) / \amin\).
+
+\noindent
+For the rest of the proof we assume that \(\alpha > 9/10\).
+We analyze sets \(J\) and \(T_i\) for \(i \in J\) at the end of execution of~\(\operatorname{ListFilter}\).
+In particular, recall that \(L = \Set{(\muhat_i, \hat \alpha_i),\ i \in J}\).
+Also, at the end of~\cref{alg:constructing_output} we have the following expression for \(T_i\):
+\begin{equation*}
+    T_i = \bigcap_{j \in J \setminus \Set{i}}\{x \in S, \text{ s.t. } \abs{v_{ij}^{\top}(x - \muhat_i)} \leq \max(\beta(\hat\alpha_i), \beta(\hat\alpha_j))\},
+\end{equation*}
+where \(v_{ij}\) are unit vectors in direction \(\muhat_i - \muhat_j\).
+Select the $s \in J$ for which $\hat\alpha_s$ is maximized.
+By (i), with probability at least $1-\wmin^{60}$, there exists a hypothesis in $J$ with $\hat\alpha \geq \alpha/4 \geq 0.2$.
+Then we have that $\hat\alpha_s \geq 0.2$.
+In addition, for all hypotheses, $\hat\alpha_s \leq 1/3$.
+Let \(j \in J\) be such that \(j \neq s\).
+We will show that at least half of the points in \(T_j\) are adversarial, i.e., \(\Card{T_j} \geq 2 \Card{T_j \cap C^{\ast}}\). 
+If this is indeed the case, we can treat all inlier points in all \(T_j\) as outliers, 
+as it would at most double total number of outlier points in \(S\).
+
+Now, assume that for some \(j \neq s\), \(\Card{T_j} < 2 \Card{T_j \cap C^{\ast}}\).
+Note that, because $|T_s| \geq 0.9 \cdot 0.2 n = 0.18n$ and $|C^*| \geq 0.9 n$, \(\Card{T_s \cap C^*} \geq 0.18n - 0.1n \geq 0.08n\). Therefore
+\begin{equation*}
+    \Card{\Set{x \in C^{\ast} \text{, s.t. } \abs{v_{sj}^{\top}(x - \muhat_s)} \leq \beta(\hat \alpha_s)}} \geq 0.08 \Card{C^{\ast}}.
+\end{equation*}
+Also note that~\cref{lem:conc-one-dir} for radius \(10 \psi_t(1/2) \leq 10 \psi_t(\hat \alpha_s)\) implies that, with exponentially small failure probability,
+\begin{equation*}
+    \Card{\Set{x \in C^{\ast} \text{, s.t. } \abs{v_{sj}^{\top}(x - \mu^{\ast})} \leq \beta(\hat \alpha_s)}} \geq 0.99 \Card{C^{\ast}}.
+\end{equation*}
+Since these two sets necessarily intersect, we can bound \(\abs{v_{sj}^{\top}(\muhat_s - \mu^{\ast})} \leq 2\beta(\hat \alpha_s)\),
+implying that \(\abs{v_{sj}^{\top}(\muhat_j - \mu^{\ast})} \geq 2\beta(\hat \alpha_j)\), since \(\norm{\muhat_s - \muhat_j} \geq 4\beta(\hat\alpha_j)\).
+Thus, if \(\abs{v_{sj}^{\top}(x - \muhat_j)} \leq \beta(\hat \alpha_j)\), 
+then \(\abs{v_{sj}^{\top}(x - \mu^{\ast})} > \beta(\hat \alpha_j)\), implying that 
+\begin{equation}
+    \label{eq:tq_non_intersect}
+    (T_j \cap C^{\ast}) \subseteq \Set{x \in C^{\ast} \text{, s.t. } \abs{v_{sj}^{\top}(x - \mu^{\ast})} > \beta(\hat\alpha_j)}.
+\end{equation}
+However,~\cref{lem:conc-one-dir} tells us that with high probability only a small fraction of points in \(C^{\ast}\) satisfies \(\abs{v_{sj}^{\top}(x - \mu^{\ast})} > \beta(\hat \alpha_j)\).
+In particular, applying the lemma with radius \(10 \psi_t(\hat \alpha_j)\), we get that with exponentially small failure probability, 
+\begin{equation}
+    \label{eq:tq_conc}
+    \Card{\Set{x \in C^{\ast} \text{, s.t. } \abs{v_{sj}^{\top}(x - \mu^{\ast})} \leq \beta(\hat\alpha_j)}} 
+    \geq \left(1 - \frac{\hat\alpha_j}{50}\right) \Card{C^{\ast}}.
+\end{equation}
+From~\cref{eq:tq_non_intersect,eq:tq_conc} it follows that \(\Card{T_j \cap C^{\ast}} \leq \hat \alpha_j \Card{C^{\ast}}  / 50\).
+Using that \(\Card{T_j} \geq 9\hat \alpha_j n / 10 \geq 9\hat \alpha_j \Card{C^{\ast}} / 10\) by the properties of~\(\operatorname{ListFilter}\), we obtain 
+\begin{equation*}
+    9 \hat \alpha_j \Card{C^{\ast}} / 10\leq \Card{T_j} \leq 2 \Card{T_j \cap C^{\ast}} 
+    \leq \hat \alpha_j \Card{C^{\ast}} / 25,
+\end{equation*}
+which is a contradiction.
+
+Therefore, for all \(j \in J\) such that \(j \neq s\), we have that \(\Card{T_j} \geq 2\Card{T_j \cap C^{\ast}}\).
+As we said in the beginning, by treating all inlier points in those \(T_j\) as outliers we at most double total number of outlier points.
+Since there are at most \((1 - \alpha+\alpha\wmin^2)n\) outlier points and the sets \(T_j\) are non-intersecting, 
+we get \(\sum_{j \in J \setminus \Set{s}} \Card{T_j} \leq 2(1 - \alpha + \alpha\wmin^2)n\).
+The lower bound on the size \(\Card{T_j} \geq 9 \amin n / 10\) implies 
+\(\Card{J / \Set{s}} \leq \frac{2(1 - \alpha+\alpha\wmin^2)n \cdot 10}{9\amin n}\)
+and thus \(\Card{L} = \Card{J} \leq 1 + 3(1 - \alpha) / \amin\). 
+
+Note that in~\(\innerstage\)~we set \(\amin = \min(\amin, 1/100)\).
+Therefore, for the original $\amin$, the list size is bounded by $1 + 240(1-\alpha)/\amin$.
+
+\paragraph{Conclusion}
+Combining the probabilities of success of all steps, we get that the algorithm succeeds with probability at least $1-\wmin^{O(1)}$ for some large constant in the exponent.
+Our algorithm, ignoring the calls to $\ckLDA$ and $\cA_{R}$, has sample complexity and time complexity bounded by $\poly(d, 1/\wmin)$, which gives the desired sample and time complexity when taking $\ckLDA$ and $\cA_R$ into consideration. 
+This completes the proof of the theorem.
+
+\subsection{Auxiliary lemmas and proofs}
+\begin{lemma}[List initialization]
+    \label{lemma:list_init}
+    Let \(S\), \(\amin\) and \(\alpha\) be as in \(\cLD\) model. If~\(\innerstage\)~(\Cref{alg:first_stage_high_level})~is run with \(S\) and \(\amin\), the size of $M$ is at most $1/\wmin^{O(1)}$, all $(\muhat, \hat\alpha) \in M$ satisfy $\hat\alpha \leq 1/3$, and with probability  at least \(1 - \wmin^{O(1)}\) 
+    there exists \((\muhat, \hat \alpha) \in M\) such that $\alpha/4 \leq \hat\alpha \leq \min(\alpha, 1/3)$ and $\norm{\muhat-\mu^*} \leq f(\hat\alpha)$.
+\end{lemma}
+\begin{proof}
+There are at most $1/\amin$ choices for $\hat\alpha$, and for each of them the output of $\ckLDA$ has size at most $1/\wmin^{O(1)}$, so $|M| \leq 1/\wmin^{O(1)}$.
+With probability $1-\wmin^{O(1)}$, $\ckLDA$ succeeds in all up to $1/\amin$ runs. Then we are guaranteed to produce one $\hat\alpha$ with $\alpha/4 \leq \hat\alpha \leq \min(\alpha, 1/3)$, and then $\ckLDA$ is guaranteed to produce one corresponding $\muhat$ with $\norm{\muhat - \mu^*} \leq f(\hat\alpha)$.
+\end{proof}
+
+\begin{lemma}[Good hypotheses are not removed]
+    \label{lemma:not_remove_good}
+    Let \(S\), \(\amin\) and \(\alpha\) be as in \(\cLD\) model. Run~\(\operatorname{ListFilter}\)~(\Cref{alg:constructing_output})~on \(S\) and \(\amin\) with \(M\) obtained from~\(\innerstage\)~(\Cref{alg:first_stage_high_level})~and call a hypothesis $(\muhat, \hat\alpha) \in M$ good if $\hat\alpha \geq \alpha/4$ and $\norm{\muhat - \mu^*} \leq f(\hat\alpha)$.
+    Then, with probability at least $|M|^2 \wmin^{O(1)}$, no good hypothesis is removed from $M$ (including in any of the reruns triggered by the algorithm).
+\end{lemma}
+
+\begin{proof}
+Let \(\ell\) be an arbitrary iteration of the outer for loop. Then, at the beginning of the \(\ell\tth\) iteration, 
+\begin{enumerate}
+    \item \(T_j \cap T_s = \emptyset\) for any \(j < s \in J\),
+    \item \(\Card{T_j} \geq 0.9\hat\alpha_j n\) for any \(j \in J\),
+    \item \(\Card{J} \leq 10 / (9\hat\alpha_\ell)\).
+\end{enumerate}
+Indeed, the second property follows directly from the algorithm. 
+
+For the first property, assume that for \(j < s \in J\), there exists \(x \in S\), such that \(x \in T_j \cap T_s\).
+This would imply that \(\abs{v_{js}^{\top}(\muhat_j - \muhat_s)} \leq 2\beta(\hat\alpha_s)\), so
+\(\norm{\muhat_j - \muhat_s} \leq 2\beta(\hat\alpha_s)\). 
+However, in this case the first 'if' condition would pass and we would not add \(s\) to \(J\).
+Thus, \(T_j \cap T_s = \emptyset\).
+
+For the third property, note that
+\begin{equation*}
+    n \geq \sum_{j \in J} \Card{T_j} \geq \sum_{j \in J} 0.9\hat\alpha_j n \geq 0.9\Card{J} \hat\alpha_\ell n,
+\end{equation*}
+which implies \(\Card{J} \leq 10 / (9\hat\alpha_\ell)\). 
+
+Now, let \(s\) be the index of a hypothesis with \(\hat\alpha_s \geq \alpha/4\) and
+\(\norm{\muhat_s - \mu^{\ast}} \leq f(\hat \alpha_s)\).
+If \(s\) was skipped in the \(s\tth\) iteration (i.e., there exists \(j \in J\) with $\muhat_j$ close to \(\muhat_s\)), then \((\muhat_s, \hat\alpha_s)\) is trivially not removed from \(M\).
+For the rest of the proof we assume that \(s\) is not skipped.
+
+For the sake of the analysis, we introduce the analogue of the sets \(T_s\), 
+which we call \(\tilde T_s\), defined for points in the set \(C^{\ast}\) (i.e., all inlier points before the adversarial removal), and show that (i) \(\Card{\tilde T_s}\) is large 
+and (ii) \(\Card{\tilde T_s \setminus T_s}\) is small.
+In particular, let 
+\[\tilde T_s =  \bigcap_{j \in J} \left\{x \in C^{\ast}, \text{ s.t. } \abs{v_{js}^{\top} (x - \muhat_s)} \leq \beta(\hat\alpha_s) \right\},\]
+where we recall \(\beta(\hat\alpha_s) = 10 \psi_t(\hat\alpha_s) + f(\hat\alpha_s)\).
+Note that \(\Card{T_s} \geq \Card{\tilde T_s} - \Card{C^{\ast} \setminus S^{\ast}} 
+            \geq \Card{\tilde T_s} - \wmin^2\Card{C^{\ast}}\).
+Also, for any \(\alpha' \leq \hat \alpha_s\), applying~\cref{lem:conc-one-dir} with radius \(10 \psi_t(\alpha')\), 
+using that \(\norm{\muhat_s - \mu^{\ast}} \leq f(\hat\alpha_s) \leq f(\alpha')\) and \(t \geq 2\),
+we get that with exponentially small failure probability,
+\begin{equation}
+    \label{eq:card_ub}
+    \Card{\Set{x \in C^{\ast} \text{, s.t. } \abs{v^{\top}(x - \muhat_s)} > \beta(\alpha')}} \leq \frac{\alpha'}{50}\Card{C^{\ast}}.
+\end{equation}
+
+Consider the \(s\tth\) iteration.
+Using a union bound over \(\Card{J} \leq 2 / \amin\) directions, and since all \(\hat \alpha_s \geq \amin\),
+we get that with exponentially small failure probability
+\begin{equation*}
+    \begin{aligned}
+    \Card{\tilde T_s} & \geq \Card{C^{\ast}} - \sum_{i \in J} \Card{\left\{x \in C^{\ast} \text{, s.t. } \abs{v_{is}^{\top} (x - \mu_s)} > \beta(\hat\alpha_s) \right\}} \\
+    &\geq \left(1 - \frac{\hat\alpha_s}{50}\Card{J}\right) \Card{C^{\ast}} \geq 0.95 \Card{C^{\ast}},
+    \end{aligned}
+\end{equation*}
+where we used that and \(\Card{J} \leq 10 / (9\hat\alpha_s)\).
+This implies that 
+\begin{equation*}
+    \Card{T_s} \geq \Card{\tilde T_s} - \wmin^2 \Card{C^{\ast}} \geq (0.95 - \wmin^2) \Card{C^{\ast}} \geq 0.92\Card{C^{\ast}} \geq 0.9 \alpha n \geq 0.9\hat \alpha_s n,
+\end{equation*}
+i.e., \((\muhat_s, \hat\alpha_s)\) is not removed from \(M\) during \(s^{\mathrm{th}}\) iteration.
+
+
+The pair \((\muhat_s, \hat\alpha_s)\) could also be removed during later iterations, when we recalculate \(T_s\) by removing points along new directions. 
+However, following a similar argument, we show that still, with high probability, \(\Card{T_s} \geq 0.9\hat\alpha_s n\).
+Assume that we are now in the \(k^{\mathrm{th}}\) iteration of the outer cycle, where \(k > s\). We define again \(\tilde T_s\) and sets \(A, B\):
+\begin{equation*}
+    \begin{aligned}
+        \tilde T_s &\coloneqq \bigcap_{i \in J \setminus \Set{s}} \left\{x \in C^{\ast}, \text{ s.t. } \abs{v_{is}^{\top} (x - \muhat_s)} \leq \max(\beta(\hat\alpha_s), \beta(\hat\alpha_i)) \right\},\\
+        A &\coloneqq \bigcap_{i < s, i \in J} A_i, \quad \text{ for } \quad A_i \coloneqq \left\{x \in C^{\ast} \text{, s.t. } \abs{v_{is}^{\top} (x - \muhat_s)} \leq \beta(\bm{\hat\alpha_s}) \right\}, \\
+        B &\coloneqq \bigcap_{i > s, i \in J} B_i, \quad \text{ for } \quad B_i \coloneqq\left\{x \in C^{\ast} \text{, s.t. } \abs{v_{is}^{\top} (x - \muhat_s)} \leq \beta(\bm{\hat\alpha_i}) \right\},
+    \end{aligned}
+\end{equation*}
+so that \(\tilde T_s = A \cap B\) and again \(\Card{T_s} \geq \Card{\tilde T_s} - \wmin^2\Card{C^{\ast}}\). It is crucial that we have different right hand sides in the definitions of \(A_i\) and \(B_i\) (we wrote them in boldface to emphasize this).
+
+Using a union bound again, we write
+\begin{equation*}
+    \Card{\tilde T_s} \geq 
+    \Card{C^{\ast}} 
+    - \sum_{i < s, i \in J} \Card{C^{\ast} \setminus A_i} 
+    - \sum_{i > s, i \in J} \Card{C^{\ast} \setminus B_i}.
+\end{equation*}
+Using~\cref{eq:card_ub}, with exponentially small failure probability, for all \(i \in J\),
+\begin{equation*}
+    \begin{aligned}
+    \Card{C^{\ast} \setminus A_i} &\leq (\hat\alpha_s / 50) \Card{C^{\ast}} \quad \text{(for } i < s \text{)} \quad \text{and} \\
+    \Card{C^{\ast} \setminus B_i} &\leq (\hat\alpha_i / 50) \Card{C^{\ast}} \quad \text{(for } i > s \text{)}.
+    \end{aligned}
+\end{equation*}
+Next, note that before the last element was added, we had that 
+(i) \(T_i \bigcap T_j = \emptyset\) for any \(i \neq j \in J\) and 
+(ii) \(\Card{T_i} \geq 0.9\hat\alpha_i n\) for any \(i \in J\).
+This implies that \(\sum_{i \in J} \hat\alpha_i < 10/9 + \hat\alpha_{\text{last}} < 19/9\), 
+where \(\hat\alpha_{\text{last}}\) corresponds to the element which was added last 
+(it might happen that after addition of the last element, we have \(\Card{T_i} < 0.9\hat\alpha_i n\) for several \(i \in J\)). 
+Therefore, as before, we obtain that 
+\begin{equation*}
+    \begin{aligned}
+    \Card{\tilde T_s} &\geq \left(1 - \sum_{i < s, i \in J} (\hat\alpha_s / 50) - \sum_{i > s, i \in J} (\hat\alpha_i / 50)\right) \Card{C^{\ast}} \\
+    &\geq  (1 - 10/(9 \cdot 50) - 19 / (9 \cdot 50)) \Card{C^{\ast}} \geq 0.93 \Card{C^{\ast}},
+    \end{aligned}
+\end{equation*}
+therefore 
+\(\Card{T_s} \geq \Card{\tilde T_s} - \wmin^2 \Card{C^{\ast}} \geq 0.92 \Card{C^{\ast}} \geq 0.9\hat\alpha_s n\) and \((\muhat_s, \hat\alpha_s)\) will not be removed from \(M\).
+
+We established that in a single run of the algorithm a good hypothesis is removed with exponentially small probability.
+The number of good hypotheses is bounded by $|M|$.
+Furthermore, the number of runs of the algorithm is also bounded by $|M|$, since whenever the algorithm is rerun a hypothesis is removed from $M$.
+Then, by a union bound, we can bound the probability that any good hypothesis is removed in any run of the algorithm by $\Card{M}^2 \wmin^{O(1)}$.
+\end{proof}

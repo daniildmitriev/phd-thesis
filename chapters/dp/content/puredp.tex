@@ -1,0 +1,17 @@
+
+While we have so far focused on Approximate~\Gls{dp} with \(\delta > 0\), in this section we briefly discuss Online learning under pure~\Gls{dp}. 
+Note that~\cref{lem:example-conc-learners} and~\cref{thm:main-finite} immediately imply the following lower bound on pure differentially private online learners for \(\point_N\).
+\begin{corollary}\label{corr:pure-dp-lower}
+    Let \(\e > 0\), \(\beta > 0\), \(K, T \in \N_+\) and \(N \geq 3KT^2 / \beta \).
+    For any \(\e\)-\Gls{dp} learner \(\alg\) which uses only \(\point^K_N\) as its output set, 
+    there exists an adversary \(\cB\), such that
+    \begin{equation}
+        \E \bs{M_{\alg}} = \Omega\br{\min\br{\frac{\log T / \beta}{\e}, T}}.
+    \end{equation}
+\end{corollary}
+\begin{proof}
+    \cref{lem:example-conc-learners} implies that \(\alg\) must be \(\conc{\beta}\). Furthermore, since \(\alg\) is \(\e\)-\Gls{dp}, it is also \((\e, \beta)\)-\Gls{dp},
+    and, thus, the existence of adversary with large regret follows from~\cref{thm:main-finite}.
+\end{proof}
+
+For \((\e, \delta)\)-\Gls{dp} online algorithms, there exists an upper bound provided by~\citet{golowich2021littlestone}. However, to the best of our knowledge, not much is known about \(\e\)-\Gls{dp} online algorithms. One way to obtain such algorithm is by leveraging existing results from the continual observation literature as done in~\Cref{prop:continual}. Under the same assumptions as in~\Cref{prop:continual}, using basic composition instead of advanced composition in the last step results in an \(\epsilon'\) scaling as \(N\epsilon\). However, this only works for~\(\point_N\) and not for more general classes. For arbitrary finite hypothesis classes, it is possible to use a~\Gls{dp} continual counter, similar to above to obtain a mistake bound that also scales with the size of the class. We also remark that the \(\mathsf{AboveThreshold}\) algorithm could be used to design learners for certain function classes. However, the question of whether generic learners can be designed remains open. Another interesting open question is whether the dependence on the size of the class, e.g.,~\(N\) for \(\point_N\), is necessary.

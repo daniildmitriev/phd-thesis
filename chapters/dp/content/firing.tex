@@ -1,0 +1,19 @@
+In~\Cref{sec:finite_horizon_result}, we analyzed a class of algorithms, namely concentrated algorithms, containing the only existing~\Gls{dp} online learning algorithm,~\Gls{dpsoa}, 
+and provided a matching logarithmic in \(T\) lower bound.
+A natural question is whether this lower bound can be extended to \textit{any} learner. While we do not provide a general answer, we show that our construction can be made more general. Here, we analyze a different class of algorithms, called \emph{firing algorithms}.
+
+For simplicity of exposition, consider the hypothesis class \(\point_3\), 
+and let \(f^{\ast} \in \Set{f^{(1)}, f^{(2)}}\).
+Let \(x^\ast\) be such that \(f^\ast = f^{(x^\ast)}\) and assume that adversary only considers sequences consisting of \((x^\ast, 1)\) and \((3, 0)\).
+Let \(\cD\) be a distribution on \(\Set{\text{all-zero function}, f^{(1)}, f^{(2)}}\).
+At each point \(t\), a firing algorithm \(\alg\) computes \(p_t = p_t(\#\text{mistakes up until }t) \in [0, 1]\) with \(p_t(0) = 0\), and samples a \(\xi_t \sim \mathrm{Bern}(p_t)\). If \(\xi_t = 1\), the algorithm commits to the correct hypothesis henceforth; otherwise, it outputs \(f_t \sim \cD\). Note that if the adversary introduces \((3, 0)\) at step \(t\), \(\alg\) is guaranteed not to err, and a single mistake suffices to identify (non-privately) the correct hypothesis.
+
+When \(\cD\) has support on only one of \(\Set{\text{all-zero function}, f^{(1)}, f^{(2)}}\), it yields a \(\conc{0}\) algorithm.
+Furthermore, the continual observation algorithm can also be viewed as a firing algorithm with a proper choice of \(\cD\). We analyze the opposite to the concentrated algorithms, in particular when \(\cD = \mathrm{Unif}\Set{f^{(1)}, f^{(2)}}\). We call such learners \emph{uniform firing algorithms} and we also obtain a logarithmic in \(T\) lower bound for them.
+
+\begin{proposition}\label{prop:firing-lb}
+    Let \(\alg\) be an \((\e, \delta)\)-\Gls{dp} uniform firing algorithm for class \(\point_3\).
+    Then, if \(\log T = \bigO{1 / \delta}\), there exists an adversary, such that \(\E \bs{M_{\alg}} = \Omega(\log T)\). 
+\end{proposition}
+
+Proof is provided in~\Cref{app:uniform_lb} and is similar to the proof of~\Cref{thm:main-finite}, but requires a more delicate construction. 

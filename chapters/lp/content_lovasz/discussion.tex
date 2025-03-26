@@ -1,0 +1,19 @@
+\subsection{Discussion}
+\label{sec:discussion}
+Based on numerical observations, we formulate the following conjecture.
+
+\begin{conjecture}
+\label{conj:sharp}
+    Let \(G\) be a dense random circulant graph. Then, 
+    \begin{equation}
+        \E \ltn(G) = (1 + o(1)) \sqrt{n}.
+    \end{equation}
+\end{conjecture}
+
+Existing lower bounds against RIP (see~\cite{bandeira2018discrete,blasiok2019improved}) do not allow us to use our proof strategy for showing~\Cref{conj:sharp}. Indeed, there exist \(\frac{n}{\log n}\)-sparse vectors in the kernel of \(\wt F\), which contradicts the desired inequality \(\norm{y}_2 \leq \frac{C}{\sqrt{n}} \norm{y}_1\) for \(y \in \ker \wt F\). However, it is still possible that no \(c n\)-sparse \emph{entrywise positive} vector exists in the kernel of \(\wt F\), for small enough constant \(c > 0\). It is also plausible that constructing a feasible vector for the dual programs in~\Cref{table:4_lps} may lead to tighter upper bounds. We leave these questions for the future work.
+
+\paragraph*{Paley graph}
+A classical example of a circulant graph is \textit{Paley} graph. For a prime \(p \equiv 1 \mod 4\), it is defined as the graph on \(p\) vertices with vertices \(i\) and \(j\) connected if and only if \(i - j\) is a quadratic residue modulo \(p\), see~\cite{cohen1988clique, baker1996maximal}. Paley graphs are believed to exhibit certain \textit{pseudorandom} properties, and bounding its independence number is a long-standing open problem in number theory and combinatorics~\cite{hanson2021refined}. This quantity can be upper bounded by the Lovász number of a certain subgraph called 1-localization which is circulant \cite{kunisky2024spectral}.
+
+Recently, several optimization based approaches were considered, see~\cite{kobzar2023revisiting,kunisky2024spectral,wanglower}. In~\cite{magsino2019linear}, a numerical evidence similar to~\Cref{conj:sharp} regarding subgraphs of Paley graph was observed, which if true, recovers the best known upper bound on the independence number due to~\cite{hanson2021refined}. 
+

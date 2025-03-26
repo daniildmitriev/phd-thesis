@@ -1,0 +1,21 @@
+\subsection{Useful inequalities}
+
+\begin{lemma}[Hoeffding's inequality]
+\label{lem:hoeffding}
+    Let \(X_1, \ldots, X_n\) be independent random variables, such that \(\E X_i = 0\) and \(a \leq X_i \leq b\) almost surely. Then,
+    \begin{equation}
+        \Pr\left(\abs*{\sum_{i=1}^n X_i} \geq t\right) \leq 2\exp\left( - \frac{2 t^2}{n (b - a)^2}\right)
+    \end{equation}
+\end{lemma}
+
+\begin{lemma}[RIP of subsampled DFT matrix,~\cite{haviv2017restricted}]
+\label{lem:rip_dft}
+Let \(F \in \C^{n \times n}\) be a DFT matrix: \(F_{jk} = \exp(-2 \pi i jk/n)\) for \(j, k \in [n]\). There exist \(c > 0\) and \(0 < \varepsilon < 1 / 3\), such that for all \(n\) large enough, a matrix consisting of \(q \geq \lceil n / 4 \rceil\) uniformly subsampled rows of \(F\) and rescaled by \(1 / \sqrt{q}\) has \((k, \varepsilon)\)-RIP for \(k = \frac{c n}{\log^3 n}\), with probability at least \(1 - 2^{\Omega(-\log^2 n)}\).
+\end{lemma}
+\begin{lemma}[e.g.~\cite{cahill2021robust}, Theorem 11]
+\label{lem:rip_l2l1}
+    If \(A \in \C^{m \times n}\) satisfies the RIP with parameters \(k\) and \(\varepsilon < 1/3\), then there exists \(C = C(\varepsilon)\), such that for any \(x \in \ker{A}\) we have that 
+    \begin{equation}
+        \norm{x}_2 \leq \frac{C}{\sqrt{k}}\norm{x}_1.
+    \end{equation}
+\end{lemma}

@@ -1,0 +1,71 @@
+\section{Preliminaries}\label{sec:prelim}
+We provide the necessary definitions for both Online Learning and Differential Privacy. 
+\subsection{Online Learning} We begin by defining the online learning game between a learner \(\alg\) and an adversary \(\cB\). Let \(T \in \N_+\) denote number of rounds and let \(\cX\) be some domain.
+\begin{definition}[General game]
+\label{def:general}
+    Let  \(\hyp \subseteq \Set{0, 1}^{\cX}\) be a hypothesis class of functions from \(\cX\) to \(\Set{0, 1}\). The game between a learner \(\alg\) and adversary \(\cB\) is played as follows:
+\begin{mdframed}[nobreak=true]
+\begin{itemize}
+    \item adversary \(\cB\) picks \(f^{\ast} \in \hyp\) and a sequence \(x_1, \ldots, x_T \in \cX\)
+    \item \textbf{for} \(t = 1, \ldots, T\):
+    \begin{itemize}
+        \item learner \(\alg\) outputs a current prediction \(\hat f_t \in \Set{0, 1}^{\cX}\) (see~\cref{def:proper})
+        \item \(\alg\) receives \((x_t, f^{\ast}(x_t))\)
+    \end{itemize}
+    \item \textbf{let} \(\regret_{\alg}  = \sum_{t = 1}^T \bI\bc{\hat f_t(x_t) \neq f^{\ast}(x_t)}\)
+\end{itemize}
+\end{mdframed}
+\end{definition}
+In this work, we study the following min-max problem:
+\begin{equation}\label{eq:mistake-bound}
+    \min_{\alg}\max_{\cB} \E \bs{\regret_{\alg}} = \min_{\alg} \max_{\cB} \sum_{t = 1}^T \Pr\bs{\hat f_t(x_t) \neq f^{\ast}(x_t)},
+\end{equation}
+where probability is taken over the randomness in \(\alg\). We refer to the random variable \(\regret_{\alg}\) as the mistake count of \(\cA\). The optimal mistake count of this game can be characterised by a combinatorial property of the hypothesis class \(\hyp\), called \emph{Littlestone dimension}, first shown by~\citet{littlestone1988learning}.
+
+\paragraph{Littlestone dimension}
+
+To define~\emph{Littlestone dimension}, we need the concept  of \emph{mistake tree}.  A mistake tree \(\cT\) is a complete binary tree, where  each internal node \(v\) corresponds to some \(x_v \in \cX\). Each root-to-leaf path of the tree -- denoted as \(x_1, x_2, \ldots, x_d, x_\mathrm{leaf}\) -- is associated with a label sequence \(y_1, \ldots, y_d\), 
+where \(y_i = \bI\bc{x_{i+1} \text{ is the right child of }x_i}\).
+ 
+We say that \(\cT\) is \emph{shattered} by \(\hyp\), if 
+for every possible root-to-leaf labeled path \(((x_1, y_1), \ldots, (x_d, y_d))\), there exists \(f \in \hyp\), such that \(f(x_i) = y_i\) for all \(i \in [d]\). This concept leads us to the formal definition of the Littlestone dimension as follows:
+\begin{definition}\label{defn:littlestone}
+    Littlestone dimension \(\br{\ldim{\hyp}}\) of a hypothesis class \(\hyp\) is defined as the maximum depth of any mistake tree that can be shattered by  \(\hyp\).
+\end{definition}
+% \begin{proposition}[\cite{littlestone1988learning}]
+
+
+    \citet{littlestone1988learning} proved that for any hypothesis class \(\hyp\), there exists a deterministic learner, called Standard Optimal Algorithm~(\Gls{soa})
+    such that \(\regret_{\mathrm{\Gls{soa}}} \leq \ldim{\hyp}\). Furthermore, for any learner \(\alg\) there exists a (possibly random) adversary \(\cB\), such that \(\E \bs{\regret_{\alg}} \geq \frac{\ldim{\hyp}}{2}\), where expectation is taken with respect to the randomness in \(\cB\). However, the~\Gls{soa} learner is not restricted to output a hypothesis in \(\hyp\) while making its predictions. Such learning algorithms are classified as \emph{improper learners}, which we define formally below:
+
+
+\begin{definition}[Proper and Improper learner]\label{def:proper}
+    A learner \(\alg\) for a hypothesis class \(\hyp\) is called \emph{proper} if its output  is restricted to belong to \(\hyp\). Any learner that is not~\emph{proper} is called~\emph{improper}.
+\end{definition}
+
+It is worth noting that most learners in online learning are improper learners though their output may only be simple mixtures of hypothesis in~\(\hyp\)~\citep{hanneke2021online}. We illustrate the importance of improper learners with a simple hypothesis class that we heavily use in the rest of this paper.
+\begin{definition}[Point class]\label{defn:point-class}
+    For \(N \in \N_+\), for domain \(\cX = [N] \coloneqq \Set{1, \ldots, N}\), define
+    \begin{equation}
+        \point_N \coloneqq \Set{f^{(i)}, i \in [N]}, \quad \text{where} \quad f^{(i)}(x) = \bI\bc{i = x}.
+    \end{equation}
+\end{definition}
+Note that \(\ldim{\point_N} = 1\) for any \(N > 1\). A simple algorithm to learn \(\point_N\) predicts \(0\) for every input until it makes a mistake. The input \(i\) where it incurred the mistake must correspond to the true target concept \(f^{(i)}\). This algorithm is improper as no hypothesis \(f\) in \(\point_N\) predicts \(0\) universally over the whole domain.
+
+\subsection{Differential Privacy}
+In this work, our goal is to study learners that satisfy the~\Gls{dp} guarantee~\citep{dwork2006calibrating} defined formally below.
+
+\begin{definition}[Approximate differential privacy]\label{defn:dp}
+    An algorithm \(\alg\) is said to be \((\varepsilon, \delta)\)-\Gls{dp}, if for any two input sequences \(\tau = \br{\br{x_1, y_1}, \ldots, \br{x_T, y_T}}\) and \(\tau'= \br{\br{x_1', y_1'}, \ldots, \br{x_T', y_T'}}\), such that there exists \textbf{only one} \(t\) with \((x_t, y_t) \neq (x_t', y_t')\), it holds that 
+    \begin{equation}
+        \Pr(\alg(\tau) \in S) \leq \exp(\varepsilon) \Pr(\alg(\tau') \in S) + \delta,
+    \end{equation}
+    where \(S\) is any set of possible outcomes.
+\end{definition}
+When \(\delta = 0\) we recover the definition of \emph{pure differential privacy}, denoted by \(\e\)-\Gls{dp}. 
+Note that for online learner \(\alg\), output at step \(t\) depends only on first \(t - 1\) elements of the input sequence. In the setting of offline learning, the inputs \(\tau,\tau'\) can be thought of as two datasets of length \(T\) and \(\cA\) as the learning algorithm that outputs one hypothesis \(f\)~(not necessarily in \(\hyp\)). If \(\cA\) simulatanously satisfies~\Gls{dp} and is a~\Gls{pac} learner~\citep{valiant1984theory}, it defines the setting of~\Gls{dp}-\Gls{pac} learning~\citep{kasiviswanathan2011can}. However,~the setting of~\Gls{dp}-online learning is more nuanced due to two reasons.\\
+
+\noindent\textbf{Privacy of Prediction or Privacy of Predictor} The first complexity arises from what the privacy adversary observes when altering an input, termed as its \emph{view}. Since \(\cA\) provides an output hypothesis \(\hat{f}_t\in\bc{0,1}^{\cX}\) at every time step \(t\in [T]\) as shown in~\Cref{def:general}, the adversary's view could encompass the entire list of predictors. Our work, like~\citet{golowich2021littlestone}, focuses on this scenario, where the output set is \(S\subseteq \Set{0, 1}^{\cX \times T}\). Nevertheless, certain studies restrict the adversary's view to only the predictions, excluding the predictors themselves~\citep{beimel2013private, dwork2018privacy,naor2023private}. In this setting, it is also important to assume that the adversary only observes the predictions on the inputs that it did not change~\citep{kearns2015robust,kaplan2023black}; thus, they have \(S\subseteq\bc{0,1}^{\br{T-1}}\).
+
+\noindent\textbf{Oblivious and Adaptive adversary} The second complexity is about whether the online adversary \(\cB\) pre-selects all input points or adaptively chooses the next point based on the learner \(\cA\)'s previous response. Although the former, known as an \emph{oblivious} adversary, seems less potent, this difference does not manifest itself in non-private learning~\citep{cesa2006prediction}. However, this distinction becomes significant in the context of DP online learning. Adaptive adversaries, by design, leverage historical data in their decision-making process.
+While works like~\citet{kaplan2023black} focus on adaptive adversaries, others like~\citet{kearns2015robust} concentrate on oblivious ones, and~\citet{golowich2021littlestone} examine both. Our contribution lies in setting lower bounds against the simpler scenario of oblivious adversaries.

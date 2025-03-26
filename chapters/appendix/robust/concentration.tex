@@ -1,0 +1,47 @@
+\section{Concentration bounds}
+
+In this section we prove some concentration bounds essential to our analysis.
+
+\begin{lemma}
+\label{lem:conc-general}
+Let $D$ be a $d$-dimensional distribution with mean $\mu^* \in \R^d$ and sub-Gaussian $t$-th central moments with parameter $1$.
+Fix a unit vector $v \in \R^d$.
+Then
+\[\Pr_{x \sim D}[|\langle x - \mu^*, v\rangle| \leq R] \geq 1 - \br{\frac{\sqrt{t}}{R}}^t\,.\]
+\end{lemma}
+\begin{proof}
+We have that
+\begin{align*}
+    \Pr_{x \sim D}[|\langle x - \mu^*, v\rangle| > R]
+    &\leq \frac{\E_{x \sim D} \langle x - \mu^*, v\rangle^t }{R^t}
+    \leq \frac{(t-1)!!}{R^t}
+    \leq \br{\frac{\sqrt{t}}{R}}^t\,,
+\end{align*}
+where we used that $(t-1)!! \leq t^{t/2} = \sqrt{t}^t$.
+\end{proof}
+
+\begin{lemma}
+\label{lem:conc-one-dir}
+Let $D$ be a $d$-dimensional distribution with mean $\mu^* \in \R^d$ and sub-Gaussian $t$-th central moments with parameter $1$.
+Let $C^*$ be a set of i.i.d. samples drawn from $D$.
+Fix a unit vector $v \in \R^d$.
+Then with probability at least $1-\exp\br{-2|C^*|\br{\frac{\sqrt{t}}{R}}^{2t}}$,
+\[\Abs{\Set{x \in C^* \text{, s.t. } \abs{\langle x - \mu^*, v\rangle} \leq R}} \geq \br{1-2\br{\frac{\sqrt{t}}{R}}^t}|C^*|\,.\]
+\end{lemma}
+\begin{proof}
+The result follows by~\Cref{lem:conc-general} and a Binomial tail bound.
+\end{proof}
+
+\begin{lemma}
+\label{lem:conc-all-dir}
+Let $D$ be a $d$-dimensional distribution with mean $\mu^* \in \R^d$ and sub-Gaussian $t$-th central moments with parameter $1$.
+Let $C^*$ be a set of i.i.d. samples drawn from $D$.
+Fix $m$ unit vectors $v_1, \ldots, v_m \in \R^d$.
+Then with probability at least $1-\exp\br{-2|S^*|m^2\br{\frac{\sqrt{t}}{R}}^{2t}}$,
+\[\Big| \bigcap_{i \in [m]}\Set{x \in S^* \text{, s.t. } \abs{\langle x - \mu^*, v_{i}\rangle} \leq R} \Big| \geq \br{1-2m\br{\frac{\sqrt{t}}{R}}^t}|S^*|\,.\]
+\end{lemma}
+\begin{proof}
+By~\Cref{lem:conc-general} and a union bound over the $m$ directions, we get
+\[\Pr_{x \sim D}[|\langle x - \mu^*, v_i\rangle| \leq R, \forall i \in [m]] \geq 1 - m\br{\frac{\sqrt{t}}{R}}^t\,.\]
+Then the result follows by a Binomial tail bound.
+\end{proof}

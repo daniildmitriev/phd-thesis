@@ -31,17 +31,17 @@
 %
 % Uncomment and adapt these lines if you want to include a cover PDF.
 %
-\includepdf[pages={1,{}}]{cover/crop/cover_front.pdf}
-\cleardoublepage\setcounter{page}{1}
+% \includepdf[pages={1,{}}]{cover/crop/cover_front.pdf}
+% \cleardoublepage\setcounter{page}{1}
 
 %
 % Frontmatter
 %
 
-\include{frontbackmatter/dirtytitlepage}
+% \include{frontbackmatter/dirtytitlepage}
 \include{frontbackmatter/titlepage}
 \include{frontbackmatter/titleback}
-\cleardoublepage\include{frontbackmatter/dedication}
+% \cleardoublepage\include{frontbackmatter/dedication}
 \cleardoublepage\include{frontbackmatter/abstract}
 \cleardoublepage\include{frontbackmatter/acknowledgments}
 \pagestyle{scrheadings}
@@ -55,15 +55,27 @@
 \include{\dir/main}
 
 \cleardoublepage%
-\def\dir{chapters/sample-chapter}
+\def\dir{chapters/dp}
 \include{\dir/main}
-
-% Include some blind text
-\Blinddocument
 
 \cleardoublepage%
-\def\dir{chapters/conclusion_outlook}
+\def\dir{chapters/robust}
 \include{\dir/main}
+dd
+\cleardoublepage%
+\def\dir{chapters/lp}
+\include{\dir/main}
+
+% \cleardoublepage%
+% \def\dir{chapters/sample-chapter}
+% \include{\dir/main}
+
+% Include some blind text
+% \Blinddocument
+
+% \cleardoublepage%
+% \def\dir{chapters/conclusion_outlook}
+% \include{\dir/main}
 
 \appendix
 \cleardoublepage%
@@ -74,7 +86,7 @@
 
 \bookmarksetup{startatroot}
 %\pagenumbering{gobble}
-\cleardoublepage\include{frontbackmatter/cv}
+% \cleardoublepage\include{frontbackmatter/cv}
 \cleardoublepage\include{frontbackmatter/publications}
 
 \end{document}

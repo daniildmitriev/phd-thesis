@@ -1,0 +1,54 @@
+\subsection{Preliminaries}
+\paragraph*{Notation}
+For \(n \in \N\), let \([n] \coloneqq \{0, \ldots, n - 1\}\). We index vectors and matrices by \([n]\): for \(x 
+\in \R^n, x = (x_0, \ldots, x_{n-1})\). We write \(x \geq \mathbf{0}\) for entrywise positivity.
+For \(n \in \N\), we denote by \(G = (V, E)\) a graph with vertex set \(V = [n]\) 
+and edge set \(E \subseteq (V \times V) \setminus \{(k, k) \text{ for } k \in V\}\).
+For a graph \(G = (V, E)\) we define its complement \(\overline{G} = (V, E')\),
+where \(E' = \{(u, v) \text{ s.t. } u \neq v \text{ and } (u, v) \notin E\}\).
+We use the standard asymptotic notation, $O(\cdot), \Omega(\cdot)$, and $\Theta(\cdot)$ to describe the order of the growth of functions associated with the limit of the graph dimension $n$. For \(x \in \R^n\), we denote \(\norm{x}_1 \coloneqq \sum_{k=0}^{n - 1} \abs{x_k}\), \(\norm{x}_2 \coloneqq \left(\sum_{k=0}^{n-1} x_k^2\right)^{1/2}\), and \(\norm{x}_{\infty} \coloneqq \max_{k}\abs{x_k}\).
+
+\paragraph*{Discrete Fourier Transform}
+Let \(F \in \C^{n \times n}\) be the discrete Fourier transform matrix: \(F_{jk} = \exp(-2 \pi i jk/n)\) for \(j, k \in [n]\). For \(k \in [n]\), let \(f_k\) denote the \(k\)-th row of \(F\).
+We associate a matrix \(\wt F \in \R^{m \times n}\) to any RCG $G$ consisting of subsampled rows of \(F\).
+\begin{definition}
+\label{def:f_tilde}
+For any RCG $G$, let $\wt F \equiv \wt F (G) \in \C^{m \times n}$ (with $m$ the number of neighbors of $0$ in $G$)  be defined as a submatrix of \(F\), including row \(f_k\) if $(0,k) \in E(G).$
+\end{definition}
+
+\begin{definition}
+ The \emph{Lovász theta number} \(\ltn(G)\) is defined as the solution to the following SDP (\(J\) is the all-ones matrix),
+\begin{equation}
+\label{def:ltn}
+\begin{aligned}
+    \ltn(G) \coloneqq \max_{X \in \R^{n \times n}}
+    \Big\{&\langle X, J \rangle \text{, such that } X \succeq 0, \Tr X = 1, \\
+    &X_{ij} = 0\text{ for all }(i, j) \in E(G)\Big\}.
+\end{aligned}
+\end{equation}
+\end{definition}
+\begin{definition}
+\label{def:circ_graph}
+ A graph on $n$ vertices is called \emph{circulant} if there is an ordering of its vertices such that its adjacency matrix is circulant. Equivalently, a circulant graph is a Cayley graph of a cyclic group \(\Z_n\).
+\end{definition}
+
+This definition implies that a circulant graph is described by listing the neighbors of a single root vertex (say vertex $0$), since $(i,j)\in E \iff (0,i-j)\in E.$
+In this text, we focus on \emph{dense random} circulant graphs.
+    \begin{definition}
+    \label{def:rand_circ}
+    For odd \(n\), a \emph{dense random circulant graph (RCG)} is a random Cayley graph of a cyclic group \(\Z_n\). It is obtained in the following way: uniformly sample \(x \in \{0, 1\}^m, m={\frac{n - 1}{2}},\) and define the first row of the adjacency matrix as
+    \begin{equation}
+        R = (0\ \ x\ \ \overset{\leftarrow}{x}),
+    \end{equation}
+    where \(\overset{\leftarrow}{x}_i \coloneqq x_{m-i-1}\). Circulate $R$ to obtain the complete adjacency matrix.
+    \end{definition}
+
+For a circulant graph \(G\) we define a vector \(g \coloneqq Fb\), where \(b \in \{\pm 1\}^{n}\) with $b_0=1$ and \(b_k = 1\) if \((0, k)\) is not an edge, and \(-1\) otherwise, for $1 \le k \le n-1$.
+
+\begin{definition}[Restricted isometry property]
+\label{def:rip}
+    A matrix \(A \in \C^{q \times n}\) is said to satisfy \((k, \varepsilon)\)-restricted isometry property, for \(k \leq n\) and \(\varepsilon \in (0, 1)\), if for all \(k\)-sparse \(x \in \C^{n}\) we have that 
+    \begin{equation}
+        (1 - \varepsilon) \norm{x}_2^2 \leq \norm{Ax}_2^2 \leq (1 + \varepsilon) \norm{x}_2^2. 
+    \end{equation}
+\end{definition}

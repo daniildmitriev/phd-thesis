@@ -1,0 +1,32 @@
+\section{Examples}
+\label{app:examples}
+\paragraph{\(k\) inlier cluster, \(c\) outlier clusters.}
+One tricky adversarial distribution is the Gaussian mixture model itself. In particular, we consider 
+\begin{equation}
+    \cX_c = \frac{k}{k + c}\sum_{i = 1}^k \frac{1}{k} \cN(\mu_i, I) + \frac{c}{k + c}\sum_{i = 1}^c \frac{1}{c}\cN(\tilde \mu_i, I),
+\end{equation}
+where the first \(k\) Gaussian components are inliers and \(Q\) is a GMM with \(c\) components, which we call \textit{fake} clusters. 
+Since all inlier cluster weights are identical, we denote \(w \coloneqq w_i = 1 / (k + c)\).
+Assume that \(1 \ll c \ll k\), which corresponds to \(\varepsilon \gg w\). Then, relative weights are \(\tilde w = 1 / (c + 1) \approx 1 / c\). 
+Due to large adversary, previous results on learning GMMs cannot be applied, leaving vanilla list-decodable learning.
+However, the latter also cannot guarantee anything better that \(\Omega(\sqrt{t}k^{1/t})\) even with the knowledge of \(k\), 
+as long as list size is \(O(k + c)\), which can be much worse than our guarantees of \(O(\sqrt{t}c^{1/t})\) for the same list size.
+
+Their drawback is that they do not utilize separation between true clusters, i.e., for each $i$, they model the data as 
+\[\cX = \frac{1}{k + c} \cN(\mu_i, I) + \left(1 - \frac{1}{k + c}\right)Q.\]
+where $Q$ can be ``arbitratily adversarial'' for recovering \(\mu_i\).
+
+\paragraph{Big + small inlier clusters}
+
+Consider the mixture
+\begin{equation}
+    \cX_b = \left(1 - w - \varepsilon\right)\cN(\mu_1, I_d) + w\cN(\mu_2, I_d) + \varepsilon Q,
+\end{equation}
+where \(\norm{\mu_1 - \mu_2} = \Omega(\sqrt{\log 1 / w})\), \(w \ll \varepsilon \ll 1\), and \(Q\) is chosen adversarially.
+In this example we have two inlier clusters, one with large weight \(\approx 1\) and another with small weight \(w\). 
+Adversarial distribution \(Q\) has large weight relative to the small cluster, but still negligible weight compared to the large one.
+
+Previous methods would either (i) recover large cluster with optimal error \(O(\varepsilon)\) (see, e.g., \cite{optimalErrorHuberModel}) but miss out small cluster  
+or (ii) recover both clusters using list-decodable mean estimation with known $\alpha = w$, but with suboptimal errors \(O(\sqrt{\log 1 / w})\) and list size \(O(1 / w)\).
+In contrast, \cref{cor:gaussian} guarantees list size at most \(1 + O(\varepsilon / w)\), error \(O(\sqrt{\log \varepsilon / w})\) for the small cluster, and error \(O(\varepsilon \sqrt{\log 1 / \varepsilon})\) for the larger. 
+In general, we achieve (i) optimal errors for both clusters and (ii) optimal (up to constants) list size.

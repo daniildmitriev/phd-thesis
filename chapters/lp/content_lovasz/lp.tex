@@ -1,0 +1,234 @@
+
+\subsection{Proof of main theorem}
+
+Let $G$ be a circulant graph. As noted in~\cite{magsino2019linear}, for circulant graphs the SDP formulation of the Lovász number can be rewritten as the following linear program:
+
+\begin{equation}
+\begin{aligned}
+    \ltn(G) &= \max_{x \in \R^{n}} \sum_{i \in [n]} x_i, \\ \text{ subject to }
+    &\begin{cases} x_k = x_{n - k} \text{ for all } k \in [n] \setminus \{0\}, \\
+    x_0 = 1,
+    Fx \geq \mathbf{0}, \\
+    x_k = 0\text{ for all edges } (0, k),
+    \end{cases}
+\end{aligned}
+\end{equation}
+
+\begin{table}[ht]
+\centering
+\caption{Four equivalent LPs for \(\ltn(G)\).}
+\label{table:4_lps}
+\renewcommand{\arraystretch}{1.05}
+\begin{tabular}{@{}p{0.47\linewidth} p{0.47\linewidth}@{}}
+\multicolumn{2}{c}{\textbf{'time' domain}} \\[3pt]
+\toprule
+\textbf{Primal} & \textbf{Dual}\\
+\midrule
+\(
+\begin{aligned}
+\max_{x \in \R^n} \ &\sum_{i} x_i\\
+\text{s.t. } &x_k = x_{n - k} \\
+&\quad \text{for all } k \in [n] \setminus \{0\}, \\
+&x_0 = 1,\ Fx \ge \mathbf{0} ,\\
+&x_k=0 \\
+&\quad \text{for all }(0, k) \in E(G).
+\end{aligned}
+\)
+&
+\(
+\begin{aligned}
+\min_{z \in \R^n} &1 + \sum_i z_i \\
+\text{s.t. } &z_k = z_{n - k} \\
+&\quad \text{for all } k \in [n] \setminus \{0\}, \\
+&z \geq \mathbf{0}, \\
+&\langle z, f_k \rangle = -1 \\
+&\quad \text{for all } (0, k) \in E(\overline{G}).
+\end{aligned}
+\)
+\\
+\bottomrule
+\\[-0.2em]
+\multicolumn{2}{c}{\textbf{'frequency' domain}} \\[3pt]
+\toprule
+\textbf{Primal} & \textbf{Dual}\\
+\midrule
+\(
+\begin{aligned}
+\max_{y \in \R^n}\ &n y_0\\
+\text{s.t. } &y_k = y_{n - k} \\
+&\quad \text{for all } k \in [n] \setminus \{0\},  \\
+&\norm{y}_1 = 1,\ y \geq \mathbf{0},\\
+&\langle y, f_k \rangle = 0 \\
+&\quad \text{for all } (0, k) \in E(G).
+\end{aligned}
+\)
+&
+\(
+\begin{aligned}
+\min_{t \in \R^n} &1 + n t_0\\
+\text{s.t. } &t_k = t_{n - k} \\
+&\quad \text{for all } k \in [n] \setminus \{0\},\\
+&Ft \geq \mathbf{0}, \\
+&t_k = -1 / n \\
+&\quad \text{for all } (0, k) \in E(\overline{G}).
+\end{aligned}
+\)
+\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\Cref{table:4_lps} shows four equivalent linear programs, arising from strong duality (see, e.g.,~\cite{bazaraa2011linear}) and switching between 'time' and 'frequency' domains. For the latter, we perform the change of variables, \(y \coloneqq Fx\) and \(t \coloneqq Fz\) respectively.
+
+All formulations share the same structure: the optimization objective is determinisitic,
+while the set of feasible solutions is random through the random circulant graph structure.
+The following proposition introduces randomness to the objective, which is a crucial part of our argument.
+\begin{lemma}
+\label{lem:lp_with_g}
+Let \(G\) be a dense RCG and \(\wt F\) be a subsampled DFT matrix, see~\Cref{def:f_tilde}. Let \(g \coloneqq Fb \in \R^n\), for \(b \in \{\pm 1\}^{n}\) with \(b_k = 1\) if \((0, k)\) is not an edge and \(-1\) otherwise. Then,
+    \begin{equation}
+\begin{aligned}
+    \ltn(G) &= \max_{y \in \R^{n}} \braket{y, g}, \\ \text{ subject to }
+    &\begin{cases} y_k = y_{n - k} \text{ for all } k \in [n] \setminus \{0\}, \\
+    \norm{y}_1 = 1,
+    y \geq \mathbf{0}, \\
+    y \in \ker \wt F,
+    \end{cases}
+\end{aligned}
+\end{equation}
+\end{lemma}
+\begin{proof}
+We use the primal formulation in the frequency domain and observe that \(n y_0 = \braket{y, \sum_{k \in [n]} f_k}\).
+Since feasible vectors \(y\) are orthogonal to \(\wt F\), i.e., \(y \in \ker \wt F\), after subtracting \(2 \sum_{(0, k) \in E(G)} \braket{y, f_k}\) from \(\braket{y, \sum_{k \in [n]} f_k}\) we obtain
+\begin{equation}
+\langle y, \sum_{k \in [n]} f_k \rangle = \langle y, \sum_{(0, k) \notin E(G)} f_k - \sum_{(0, k) \in E(G)} f_k \rangle = \langle y, g\rangle.
+\end{equation}
+\end{proof}
+
+By the definition of graph \(G\), \(b_0 = 1\), and \(b_1, b_2, \ldots, b_{\frac{n - 1}{2}} \overset{\mathrm{iid}}{\sim} \mathrm{Unif}\{-1, 1\}\).
+Since \(\max_{jk} \abs{F_{jk}} = 1\), we can bound \(\|g\|_{\infty}\), leading to the following upper bound on \(\ltn\).
+\begin{lemma}
+\label{lem:nlogn_ub}
+Let \(G\) be a dense RCG. Then,
+\begin{equation}
+\Pr(\ltn(G) \leq 1 + 4\sqrt{n \log n}) \geq 1 - \frac{2}{n}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+We show that each entry of \(g\) is small with high probability. Indeed, for any \(k \in [n]\),
+\begin{equation}
+\begin{aligned}
+&\Pr(\abs{g_k} > 1 + 4 \sqrt{n \log n}) = \Pr(\abs{\langle f_k, b \rangle} > 1 + 4 \sqrt{n \log n}) \\
+&\quad \leq \Pr\left(\abs*{\sum_{j = 1}^{(n - 1) / 2}X_j} > 2 \sqrt{n \log n}\right) \leq \frac{2}{n^2},
+\end{aligned}
+\end{equation}
+where \(X_j \coloneqq \Re(F_{kj})b_j \in [-1, 1]\), and the last step follows from Hoeffding's inequality~(\Cref{lem:hoeffding}).
+Applying union bound over \(k \in [n]\), we obtain
+\begin{equation}
+\label{eq:linf_norm}
+\begin{aligned}
+    &\Pr(\norm{g}_{\infty} > 1 + 4 \sqrt{n \log n}) \leq \frac{2}{n}.
+\end{aligned}
+\end{equation}
+Thus, on a complement event, for any feasible vector \(y\) of~\Cref{eq:first_step}, we can simply upper bound \(\braket{y, g} \leq \norm{y}_{1} \norm{g}_{\infty} \leq 1 + 4\sqrt{n \log n}\), which finishes the proof.
+\end{proof}
+
+The upper bound in~\Cref{thm:main} would follow if we could show \(\max_k g_k = O(\sqrt{n \log \log n})\) with high probability.
+However, this is too optimistic: since we expect that the coordinates of \(g\) behave like standard Gaussian random variables and are uncorrelated, 
+we also expect that \(\max_k g_k = \Theta(\sqrt{n \log n})\). 
+Fortunately, as the next lemma shows, only a vanishing fraction of entries is of order at least \(\sqrt{n \log \log n}\).
+\begin{lemma}
+\label{lem:few_large}
+There exists a constant \(C > 0\), such that for \(\mathcal{I} \coloneqq \{k \in [n]: \abs{g_k} \geq C \sqrt{n\log \log n}\}\), it holds
+    \begin{equation}
+        \Pr\left(\lvert \mathcal{I} \rvert \leq \frac{n}{\log^{10} n}\right) \geq 1 - \frac{1}{\log^{10} n}.
+    \end{equation}
+\end{lemma}
+
+\begin{proof}
+    We express \(\abs{\mathcal{I}} = \sum_{k=0}^{n - 1} Y_k\), where \(Y_k = \mathbb{I}\{ \abs{g_k} \geq C \sqrt{n \log \log n}\}\). 
+    Using Hoeffding's inequality we obtain, for \(C\) large enough,
+    \begin{equation}
+    \begin{aligned}
+        \E \lvert \mathcal{I} \rvert &= \sum_{k = 0}^{n - 1} \Pr(\abs{g_k} \geq C \sqrt{n\log \log n}) \leq \frac{n}{\log^{20} n}, \\
+    \end{aligned}
+    \end{equation}
+    where the constant on the right hand side is absorbed into logarithm, and its power is chosen for the technical reasons.
+    Plugging this bound into Markov's inequality we get
+    \begin{equation}
+    \Pr\left(\lvert \mathcal{I} \rvert \geq \frac{n}{\log^{10} n}\right) \leq \frac{1}{\log^{10} n}.
+    \end{equation}
+\end{proof}
+
+The constraint \(y \in \ker \wt F\) was so far only used 
+to change the objective function from \(n y_0\) to \(\langle y, g \rangle\). 
+Next lemma highlights another important consequence of this constraint,
+namely, an upper bound on the \(\norm{y}_2\).
+\begin{lemma}
+\label{lem:rip}
+    For large enough $n$, with probability at least \(1 - \frac{1}{n}\) all \(x \in \ker \wt F\) satisfy \(\norm{x}_2 \leq \frac{\log^2 n}{\sqrt{n}} \norm{x}_1\).
+\end{lemma}
+\begin{proof}
+    We adapt the existing results in the literature regarding the RIP of the subsampled Fourier basis.
+    
+    Consider the following coupling: let \(\hat b \in \{0, 1\}^n\) with \(\hat b_0 = 0\) and \(\hat b_k \overset{\mathrm{iid}}{\sim} \mathrm{Ber}\left(\frac{\sqrt{2} - 1}{\sqrt{2}}\right)\) for \(k = 1, \ldots, n - 1\). Let \(\wt b \in \{0, 1\}^n\) be defined as follows:
+    \begin{equation}
+        \wt b_k = \begin{cases}
+            0, \quad &\text{for }k = 0, \\
+            1, \quad &\text{if }\hat b_k = 1 \text{ or } \hat b_{n - k} = 1, \text{ for } k \geq 1, \\
+            0, \quad &\text{otherwise}.
+        \end{cases}
+    \end{equation}
+    Note that (i) the distribution of \(\wt b\) is the same as the distribution of the adjacency vector for the vertex \(0\) in the random circulant graph \(G\) and (ii) \(\wt b_i = 0\) implies \(\hat b_i = 0\). 
+    Let \(q \coloneqq \sum_k \hat b_k\). 
+    Define \(\wh F \in \C^{q \times n}\) to be the matrix consisting of subsampled rows of \(F\) rescaled by \(1 / \sqrt{q}\),
+    where the \(k\)-th row is included if and only if \(\hat b_k = 1\). 
+
+
+    To show that \(\wh F\) satisfies the RIP, we apply~\Cref{lem:rip_dft}. To ensure its requirements, we condition on the following two events. First, since we do not include row $0$ in our construction, we condition on the event that among the uniformly subsampled rows, row \(0\) is not present; this increases the probability of a bad event by at most a constant factor. Additionally, we condition on a high probability event that \(q \geq \lceil n / 4 \rceil\). \Cref{lem:rip_dft} then implies that there exist constants \(c > 0\) and \(0 < \varepsilon < 1/3\), such that with probability at least \(1 - 1/n\), 
+    \(\wh F\) satisfies the RIP with parameters \(k = \frac{c n}{\log^3 n}\) and \(\varepsilon\). 
+    
+    On this event, by~\Cref{lem:rip_l2l1}, it follows that
+    \begin{equation}
+         \norm{x}_2 \leq \frac{C(\e)\log^{3/2} n}{\sqrt{cn}} \norm{x}_1 \leq \frac{\log^2 n}{\sqrt{n}} \norm{x}_1,
+    \end{equation}
+    for all \(x \in \ker \wh F\) and large enough $n$, where we absorbed the constants in the additional $(\log n)^{1/2}$ factor in the numerator. Since $\wh F$ consists of a subset of rows of $\wt F$, all \(x \in \ker \wt F\) are also in \(\ker \wh F\), so the proof is complete. 
+\end{proof}
+
+\begin{remark}[Alternative proof technique]
+\Cref{lem:rip} also follows from an intermediate step in the proof of RIP of the subsampled Fourier matrix in~\cite{haviv2017restricted}. More specifically, in our notation \cite[Theorem~3.1]{haviv2017restricted} implies that $\|\wh F x\| \ge (1 - \varepsilon) \| F x\|^2_2 - C \varepsilon / k \| x \|_1^2$ with high probability, and since $x \in \ker \wh F$, it follows that $\|x\|_2 \le \frac{ \log^{2}n}{\sqrt{n}}$.
+\end{remark}
+
+Now we present the proof of our main result.
+\begin{proof}[Proof of~\Cref{thm:main}]
+We begin with the lower bound \(\E \ltn(G) \geq \sqrt{n}\). Since \(G\) is vertex-transitive, it holds that \(\ltn(G) \ltn(\overline{G}) = n\), see~\cite[Theorem 8]{lovasz1979shannon}. Therefore,
+\begin{equation}
+    \log n = \E \log \ltn(G)\ltn(\overline{G}) = 2 \E \log \ltn(G) \leq 2 \log \E \ltn(G),
+\end{equation}
+where we used the fact that \(G\) equals in distribution to \(\overline{G}\) together with Jensen's inequality and linearity of the expected value. Upon exponentiating we obtain
+\begin{equation}
+    \E \ltn(G) \geq \sqrt{n}.
+\end{equation}
+
+    To prove the upper bound, we use the LP formulation of the Lovász number as in~\Cref{lem:lp_with_g}. Let \(A\) denote the intersubsection of the events of~\Cref{lem:nlogn_ub,lem:rip}, with \(\Pr(A) \geq 1 - \frac{3}{n}\) from union bound, and let \(B\) denote the event of~\Cref{lem:few_large}. Since \(\E [\ltn \lvert \overline{A} \text{ or } \overline{B}] \Pr(\overline{A} \text{ or } \overline{B}) = O(1)\), we condition on \(A\) and \(B\) in the following. 
+    For constant \(C\) defined in~\Cref{lem:few_large}, we split \(g\) into two parts, \(g_{\mathrm{small}}\) and \(g_{\mathrm{large}}\), where 
+    \begin{equation}
+    (g_{\mathrm{small}})_k = 
+    \begin{cases} 
+        g_k&\text{ if } \abs{g_k} < C \sqrt{n \log \log n}, \\
+        0 &\text{ otherwise},
+    \end{cases}
+    \end{equation}
+    and \(g_{\mathrm{large}} = g - g_{\mathrm{small}}\).
+    Then, \(\braket{y, g} = \braket{y, g_{\mathrm{small}}} + \braket{y, g_{\mathrm{large}}}\). 
+    We bound each term separately: first,
+    \begin{equation}
+        \braket{y, g_{\mathrm{small}}} \leq \norm{y}_1  \norm{g_{\mathrm{small}}}_{\infty} = O(\sqrt{n \log \log n}).
+    \end{equation}
+    On the event \(B\) we have that \(g_{\mathrm{large}}\) is \(\frac{n}{\log^{10} n}\)-sparse. 
+    From~\Cref{eq:linf_norm} \(\norm{g_{\mathrm{large}}}_{\infty} = O(\sqrt{n \log n })\), which implies that \(\norm{g_{\mathrm{large}}}_2 = O(n / \log^4 n)\). Using Cauchy-Schwartz inequality together with~\Cref{lem:rip}, we bound the second term as follows:
+    \begin{equation}
+        \braket{y, g_{\mathrm{large}}} \leq \norm{y}_2 \norm{g_{\mathrm{large}}}_{2} \leq \frac{\log^2 n }{\sqrt{n}} \cdot \frac{n}{\log^4 n}= O(\sqrt{n}),
+    \end{equation}
+    which completes the proof.
+\end{proof}

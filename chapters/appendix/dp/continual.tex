@@ -1,0 +1,9 @@
+\section{Proof of~\Cref{prop:continual}}
+\begin{proof} The proof for~\Cref{prop:continual} simply follows from first instantiating \(\abs{\cH}\) separate \(\br{T,\alpha,\beta,\epsilon'}\)-\Gls{dp} continual counters, one for each \(h\in\cH\). 
+
+Then we construct the learning algorithm as follows: at each step \(t\), the learner outputs the hypothesis that predicts \(0\) uniformly. This is possible as the learning algorithm is improper. Then the adversary provides the learner with \(\br{x_t, f^*\br{x_t}}\). The algorithm then privately updates the counter \(\cC_{h}\) with \(b_h = \bI\bc{f^*\br{x_t} = h\br{x_t}}\wedge f^*\br{x_t}\). Then, as soon as any counter's value~(say \(\cC_{h^*}\)) surpasses \(\alpha\), only predict using \(h^*\).
+
+Note that this algorithm only incurs a mistake at step \(t\) if \(b_h=1\) at step \(t\). However, every time \(b_h=1\), the counter for \(f^*\) gets updated by one. Thus, after \(\alpha\) updates it can be guaranteed with probability \(1-\beta\) that \(h^* = f^*\). To get the final expected mistake bound, set \(\beta = \alpha\) and this completes the proof.
+
+The privacy proof follows from applying strong composition to the different counters.
+\end{proof}

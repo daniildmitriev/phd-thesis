@@ -1,0 +1,120 @@
+\section{Proof of outer stage algorithm guarantees in~\Cref{sec:outer_stage_formulated}}\label{sec:outer-stage}
+Recall that $\ds = 4\psi_t(\wmin^4)$ and $\ds' = 160\psi_t(\wmin/4) + 16f(\wmin/4)$.
+
+\subsection{Proof of~\Cref{thm:outer-stage-init-guarantees}}
+In what follows we condition on the event $E$ that the events under which the conclusions in~\Cref{lem:conc-all-dir,lem:conc-one-dir} hold and that \(\csLDA\) succeeds. This event holds with probability \(1 - \wmin^{O(1)}\) by~\Cref{asm:algs},~\Cref{rem:succ_prob} and union bound (also see~\Cref{app:stability}).
+\paragraph{Proof of Theorem~\ref{item:M_small}}
+The list size bound follows from the standard results on \(\csLDA\) (see~\cite{diakonikolas2018list}, Proposition B.1). 
+\paragraph{Proof of Theorem~\ref{item:outer_stage_large_S_mi}}
+Guarantees of \(\csLDA\) imply that there exists $\mu_i \in M$ such that $\norm{\mu_i - \mu^*} \leq \ds'$. By~\Cref{lem:conc-all-dir}, a $(1-\wmin^2/2)$-fraction of the samples in $C^*$ are $\ds$-close to $\mu^*$ along each direction $v_{ij}$ with $i \neq j \in [|M|]$.
+Then, the same $(1-\wmin^2/2)$-fraction of samples are $(\ds+\ds')$-close to $\mu_i$ along each direction $v_{ij}$, so they are included in $S_i^{(1)}$.
+\paragraph{Proof of Theorem~\ref{item:first_iter_small_or_large}}
+Suppose $|S_i^{(1)} \cap C^*| \geq \wmin^4 |C^*|$.
+    Previous point implies that, on event \(E\), there exists $\mu_j \in M$ be such that $\norm{\mu_j - \mu^*} \leq \ds'$.
+    Then at least an $\wmin^4$-fraction of the samples in $C^*$ are $(\ds+\ds')$-close to $\mu_i$ in direction $\mu_i - \mu_j$.
+    By~\Cref{lem:conc-one-dir}, $\mu^*$ is also $\ds$-close in direction $\mu_i - \mu_j$ to more than a $(1-\wmin^4)$-fraction of the samples in $C^*$, so it is $\ds$-close to at least one sample in any $\wmin^4$-fraction of samples in $C^*$.
+    Therefore $\mu^*$ is also $(2\ds+\ds')$-close to $\mu_i$ in direction $\mu_i - \mu_j$.
+    Then $\norm{\mu_i - \mu_j} \leq 2\ds+2\ds'$ and $\norm{\mu_i - \mu^*} \leq 2\ds+3\ds'$.
+    Again, using~\Cref{lem:conc-all-dir} we obtain that there exists a  $(1-\wmin^2/2)$-fraction of the samples in $C^*$, which is included in \(S_i^{(2)}\).
+\paragraph{Proof of Theorem~\ref{item:outer_stage_S_mi_no_others}}
+Similarly, if $|S_i^{(2)} \cap C^*| \geq \wmin^4 |C^*|$, then there exists $\mu_j \in M$, 
+    such that at least an $\wmin^4$-fraction of the samples in $C^*$ are $(3\ds+3\ds')$-close to $\mu_i$ in direction $\mu_i - \mu_j$.
+    By the same arguments as in previous paragraph, we obtain that $\norm{\mu_i - \mu_j} \leq 4\ds+4\ds'$ and $\norm{\mu_i - \mu^*} \leq 4\ds+5\ds'$.
+    
+    Then any other true cluster with mean $(\mu^*)'$ and set of samples $(C^*)'$ satisfies $\norm{\mu^* - (\mu^*)'} \geq 16\ds+16\ds'$, so $\norm{\mu_i - (\mu^*)'} \geq 12\ds+11\ds'$.
+    From guarantees of \(\csLDA\), there exists $\mu_j' \in M$ such that $\norm{\mu_j' - (\mu^*)'} \leq \ds'$. Then $\norm{\mu_i - \mu_j'} \geq 12\ds+10\ds'$. 
+    By~\Cref{lem:conc-one-dir}, more than an $\wmin^4$-fraction of the samples from $(C^*)'$ are $\ds$-close to $(\mu^*)'$ in direction $\mu_i-\mu_j'$, so also $(\ds+\ds')$-close to $\mu_j'$ in direction $\mu_i-\mu_j'$, so also $(11\ds+9\ds')$-far from $\mu_i$ in direction $\mu_i-\mu_j'$.
+    Then $S_i^{(2)}$ selects at most a $\wmin^4$-fraction of the samples from $(C^*)'$.
+    Overall, $S_i^{(2)}$ selects from all other true clusters at most $\wmin^4 n$ samples.
+\paragraph{Proof of Theorem~\ref{item:outer_stage_S_mi_nonitersect}}
+Note that by the same argument, $\norm{\mu_i - \mu^*} \leq 4\ds+5\ds'$ and $\norm{\mu_{i'} - (\mu^*)'} \leq 4\ds+5\ds'$.
+    However, $\norm{\mu^* - (\mu^*)'} \geq 16\ds+16\ds'$, so also $\norm{\mu_i - \mu_{i'}} \geq 8\ds+6\ds'$, so $S_i^{(2)}$ and $S_{i'}^{(2)}$ are disjoint by the condition that each selects only samples that are $(3\ds+3\ds')$-close along direction $\mu_i - \mu_{i'}$ to the respective means $\mu_i$ and $\mu_{i'}$.    
+
+
+\subsection{Proof of~\Cref{thm:outer_stage_guarantees}}
+
+In the sequel, for any \(i \in G\), let \(m_i\) be the index in \(R\) after initialization that satisfies~Theorem~\ref{item:outer_stage_large_S_mi}. We condition on the event \(E'\) that event \(E\) from the proof of~\Cref{thm:outer-stage-init-guarantees} holds and that both \(\abs{\Card{C_i^*} - w_i n} \leq \wmin^{10} n\) for all \(i \in [k]\) and the number of adversarial points lies in the range \(\e n \pm \wmin^{10} n\).
+By Hoeffding's inequality and the union bound, the probability of $E'$ is at least $1-\wmin^{O(1)}$.
+\paragraph{Proof of~Theorem~\ref{item:outer_stage_U_small}}
+Let \(i \in G\), 
+and consider the beginning of the iteration when \(\mu_{g_i}\) is selected.  
+Then, using that all previous iterations could have removed at most $O(\wmin^3) |C_i^*|$ samples from $C_i^*$, we have that \[|S_{m_i}^{(1)} \cap C_i^*| \geq (1-\wmin^2/2-O(\wmin^3))|C_i^*|.\]
+Therefore at the iteration in which $\mu_{g_i}$ is selected, we still have $m_i \in R$.
+We now discuss two cases: First, consider the case that $|S_{m_i}^{(2)}| \leq 2 |S_{m_i}^{(1)}|$. Then, because we selected $\mu_{g_i} \in M$ and not $\mu_{m_i} \in M$ it means that $|S_{g_i}^{(1)}| \geq |S_{m_i}^{(1)}| \geq (1-\wmin^2/2-O(\wmin^3))|C_i^*|$.
+Note also by~Theorem~\ref{item:outer_stage_S_mi_no_others}, the number of samples from other true clusters in $S_{g_i}^{(2)}$ is at most $\wmin^4 n$.
+Then the number of adversarial samples in $S_{g_i}^{(2)}$ is at least 
+\begin{equation*}
+\begin{aligned}
+    |S_{g_i}^{(2)}| - |C_i^*| - \wmin^4 n &\geq |S_{g_i}^{(2)} \setminus S_{g_i}^{(1)}| - O(\wmin^2) |C_i^*| - \wmin^4 n \\ 
+    &\geq |S_{g_i}^{(2)} \setminus S_{g_i}^{(1)}| - O(\wmin^2)|C_i^*|.
+\end{aligned}
+\end{equation*}
+Then, either  $\Card{S_{g_i}^{(2)} \setminus S_{g_i}^{(1)}} = O(\wmin^2) |C_i^*|$ and $|U_i| \leq \Card{S_{g_i}^{(2)} \setminus S_{g_i}^{(1)}} = O(\wmin^2)|C_i^*|$, or $\Card{S_{g_i}^{(2)} \setminus S_{g_i}^{(1)}} \gg \wmin^2 |C_i^*|$. In the latter case, even if  $S_{g_i}^{(2)} \setminus S_{g_i}^{(1)}$ consists of adversarial examples only, then, since $|S_{g_i}^{(2)}| \leq 2 |S_{g_i}^{(1)}|$,  $U_i$ contains at most double the number of adversarial examples in $S_{g_i}^{(1)}$, i.e. $|U_i| \leq  2V_i$ where \(V_i\) denotes the number of adversarial examples in $S_{g_i}^{(1)}$. 
+
+Now consider the case that $|S_{m_i}^{(2)}| > 2 |S_{m_i}^{(1)}|$.
+By Theorem~\ref{item:outer_stage_S_mi_no_others}, the number of samples from true clusters in $S_{m_i}^{(2)}$ is at most $|C_i^*| + \wmin^4 n \leq 1.02 |S_{m_i}^{(1)}|$, so the number $W_i$ of adversarial samples in $S_{m_i}^{(2)}$  %(call this number \(W_i\)) 
+is at least $W_i \geq |S_{m_i}^{(2)}| - 1.02|S_{m_i}^{(1)}| \geq 0.98 |S_{m_i}^{(1)}| \geq 0.96 |C_i^*|$.
+Then, \(\Card{U_i} = \Card{(C_i^* \cap S_{g_i}^{(2)}) \setminus S_{g_i}^{(1)}} \leq \Card{C_i^*} \leq 2 W_i\). 
+
+Finally note that  by~Theorem~\ref{item:outer_stage_S_mi_nonitersect}, the sets $S_{g_i}^{(2)}$ and $S_{m_i}^{(2)}$ are disjoint from any other sets $S_{g_{j}}^{(2)}$ and $S_{m_{j}}^{(2)}$ that correspond to another component $C_j^*$. Therefore, the number of adversarial examples in the $S_{m_i}^{(2)}$ in the second case and $S_{g_{i}}^{(2)}$ in the first case is smaller than the total number of adversarial examples, i.e.
+\begin{equation*}
+    \sum_{\substack{i \in G \\ \Card{S_{m_i}^{(2)}} \leq 2 \Card{S_{m_i}^{(1)}}}} V_i + \sum_{\substack{i \in G \\ \Card{S_{m_i}^{(2)}} > 2 \Card{S_{m_i}^{(1)}}}} W_i \leq (\e + \wmin^{10}) n.
+\end{equation*}
+Therefore, we directly obtain
+\begin{equation*}
+\begin{aligned}
+    \Card{U} &\leq \sum_{i \in G} \Card{(C_i^* \cap S_{g_i}^{(2)}) \setminus S_{g_i}^{(1)}} \\
+    & = \sum_{\substack{i \in G \\ \Card{S_{m_i}^{(2)}} \leq 2 \Card{S_{m_i}^{(1)}}}} \Card{(C_i^* \cap S_{g_i}^{(2)}) \setminus S_{g_i}^{(1)}} + \sum_{\substack{i \in G \\ \Card{S_{m_i}^{(2)}} > 2 \Card{S_{m_i}^{(1)}}}} \Card{(C_i^* \cap S_{g_i}^{(2)}) \setminus S_{g_i}^{(1)}} \\
+    & \leq \sum_{\substack{i \in G \\ \Card{S_{m_i}^{(2)}} \leq 2 \Card{S_{m_i}^{(1)}}}} 2 V_i + \sum_{\substack{i \in G \\ \Card{S_{m_i}^{(2)}} > 2 \Card{S_{m_i}^{(1)}}}} 2 W_i + O(\wmin^2) n \leq (2\e + O(\wmin^2))n.
+\end{aligned}
+\end{equation*}
+\paragraph{Proof of~Theorem~\ref{item:outer_stage_S_gi}}
+
+
+Each iteration before \(g_i\) was selected, removed at most $\wmin^4 |C_i^*|$ samples from $C_i^*$, 
+so all previous iterations removed at most $O(\wmin^3)|C_i^*|$ samples from $C_i^*$.
+Then, by~Lemma~\ref{item:first_iter_small_or_large}, $S_{g_i}^{(2)}$ contains at least $(1-\wmin^{2}/2-O(\wmin^3))|C_i^*|$ samples from $C_i^*$.
+The statement follows then since on the event $E'$, we have   
+$w^*n - \wmin^{10} n \leq |C^*| \leq w^* n + \wmin^{10} n$. 
+
+\paragraph{Proof of~Theorem~\ref{item:outer_stage_not_S_gi_small}}
+Here, either for all $i \in [k]$, $|S_j^{(1)} \cap C_i^*| < \wmin^4 |C_i^*|$ or \(i \in G\) and the algorithm had already selected in a previous iteration  $\mu_{g_i} \in M$ with $|S_{g_i}^{(1)} \cap C_i^*| \geq \wmin^4 |C_i^*|$.
+Consider a first case, in which $|S_j^{(1)} \cap C_i^*| < \wmin^4 |C_i^*|$ for all $i \in [k]$.
+Then the total number of samples from true clusters in $S_j^{(1)}$ is at most $\wmin^4 n$.
+Using that $|S_j^{(1)}| > 100\wmin^4 n$, it follows that more than half of the samples in $S_j^{(1)}$ are adversarial. 
+
+The second case is that $|S_j^{(1)} \cap C_i^*| \geq \wmin^4 |C_i^*|$ for some $i \in G$ for which in a previous iteration \(g_i\) we had that $|S_{g_i}^{(1)} \cap C_i^*| \geq \wmin^4 |C_i^*|$.
+Note that at most $\wmin^2 |C_i^*|/2$ of the samples in $S \cap C_i^*$ are not considered adversarial at this point (the ones that were outside $S_{g_i}^{(2)}$).
+Also, by~Theorem~\ref{item:outer_stage_S_mi_no_others}, $S_j^{(1)}$ contains at most $\wmin^4 n$ samples from other true clusters.
+Therefore either more than half of the samples in $S_j^{(1)}$ are considered adversarial or \[|S_j^{(1)}| \leq \wmin^2 |C_i^*| + 2 \wmin^4 n \leq O(\wmin^2) n.\]
+
+\paragraph{Proof of~Theorem~\ref{item:outer_stage_else}}
+Suppose that when the algorithm reaches the else statement we have for some $i \in [k]$ that $i \in R$ and $|S_{m_i}^{(1)} \cap C_i^*| \geq 20 \wmin^2 |C_i^*|$. 
+We have that $|S_{m_i}^{(2)} \cap C_i^*|$ is at most $|S_{m_i}^{(1)} \cap C_i^*| + \wmin^2 |C_i^*| / 2$, where we use that by~Theorem~\ref{item:outer_stage_large_S_mi}, at most $\wmin^2 |C_i^*|/2$ samples can fail to be captured by $S_{m_i}^{(1)}$. 
+By~Theorem~\ref{item:outer_stage_S_mi_no_others}, furthermore, the number of samples from other true clusters in $S_{m_i}^{(2)}$ is at most $\wmin^4 n$.
+Therefore, using that $|S_{m_i}^{(2)}| > 2 |S_{m_i}^{(1)}|$, the number of adversarial samples in $S_{m_i}^{(2)}$ is at least 
+\[|S_{m_i}^{(2)}| - |S_{m_i}^{(1)} \cap C_i^*| - \wmin^2 |C_i^*| / 2 - \wmin^4 n \geq 0.45 |S_{m_i}^{(2)}| - \wmin^4 n \geq 0.44 |S_{m_i}^{(2)}|\,,\]
+where in the last inequality we used that $|S_{m_i}^{(2)}| > 100 \wmin^4 n$.
+Let $V$ be the union, over all $i \in [k]$, of all sets $S_{m_i}^{(2)}$ such that $i \in R$ and $|S_{m_i}^{(1)} \cap C_i^*| \geq 20 \wmin^2 |C_i^*|$.
+Theorem~\ref{item:outer_stage_S_mi_nonitersect} gives that all such sets $S_{m_i}^{(2)}$ are disjoint. 
+Therefore at least a $0.44$-fraction of the samples in $V$ are adversarial.
+
+Consider now for some $i \in [k]$ how many samples from $S \cap C_i^*$ can be outside $V$ when the algorithm reaches the else statement.
+By~Theorem~\ref{item:outer_stage_large_S_mi}, $S_{m_i}^{(1)}$ can fail to capture at most $\wmin^2|C_i^*|/2$ samples from $C_i^*$, and we have no guarantee that these samples are in $V$.
+Consider now the samples in $S_{m_i}^{(1)} \cap C_i^*$.
+If $i \in R$, we may miss up to $20 \wmin^2 |C_i^*|$ of these samples if $|S_{m_i}^{(1)} \cap C_i^*| < 20 \wmin^2 |C_i^*|$, because in this case we do not include $S_{m_i}^{(2)}$ in $V$.
+On the other hand, if $i \not\in R$, there are at most $100\wmin^4 n$ samples in $S_{m_i}^{(1)} \cap C_i^*$. 
+Then the total number of samples from $S \cap C_i^*$ outside $V$ is at most $ \wmin^2 |C_i^*|/2 + 20\wmin^2|C_i^*| + 100\wmin^4 n$.
+Summed across all $i \in [k]$, this makes up at most $21 \wmin^2 n$ samples.
+
+Overall, the number of adversarial samples in $S$ when the algorithm reaches the else statement is at least
+\begin{equation*}
+    \begin{aligned}
+    0.44 |V| + (|S| - |V| - 21 \wmin^2 n) &= |S| - 0.56 |V| - 21 \wmin^2 n \\
+    & \geq 0.44|S| - 21 \wmin^2 n \geq 0.4 |S|
+    \end{aligned}
+\end{equation*}
+where in the last inequality we also used that $|S| \geq 0.1 \wmin n$.
+
+
+

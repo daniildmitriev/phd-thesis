@@ -1,0 +1,27 @@
+\section{Extending finite lower bound to other values of \(\e\)}
+\label{app:all-eps}
+\paragraph{Smaller \(\e\)}
+Let \(d \in \N_+\) and \(\e = \e_0 / d\), where \(\e_0 = \log(3/2)\).
+WLOG we assume that \(T = d (2^k - 1)\). 
+We repeat the same construction as in the proof of~\cref{thm:main-finite} for the case \(\e_0\),
+but now instead of inserting only one point at each step, we insert \(d\) points.
+Note that this way sequences \(\inpseq^{(i+1)}\) and \(\inpseq^{(i)}\) are \(d\) points away from each other, therefore, by applying \Gls{dp} property of \(\alg\) \(d\) times, 
+we obtain the following equivalent version of~\cref{eq:q-i-plus-one}:
+\begin{equation}
+    \min\br{\Pr\bs{Q_1(\inpseq^{(i+1)})}, \Pr\bs{Q_2(\inpseq^{(i+1)})}}
+    \leq \frac{1}{2} \br{\exp(\varepsilon_0) \Pr\bs{Q(\inpseq^{(i)})} + A\delta},
+\end{equation}
+where \(A = 1 + \exp(\e_0 / d) + \exp(2\e_0 / d) + \ldots + \exp\br{\frac{(d - 1)\eps_0}{d}} \leq d \exp(\eps_0).\)
+Therefore, multiplying \(\delta\) by a factor \(d \exp(\eps_0)\), we recover the previous setting. 
+Since only \(\log 1 / \delta\) appears in the final bound, and since \(\eps_0\) is a constant, we only suffer an extra \(\log d \sim \log 1 / \e\) term,
+which is subleading.
+
+\paragraph{Larger \(\e\)}
+When \(\e > \e_0\), instead of dividing the sequence in two parts, we will divide it into \(s\) parts, for some integer \(s \geq 3\), obtaining
+\begin{equation}
+    \min\br{\Pr\bs{Q_1(\inpseq^{(i+1)})}, \ldots, \Pr\bs{Q_s(\inpseq^{(i+1)})}}
+    \leq \frac{1}{s} \br{\exp(\e) \Pr\bs{Q(\inpseq^{(i)})} + \delta}.
+\end{equation}
+We need to ensure that \(\exp(\e) / s \leq 3/4\), in order for the proof to go through, which follows if \(\log s = O(\e)\). 
+Finally, note that instead of repeating process \(\Omega(\log T)\) times, we repeat \(\Omega\br{\frac{\log T}{\log s}} = \Omega\br{\frac{\log T}{\e}}\) times,
+which matches the required mistake bound.
