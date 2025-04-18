@@ -28,5 +28,5 @@ Adversarial distribution \(Q\) has large weight relative to the small cluster, b
 
 Previous methods would either (i) recover large cluster with optimal error \(O(\varepsilon)\) (see, e.g., \cite{optimalErrorHuberModel}) but miss out small cluster  
 or (ii) recover both clusters using list-decodable mean estimation with known $\alpha = w$, but with suboptimal errors \(O(\sqrt{\log 1 / w})\) and list size \(O(1 / w)\).
-In contrast, \cref{cor:gaussian} guarantees list size at most \(1 + O(\varepsilon / w)\), error \(O(\sqrt{\log \varepsilon / w})\) for the small cluster, and error \(O(\varepsilon \sqrt{\log 1 / \varepsilon})\) for the larger. 
+In contrast, \Cref{cor:gaussian} guarantees list size at most \(1 + O(\varepsilon / w)\), error \(O(\sqrt{\log \varepsilon / w})\) for the small cluster, and error \(O(\varepsilon \sqrt{\log 1 / \varepsilon})\) for the larger. 
 In general, we achieve (i) optimal errors for both clusters and (ii) optimal (up to constants) list size.

@@ -9,7 +9,8 @@ In this section, we provide the main result of our work along with their proof. 
     Given \(f_0, f_1 \in \hyp\) and \(\xeq, \xdif \in \cX\), we call the tuple \((f_0, f_1, \xeq, \xdif)\) \emph{distinguishing},
     if  it satisfies both \(f_0(\xeq) = f_1(\xeq)\) and \(f_0(\xeq) = f_0(\xdif) \neq f_1(\xdif)\).
 \end{definition}
-A distinguishing tuple means that there are two functions (\(f_0, f_1\)), and two input points (\(\xeq, \xdif\)), such that only one of these points can effectively differentiate between the two functions. The absence of a distinguishing tuple implies a restricted hypothesis class: either \(\mathcal{H}\) is a singleton (\(\Card{\hyp} = 1\)), or it contains precisely two inversely related functions ( \(\Card{\hyp} = 2\) with \(f_1 = 1 - f_0\)). In the latter case, \emph{every} input point contains information distinguishing \(f_1\) and \(f_2\).
+A distinguishing tuple means that there are two functions (\(f_0, f_1\)), and two input points (\(\xeq, \xdif\)), such that only one of these points can effectively differentiate between the two functions. 
+The absence of a distinguishing tuple implies a restricted hypothesis class: either \(\mathcal{H}\) is a singleton (\(\Card{\hyp} = 1\)), or it contains precisely two inversely related functions (\(\Card{\hyp} = 2\) with \(f_1 = 1 - f_0\)). In the latter case, \emph{every} input point contains information distinguishing \(f_1\) and \(f_2\).
 This implies that there is no difference between input sequences, and the mistake bound will not depend on \(T\). For the purposes of our analysis, we proceed under the assumption that a distinguishing tuple always exists.
 
 
@@ -28,7 +29,7 @@ we denote \(\cA(\tau)_t \bs{x}\) to be the value of the \(t\)-th output function
     \end{equation}
     where \(\tau_0 = \br{\br{\xeq, f_0(\xeq)}, \ldots, \br{\xeq, f_0(\xeq)}}\).
 \end{definition}
-Note that \(\tau_0\) from~\cref{defn:beta-conc} is a `dummy', \emph{non-distinguishing} input, as it does not contain any information to distinguish \(f_0\) from \(f_1\).
+Note that \(\tau_0\) from~\Cref{defn:beta-conc} is a `dummy', \emph{non-distinguishing} input, as it does not contain any information to distinguish \(f_0\) from \(f_1\).
 
 \subsection{Main Result}\label{sec:finite_horizon_result}
 We now show that if the learner is both differentially private and concentrated, it will necessarily suffer a large (logarithmic in \(T\)) number of mistakes  in the game of~\Cref{def:general}.
@@ -46,12 +47,12 @@ This can be seen from the following simple \emph{Name \& Shame} algorithm:  init
 Furthermore, each time the algorithm incurs a mistake, it adds this mistake to \(S\) with probability \(\delta\). Since the algorithm runs \Gls{soa} on \(S\), it will make on expectation at most \(\ldim{\hyp} / \delta\) mistakes.
 This algorithm is, however, not `conventionally' private, since it potentially discloses a \(\delta\)-fraction of the data, namely the set \(S\).
 
-Now, we compare result of~\cref{thm:main-finite} with known upper bounds in~\Cref{fig:lower-bound}. Recall that~\Gls{dpsoa} in \citet{golowich2021littlestone} obtained an upper bound which increases logarithmically with the time horizon \(T\).~\Cref{fig:lower-bound} shows that for \(T \leq \exp(1 / (32\delta))\), the dependency on \(T\) is necessary, thereby showing the tightness of~\Gls{dpsoa}~\citep{golowich2021littlestone}. For  larger \(T\), the aforementioned \emph{Name \& Shame} actually outperforms~\Gls{dpsoa}, indicating that, for fixed \(\e, \delta\), \emph{online algorithm always compromises privacy at very large \(T\)}. However, even for smaller \(T\), the plot shows that the number of mistake must grow with increasing \(T\) until it matches the \emph{Name \& Shame} algorithm.
+Now, we compare result of~\Cref{thm:main-finite} with known upper bounds in~\Cref{fig:lower-bound}. Recall that~\Gls{dpsoa} in \citet{golowich2021littlestone} obtained an upper bound which increases logarithmically with the time horizon \(T\).~\Cref{fig:lower-bound} shows that for \(T \leq \exp(1 / (32\delta))\), the dependency on \(T\) is necessary, thereby showing the tightness of~\Gls{dpsoa}~\citep{golowich2021littlestone}. For  larger \(T\), the aforementioned \emph{Name \& Shame} actually outperforms~\Gls{dpsoa}, indicating that, for fixed \(\e, \delta\), \emph{online algorithm always compromises privacy at very large \(T\)}. However, even for smaller \(T\), the plot shows that the number of mistake must grow with increasing \(T\) until it matches the \emph{Name \& Shame} algorithm.
 
 \begin{figure}[t]\centering\vspace{-20pt}
 \includegraphics[width=0.2\linewidth]{chapters/dp/content/figures/legend.pdf}\quad\quad
 \includegraphics[width=0.6\linewidth]{chapters/dp/content/figures/lb_comp_markers_no_leg.pdf}
-\caption{\small Lower bound from~\cref{thm:main-finite} vs. existing upper bounds. We assume that \(\eps, \delta\) are fixed and for simplicity ignore dependence on \(\eps\). X-axis corresponds to the number of samples, growing from \(T \sim 1/\delta\) to \(T \sim \exp(1/\delta)\) and larger. Y-axis shows the expected number of mistakes, \(\E \bs{M_{\alg}}\).\vspace{-15pt}}
+\caption{\small Lower bound from~\Cref{thm:main-finite} vs. existing upper bounds. We assume that \(\eps, \delta\) are fixed and for simplicity ignore dependence on \(\eps\). X-axis corresponds to the number of samples, growing from \(T \sim 1/\delta\) to \(T \sim \exp(1/\delta)\) and larger. Y-axis shows the expected number of mistakes, \(\E \bs{M_{\alg}}\).\vspace{-15pt}}
 \label{fig:lower-bound}
 \end{figure}
 
@@ -61,7 +62,7 @@ Note that if adversary inserts \(\xdif\) serially starting from \(t = 1\), \(\al
 Therefore, the adversary needs to `disperse' the points \(\xdif\) across \(T\) time steps, such that \(\alg\) cannot predict, where it might make the next mistake. We begin our construction by first inserting a point at the beginning. Then, depending on whether the leaner anticipates more points \(\xdif\) in the first half \emph{or} in the second half of the sequence, we insert \(\xdif\) in the half where it least expects it. Note that because of the concentration and~\Gls{dp} assumption, the learner cannot anticipate points \(\xdif\) in both halves simultaneously (recall that on input sequence consisting of only \(\xeq\), learner does not output a correct function for \(\xdif\)). By continuing this construction recursively, we are able to insert \(\Omega(\log T)\) points \(\xdif\), such that with constant probability, on each of them \(\alg\) will make a mistake.
 
 
-\begin{proof}[of~\cref{thm:main-finite}]
+\begin{proof}[of~\Cref{thm:main-finite}]
     Since \(\alg\) is \(\conc{0.1}\), there exists a distinguishing tuple \(\br{f_0, f_1, \xeq, \xdif}\), such that 
     \begin{equation}
         \Pr \bs{\forall t \in [T],\ \alg \br{\tau_0}_t\bs{\xdif} = f_0(\xdif)} \geq 0.9,
@@ -104,7 +105,10 @@ Therefore, the adversary needs to `disperse' the points \(\xdif\) across \(T\) t
       \end{enumerate}
     Assume that we obtain these sequences until \(i = k \geq \frac{1}{2} \log T\). Then on the event \(\Set{\forall t \in [1, l_k - 1], \alg(\inpseq^{(i)})_t\bs{\xdif} = 0}\), \(\alg\) will make \(k\) mistakes. Since \(k \leq 1/(16\delta)\), from the second property above \(p_k \geq 1/4\). This implies that for the sequence \(\inpseq^{(k)}\) we have \(\E\bs{\regret_{\alg}} \geq p_k k \geq \frac{1}{8} \log T\).
     
-     We construct the sequences by induction, starting with \(\inpseq^{(0)} = \br{\xeq, \ldots, \xeq}\). For each \(i\), \(\inpseq^{(i)}\) will differ from \(\inpseq^{(i+1)}\) at exactly one point. This allows us to use \Gls{dp} property of \(\alg\) in order to compare outputs on \(\inpseq^{(i)}\) and \(\inpseq^{(i+1)}\). From \(\conc{\delta}\) assumption, we can pick \(l_0 = 1, r_0 = T\) which gives \(p_0 = 1\) and \(q_0 = 0.1\) (we interpret \(\Pr\bs{\forall t \in \emptyset \ldots} = 1\)).
+     We construct the sequences by induction, starting with \(\inpseq^{(0)} = \br{\xeq, \ldots, \xeq}\). 
+     For each \(i\), \(\inpseq^{(i)}\) will differ from \(\inpseq^{(i+1)}\) at exactly one point. 
+     This allows us to use \Gls{dp} property of \(\alg\) in order to compare outputs on \(\inpseq^{(i)}\) and \(\inpseq^{(i+1)}\). 
+     From \(\conc{0.1}\) assumption, we can pick \(l_0 = 1, r_0 = T\) which gives \(p_0 = 1\) and \(q_0 = 0.1\) (we interpret \(\Pr\bs{\forall t \in \emptyset \ldots} = 1\)).
 
     Given \(\inpseq^{(i)}\) we construct \(\inpseq^{(i+1)}\) by substituting \(l_i\)-th input point with \(\xdif
     \):
@@ -209,7 +213,7 @@ Therefore, the adversary needs to `disperse' the points \(\xdif\) across \(T\) t
 
 \subsection{Examples of \(\conc{\beta}\) online learners for \(\point_N\)}
 \label{sec:example-conc}
-Next, we show that several learners that could be used for online learning \(\point_N\), satisfy~\cref{defn:beta-conc}. In particular, in~\Cref{lem:example-conc-learners} we prove that any improper learner that learns \(\point_N\) using a finite union of hypothesis in \(\point_N\)~(defined as Multi-point in~\Cref{defn:multi-point}) is concentrated. \Cref{lem:dpsoa-conc} implies that the only existing private online learning algorithm~\Gls{dpsoa} is concentrated.
+Next, we show that several learners that could be used for online learning \(\point_N\), satisfy~\Cref{defn:beta-conc}. In particular, in~\Cref{lem:example-conc-learners} we prove that any improper learner that learns \(\point_N\) using a finite union of hypothesis in \(\point_N\)~(defined as Multi-point in~\Cref{defn:multi-point}) is concentrated. \Cref{lem:dpsoa-conc} implies that the only existing private online learning algorithm~\Gls{dpsoa} is concentrated.
 
 
 \begin{definition}[Multi-Point class]\label{defn:multi-point}
@@ -254,7 +258,7 @@ While their motivation was to explicitly construct a smaller hypothesis class th
     Output of \(\dpsoa\) is equal to the output of \(\soa\) algorithm on some input sequence. 
     Note that \(\soa\) for \(\point_N\) is always equal to either (i) an all-zero function, or (ii) a target function \(f^{\ast}\),
     which implies that it lies in \(\point^1_N\).
-    Therefore, by~\cref{lem:example-conc-learners}, we obtain that \(\dpsoa\) is also \(\conc{\beta}\).
+    Therefore, by~\Cref{lem:example-conc-learners}, we obtain that \(\dpsoa\) is also \(\conc{\beta}\).
 \end{proof}
 
 

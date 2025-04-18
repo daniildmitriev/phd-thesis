@@ -212,7 +212,10 @@ must be separated from other components and each other.
 We now introduce some notation to present the next theorem that establishes further guarantees for the algorithm output during execution.  For \(\cT\), a collection of sets that is the output of~\Cref{alg:second_stage_pruning}, we define
 \begin{equation}
 \label{eq:set-G-def}
-G \coloneqq \Set{i \in [k] \text{, such that there exists } T = S_j^{(2)} \in \cT \text{ with } \Card{S_{j}^{(1)} \cap C^*_i} \geq \wmin^4 \Card{C^*_i} \text{, for some }j}. 
+\begin{aligned}
+G \coloneqq \big\{i \in [k] &\text{, such that there exists } T = S_j^{(2)} \in \cT \\
+ &\text{ with } \Card{S_{j}^{(1)} \cap C^*_i} \geq \wmin^4 \Card{C^*_i} \text{, for some }j\big\}. 
+\end{aligned}
 \end{equation}
 In words, it is the set of inlier components for which a corresponding set with "sufficiently many" points from the $i$-th component was added to $\cT$.
 It may happen that for a given index \(i \in G\), several \(j \in [\Card{M}]\) satisfy \(S_j^{(2)} \in \cT\) and \(\Card{S_{j}^{(1)} \cap C^*_i} \geq \wmin^4 \Card{C^*_i}\). We define \(g_i \in [\Card{M}]\) to denote the index of the \emph{first} such set \(S_{g_i}^{(2)}\) added to \(\cT\). 

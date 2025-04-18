@@ -1,0 +1,94 @@
+The forthcoming results are valid under the conditions listed below, which will be assumed to hold throughout.
+\begin{assumption}\label{asmpt:A_np_m}We assume that
+
+% \begin{enumerate}[ref={\theassumption.\arabic*}]
+\begin{enumerate}
+    \item Each element $j\in \mathcal{X}$ is assigned to any subset $\mathcal{S}_i$, $i \in [m]$ with probability $p \equiv p(n)$, independently. That is, $\A \in \{0, 1\}^{m \times n}$ is such that $A_{ij} \overset{\text{iid}}{\sim} \mathrm{Bernoulli}(p)$; 
+    \item $n$ is intended to be large but finite;
+    \item \label{asmpt:A_np_m.c} \(m \equiv m(n) = \mathrm{poly}(n)\), i.e. $\exists c, C > 0$, such that $c n^c \leq m \leq Cn^C$ for $n$ large enough; 
+    \item 
+\label{asmpt:A_np_m.d} There exist $\delta \in (0,1)$, such that \(p \equiv p(n)\) satisfies \(1/n^{\delta} \leq p \leq 1/2\), for all \(n\) large enough.
+\end{enumerate}
+\end{assumption}
+
+\noindent
+Note that in Assumption~\hyperref[asmpt:A_np_m.c]{1.1.2.3}, the upper bound is chosen to avoid trivial solutions w.h.p. which arise, for example, in the setting where the number of sets grows exponentially in the cardinality of $\mathcal{X}$.  
+In addition, Assumption~\hyperref[asmpt:A_np_m.d]{1.1.2.4} is by no means restrictive, since one can show that for $m = \text{poly}(n)$ and \(np \ll \log n\), we have that $\A$ contains an all-zero row w.h.p., yielding an infeasible solution for $\ip$. 
+The requirement \(p \leq 1/2\) is chosen for technical convenience and can be relaxed to any constant \(p\), encompassing the regime in~\cite{iliopoulos2021group}.\\
+
+\noindent
+Our contributions stem from the study of the size of the inclusion sets $I_j := \set{i \in [m]\: : \: j \in \mathcal{S}_i}$, for $j \in [n]$, which in the \(\mvch\) formulation of the problem at hand correspond to the set of hyperedges incident to any given vertex. 
+The key quantity under study is the average inclusion set size, that is $\E |I_j| = mp$, for all $j$, under the present distributional assumptions. 
+This quantity exhibits two separate regimes of interest, referred to as the \emph{sparse}, $mp \ll \log{n}$, and \emph{dense}, $mp \gg \log{n}$, regimes. 
+These, in turn, determine the size of the maximum inclusion set, or maximum degree, $\dmax := \max_{j \in [n]} |I_j|$. 
+We characterize the integrality gap behaviour up to multiplicative constants and analyse Lovász's $\greedy$ algorithm \cite{lovasz1975ratio} in these two regimes w.h.p as $n \to \infty$. 
+We do this by proving the success of a simple greedy heuristic, the \bgreedy algorithm (Algorithm \ref{alg:block_greedy}). 
+Throughout, we use the notation $\text{val}_{\mathtt{Gr}}$, $\valbgr$ to denote the size of the hitting set returned by $\greedy$ and $\bgreedy$ respectively. Below we provide an informal description of the main results which hold with high probability, where $A(n) \sim B(n)$ denotes that $c A(n) \leq B(n) \leq C A(n)$ for large enough $n$ and for some constants $c, C > 0$: 
+\\
+% \noindent
+
+\section{Main contributions}\label{sec:intro}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{figure}
+%     \centering
+%   \begin{tikzpicture}
+%     \begin{axis}[ymin = 0, ymax = 0.45, axis lines=middle, height=8cm, width=14cm,
+%     legend style={
+%       at={(1,1)}
+%       },
+%     axis line style={->},
+%     x label style={at={(axis description cs:0.96,-0.14)},anchor=south},
+%     y label style={at={(axis description cs:-0.05,0.9)},anchor=south},
+%     xlabel={\LARGE $m(n)$},
+%     ylabel={\LARGE $p(n)$},
+%     xtick={1.58, 3.98, 10, 25.11},
+%     xticklabels={\large $n^{0.1}$,
+%                 \large $n^{0.3}$,
+%                 \large $n^{0.5}$, 
+%                 \large $n^{0.7}$},
+%     ytick={0.01,0.039,0.1,0.25,0.63},
+%     yticklabels={\large $1 / n^{0.9}$,
+%                 \large $1 / n^{0.7}$,
+%                 \large $1 / n^{0.5}$,
+%                 \large $1 / n^{0.3}$,
+%                 \large $1 / n^{0.1}$},]
+%         \addplot[thick, color=red, smooth, name path = inv, domain = 1:40, line width=2pt] {1.5/x};
+%         \addplot[name path = floor, draw = none] coordinates {(1,0) (40,0)};
+%         \addplot[fill=red, 
+%         fill opacity=0.2] fill between[of = inv and floor];
+%         \path[name path=axis] (axis cs:0,40) -- (axis cs:40,40);
+%         \addplot[fill = blue, fill opacity=0.3] fill between[of= inv and axis];
+%         \legend{\large $ mp \sim \log n$}
+%     \node[below, text=red!30!black,font=\bfseries\Large] at (12, 0.055) {\valbgr \(\sim\) \valip \(\sim\) \vallp \(\sim m / \dmax\)};
+%     \node[above, text=blue!80!black, font=\bfseries\Large] at (23,0.2) {\valbgr \(\sim\) \valip \(\sim \log\left(\frac{mp}{\log n}\right) / p \)};
+%     \node[above, text=blue!80!black, font=\bfseries\Large] at (18,0.17) {\vallp \(\sim 1/p\)};
+% \end{axis}
+% \end{tikzpicture}
+% \caption{Transition between the sparse and the dense regime for different values of the average inclusion set size $mp$.}
+%     \label{fig:phase_diagram}
+% \end{figure}
+
+\noindent
+The results above are also depicted in Figure \ref{fig:phase_diagram}, and the formal statements are given in~\Cref{cor:ipgap_collected} and Theorem~\ref{thm:greedy}. The rest of the chapter is organized as follows. 
+In Section \ref{sec:notation}, we present relevant notation. In Section \ref{sec:related work}, we outline and discuss related literature. 
+In Section \ref{sec:bounds_LP_IP}, we prove a number of preliminary results that will be instrumental in developing the core arguments. 
+Subsequently, in Section~\ref{sec:algo_sol}, we delve into the algorithmic aspects of the problem at hand by first providing guarantees for a simple algorithm, \bgreedy. We then analyse \greedy by means of a reduction. 
+We conclude in Section \ref{sec:discussion} by summarizing the results and offering indications for future work. We defer the proofs of more technical results to the appendix, in order to streamline the presentation for the reader's convenience.
+
+\section{Notation and conventions}\label{sec:notation}
+For integers $k \in \mathbb{N}$, we write $[k]:=\set{1,...,k}$. 
+We denote vectors, matrices by bold-faced Roman letters $\x, \A \in \mathbb{R}^k, \mathbb{R}^{k \times k}$, respectively, for some $k \in \mathbb{N}$. 
+Define the \emph{inclusion set} of an element, or node, $j \in [n]$ as $I_j = \left\{i \in [m] : j \in \mathcal{S}_i \right\}$. 
+We denote the $\ell_1$ norm of the $j$-th column of $\A$ by $X_j$, $j\in [n]$, noting that $X_j = |I_j|$ and $X_1, \ldots X_n \overset{\text{iid}}{\sim} \mathrm{Binomial}(m, p)$. 
+In addition, we let $\dmax \equiv \dmax(X_1, \ldots, X_n) := \max_{i \in [n]} X_i$. 
+We use $\E, \text{Var}$ to denote expectation and variance, respectively. 
+By $\lesssim$, $\gtrsim$ we denote inequalities up to multiplicative constants. 
+We let $A \sim B$ denote that $A \lesssim B \lesssim A$ for large enough $n$. 
+We let $\log$ denote the natural logarithm. 
+For possibly random functions \(f(n), g(n)\), we let \(\{f \lesssim g\}\) denote a sequence of events \(\{f(n) \leq A g(n)\}\) for some constant \(A > 0\) independent of \(n\). 
+Consequently, \(\Pr(f \lesssim g)\) is viewed as a function of \(n\). For deterministic functions $h(n), w(n)$, we let $h \ll w, h \gg w$ denote that $h/w \to 0, w/h \to 0$ respectively, as $n \to \infty$. 
+The notation for other inequalities is defined analogously. 
+We say that a sequence of events $\set{A_n}$ holds \emph{with high probability} (w.h.p.) with respect to a probability measure $\Pr$ if there exists a constant $c > 0$, independent of $n$, such that $\Pr(A_n) \geq 1-n^{-c}$, for large enough values of $n$.

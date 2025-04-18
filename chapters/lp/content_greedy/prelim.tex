@@ -1,0 +1,52 @@
+\section{Preliminary Bounds}\label{sec:bounds_LP_IP}
+\label{sec:bounds}
+% The aim of this section is to obtain preliminary bounds on $\vallp, \valip$, starting from the following deterministic lower bound on $\vallp$, which holds across all regimes of $m,n,p$.
+%
+In this section, we outline preliminary bounds on $\vallp, \valip, \dmax$ which will prove crucial to analysing $\ipgap$ and $\greedy$. We begin by characterizing the value of the linear program:
+%
+\begin{lemma}\label{lemma:lp_lb_ub}
+There exists $c > 0$, independent of $n$, such that with probability at least $1 - \exp(c n^{1 - \delta})$, we have that
+\[\frac{m}{\dmax} \leq \vallp \lesssim \frac{1}{p}.\]
+\end{lemma}
+%
+The proof is included in Appendix \ref{appendix:aux_lemmas}, and follows from a maximum argument and a standard Chernoff bound. We note that the proof also implies \(\Pr(\ip \text{ is feasible}) \geq 1 - \exp\left(-cn^{1-\delta}\right).\) Although Lemma \ref{lemma:lp_lb_ub} readily yields $\valip \geq m/\dmax$, we highlight that this lower bound is not tight whenever $mp \gg \log{n}$. Indeed, we apply the first moment method to obtain a tighter lower bound on $\valip$ in this regime:
+% Lemma~\ref{lemma:lp_lb} clearly implies that \(\valip \geq m / \dmax\). However, when \(mp \gg \log n\), this lower bound is not precise. Indeed, we will apply the first moment method to prove a tighter lower bound on $\valip$. We first recall the following properties of the Lambert \(W\) function, which consists of the solution to the equation $ye^y = x$, for $x \geq 0$. 
+%
+% \noindent
+% We now provide a tighter lower bound for $\valip$ in the regime \(mp \gg \log{n}\) through the first moment method. 
+\begin{lemma}
+\label{lemma:first_moment_mp_large}
+Let \(mp \gg \log n\). For any \(D \geq 1\) and \(n\) large enough, with probability at least $1 - n^{-D}$ we have that
+\begin{align*}
+    \frac{1}{p} \log \left(\frac{mp}{\log n}\right) \lesssim \valip 
+\end{align*}
+\end{lemma}
+%
+The proof of Lemma \ref{lemma:first_moment_mp_large} is provided in Appendix \ref{appendix:aux_lemmas}. Lemmas \ref{lemma:lp_lb_ub} and \ref{lemma:first_moment_mp_large} come short of providing a full characterization of $\ipgap$, namely lacking an upper bound on $\valip$. In this light, we turn our attention to the $\greedy$ algorithm, and utilize it to construct a feasible integral solution and hence an upper bound on the value of $\ip$. The analysis of $\greedy$ crucially relies on characterizing the maximum inclusion set size, $\dmax := \max_{j \in [n]} |I_j|$. The following lemma offers such a characterization in expectation, and evidences a key difference between the sparse and dense regimes of our problem:
+% In this section we will first estimate the size of $\E \dmax$ and subsequently show that w.h.p. $\dmax \lesssim \E \dmax$, which suffices for the purposes of this work. For additional arguments concerning concentration of $\dmax$ around its mean, we refer the reader to Lemmas  \ref{lemma:d_max_concentration}, \ref{lemma:tensorization_var}. The following lemma characterizes the two distinct regimes of the maximum inclusion set size $\max_{j \in [n]} |I_j|$. \dan{add a discussion to compare with Gaussian approximation}
+\begin{lemma}[Maximum of Binomials] \label{lemma:maximal_ineq}
+Let $X_1, \ldots, X_n  \overset{\underset{\mathrm{iid}}{}}{\sim} Bin(m,p)$. Under the conditions in Assumption \ref{asmpt:A_np_m}, it holds that
+\begin{align*}
+\edmax = \mathbb{E}\max_{i \in [n]}X_i \sim \begin{cases}
+        \frac{\log{n}}{\log\br{\log n / mp}} & \text{, if } mp \ll \log{n},\\
+        mp & \text{, if } mp \gtrsim \log{n}.
+    \end{cases}
+\end{align*}
+%\ga{We have to generalize this lemma to $mp = \Omega(\log{n})$. }
+\end{lemma}
+%
+The proof of Lemma \ref{lemma:maximal_ineq} is provided in Appendix \ref{appendix:aux_lemmas}, and involves a straight forward application of Markov's and Jensen's inequalities. Lemma \ref{lemma:maximal_ineq} indicates a sharp transition between two regimes: the sparse regime $mp \ll \log{n}$, where binomial random variables are known to be well approximated by Poisson random variables, and the dense regime $mp \gg \log{n}$, where binomial random variables are known to be well approximated by Gaussian random variables. Importantly, in the sparse (Poisson-like) regime, the expected maximum of binomial random variables exceeds their individual expectations: $\mathbb{E} X_1 \ll \edmax$. Meanwhile in the dense (Gaussian-like) regime, the expected maximum and individual expectations are asymptotically equivalent up to multiplicative constants: $\mathbb{E} X_1 \sim \edmax$. This fine-grained characterization of the maxima of binomial random variables will prove essential to analysing the behaviour of $\bgreedy$ in ~\Cref{sec:algo_sol}. 
+%
+% We note that in the sparse regime \(mp \ll \log n\), there holds that \(mp \ll \edmax \ll \log n\), whereas in the dense regime \(mp \gg \log n\), we have that \(mp \sim \edmax \gg \log n\). In the threshold regime \(mp \sim \log n\), the average and maximum of $X_i$'s become of the same order, that is $mp \sim \edmax \sim \log n$. \\
+%The smooth transition is visible from the proof by noting that in this regime, $b_n, b_n^*, W_0(b_n^*)\sim 1$.
+Finally, we characterize the asymptotic behaviour of $\dmax$ and prove that $\dmax \lesssim \edmax$ with high probability. 
+% We conclude this section by bounding $\dmax$ by its expectation from above, up to multiplicative constants w.h.p.. 
+Whilst this one sided result suffices for the forthcoming analysis, we expect a matching lower bound to hold as well. Additional insights into the concentration of $\dmax$ may be found in Lemmas  \ref{lemma:tensorization_var}, \ref{lemma:d_max_concentration}, in~\Cref{appendix:aux_lemmas}.
+%
+\begin{lemma}
+\label{lemma:d_max_concentration_whp}
+    Let $X_1, \ldots, X_n  \overset{\underset{\mathrm{iid}}{}}{\sim} Bin(m,p)$. Then, there exist constants $c, \tilde{c} > 0$, independent of $n$, such that 
+    \[\Pr \br{\max_{i \in [n]} X_i \geq c \cdot  \E \max_{i \in [n]}X_i} \leq \frac{1}{n^{\tilde{c}}}.  \]
+    % That is, $\max_{i \in [n]}X_i \lesssim \E \max_{i \in [n]}X_i$ w.h.p..
+\end{lemma}
+The proof of Lemma \ref{lemma:d_max_concentration_whp} is provided in Appendix \ref{appendix:aux_lemmas}.

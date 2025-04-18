@@ -1,10 +1,10 @@
-\subsection{Useful inequalities}
+\section{Useful inequalities}
 
 \begin{lemma}[Hoeffding's inequality]
 \label{lem:hoeffding}
     Let \(X_1, \ldots, X_n\) be independent random variables, such that \(\E X_i = 0\) and \(a \leq X_i \leq b\) almost surely. Then,
     \begin{equation}
-        \Pr\left(\abs*{\sum_{i=1}^n X_i} \geq t\right) \leq 2\exp\left( - \frac{2 t^2}{n (b - a)^2}\right)
+        \Pr\left(\Abs{\sum_{i=1}^n X_i} \geq t\right) \leq 2\exp\left( - \frac{2 t^2}{n (b - a)^2}\right)
     \end{equation}
 \end{lemma}
 

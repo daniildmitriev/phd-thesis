@@ -6,122 +6,123 @@
 \babel@toc {ngerman}{}
 \babel@toc {english}{}
 \contentsline {chapter}{\numberline {1}{Introduction}}{1}{chapter.1}%
-\babel@toc {ngerman}{}
-\babel@toc {english}{}
-\contentsline {chapter}{\numberline {2}{Lower bounds for private online learning}}{3}{chapter.2}%
-\contentsline {section}{\numberline {2.1}{Introduction}}{3}{section.2.1}%
-\contentsline {paragraph}{{Main Result}}{4}{section.2.1}%
-\contentsline {section}{\numberline {2.2}{Preliminaries}}{6}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}{Online Learning}}{6}{subsection.2.2.1}%
-\contentsline {paragraph}{{Littlestone dimension}}{7}{equation.2.2.1}%
-\contentsline {subsection}{\numberline {2.2.2}{Differential Privacy}}{8}{subsection.2.2.2}%
-\contentsline {section}{\numberline {2.3}{Related work}}{9}{section.2.3}%
-\contentsline {section}{\numberline {2.4}{Lower bound under concentration assumption}}{11}{section.2.4}%
-\contentsline {subsection}{\numberline {2.4.1}{Main Result}}{12}{subsection.2.4.1}%
-\contentsline {subsection}{\numberline {2.4.2}{Examples of \(\beta \operatorname {-concentrated}\) online learners for \(\mathrm {Point}_N\)}}{17}{subsection.2.4.2}%
-\contentsline {section}{\numberline {2.5}{Discussion}}{19}{section.2.5}%
-\contentsline {subsection}{\numberline {2.5.1}{Connection to~\Gls {dp} under continual observation}}{19}{subsection.2.5.1}%
-\contentsline {subsection}{\numberline {2.5.2}{Beyond concentration assumption}}{20}{subsection.2.5.2}%
-\contentsline {subsection}{\numberline {2.5.3}{Pure differentially private online learners}}{21}{subsection.2.5.3}%
-\contentsline {subsection}{\numberline {2.5.4}{Open problems}}{22}{subsection.2.5.4}%
-\contentsline {chapter}{\numberline {3}{Robust mixture learning}}{25}{chapter.3}%
-\contentsline {section}{\numberline {3.1}{Introduction}}{25}{section.3.1}%
-\contentsline {paragraph}{{Contributions}}{27}{section.3.1}%
-\contentsline {section}{\numberline {3.2}{Settings}}{28}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}{List-decodable mixture learning under adversarial corruptions}}{28}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}{Mean estimation under adversarial corruptions}}{30}{subsection.3.2.2}%
-\contentsline {paragraph}{{Robust mean estimation}}{30}{subsection.3.2.2}%
-\contentsline {paragraph}{{List-decodable mean estimation}}{30}{subsection.3.2.2}%
-\contentsline {section}{\numberline {3.3}{Main results}}{30}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}{Upper bounds for list-decodable mixture learning}}{32}{subsection.3.3.1}%
-\contentsline {paragraph}{{Gaussian case}}{33}{theorem.3.3.3}%
-\contentsline {paragraph}{{Comparison with prior work}}{34}{theorem.3.3.4}%
-\contentsline {subsection}{\numberline {3.3.2}{Information-theoretical lower bounds and optimality}}{34}{subsection.3.3.2}%
-\contentsline {section}{\numberline {3.4}{Algorithm sketch}}{35}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}{Inner stage: list-decodable mean estimation with unknown inlier fraction}}{36}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}{Two-stage meta-algorithm}}{37}{subsection.3.4.2}%
-\contentsline {subsection}{\numberline {3.4.3}{Outer stage: separating inlier clusters}}{39}{subsection.3.4.3}%
-\contentsline {section}{\numberline {3.5}{Related work}}{39}{section.3.5}%
-\contentsline {paragraph}{{List-decodable mean estimation}}{39}{section.3.5}%
-\contentsline {paragraph}{{Robust mean estimation and mixture learning}}{40}{section.3.5}%
-\contentsline {paragraph}{{Robust clustering}}{40}{section.3.5}%
-\contentsline {section}{\numberline {3.6}{Discussion and future work}}{40}{section.3.6}%
-\contentsline {chapter}{\numberline {4}{Optimization of random linear programs}}{45}{chapter.4}%
-\contentsline {section}{\numberline {4.1}{Greedy heuristics}}{45}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}{Introduction}}{45}{subsection.4.1.1}%
-\contentsline {paragraph}{{\textbf {Sparse Regime} ($mp \ll \qopname \relax o{log}{n}$):}}{48}{Item.19}%
-\contentsline {paragraph}{{\textbf {Dense Regime} ($mp \gg \qopname \relax o{log}{n}$):}}{48}{Item.19}%
-\contentsline {paragraph}{{\textbf {Threshold Regime} ($mp \sim \qopname \relax o{log}{n}$):}}{48}{Item.19}%
-\contentsline {paragraph}{{\textbf {Greedy}:}}{48}{Item.19}%
-\contentsline {subsection}{\numberline {4.1.2}{Notation and conventions}}{49}{subsection.4.1.2}%
-\contentsline {subsection}{\numberline {4.1.3}{Related Work}}{49}{subsection.4.1.3}%
-\contentsline {subsection}{\numberline {4.1.4}{Bounds on \text {val}\textsubscript {\texttt {LP}\xspace }\xspace and \text {val}\textsubscript {\texttt {IP}\xspace }\xspace }}{51}{subsection.4.1.4}%
-\contentsline {subsection}{\numberline {4.1.5}{Analysis of \(d_{\mathtt {max}}\)}}{53}{subsection.4.1.5}%
-\contentsline {subsection}{\numberline {4.1.6}{Algorithmic solutions}}{57}{subsection.4.1.6}%
-\contentsline {subsection}{\numberline {4.1.7}{Discussion and Open Questions}}{64}{subsection.4.1.7}%
-\contentsline {subsubsection}{\numberline {4.1.7.1}{Summary of our results and proof techniques.}}{64}{subsubsection.4.1.7.1}%
-\contentsline {subsubsection}{\numberline {4.1.7.2}{Multiplicative vs. additive integrality gaps}}{65}{subsubsection.4.1.7.2}%
-\contentsline {subsubsection}{\numberline {4.1.7.3}{Analysis of a linear program solution.}}{65}{subsubsection.4.1.7.3}%
-\contentsline {section}{\numberline {4.2}{Lovasz number}}{66}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}{Introduction}}{66}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}{Preliminaries}}{68}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}{Proof of main theorem}}{70}{subsection.4.2.3}%
-\contentsline {subsection}{\numberline {4.2.4}{Discussion}}{75}{subsection.4.2.4}%
-\contentsline {subsection}{\numberline {4.2.5}{Useful inequalities}}{75}{subsection.4.2.5}%
-\contentsline {chapter}{\numberline {A}{Appendix of DP}}{77}{chapter.1}%
-\contentsline {section}{\numberline {A.1}{Proof of~\Cref {prop:continual}}}{77}{section.1.1}%
-\contentsline {section}{\numberline {A.2}{Lower bound for a non-concentrated algorithm}}{77}{section.1.2}%
-\contentsline {section}{\numberline {A.3}{Extending finite lower bound to other values of \(\epsilon \)}}{77}{section.1.3}%
-\contentsline {paragraph}{{Smaller \(\epsilon \)}}{77}{section.1.3}%
-\contentsline {paragraph}{{Larger \(\epsilon \)}}{78}{equation.1.3.1}%
-\contentsline {chapter}{\numberline {B}{Appendix of Robust}}{79}{chapter.2}%
-\contentsline {section}{\numberline {B.1}{Examples}}{79}{section.2.1}%
-\contentsline {paragraph}{{\(k\) inlier cluster, \(c\) outlier clusters.}}{79}{section.2.1}%
-\contentsline {paragraph}{{Big + small inlier clusters}}{79}{equation.2.1.1}%
-\contentsline {section}{\numberline {B.2}{Inner and outer stage algorithms and guarantees}}{80}{section.2.2}%
-\contentsline {subsection}{\numberline {B.2.1}{Detailed setting}}{80}{subsection.2.2.1}%
-\contentsline {subsection}{\numberline {B.2.2}{Inner stage algorithm and guarantees}}{81}{subsection.2.2.2}%
-\contentsline {subsection}{\numberline {B.2.3}{Outer stage algorithm and guarantees}}{84}{subsection.2.2.3}%
-\contentsline {section}{\numberline {B.3}{Proof of~\Cref {thm:informal}}}{87}{section.2.3}%
-\contentsline {subsection}{\numberline {B.3.1}{General theorem statement}}{87}{subsection.2.3.1}%
-\contentsline {subsection}{\numberline {B.3.2}{Proof of~\Cref {thm:main-technical} }}{88}{subsection.2.3.2}%
-\contentsline {paragraph}{{(i) Proof of error statement}}{89}{subsection.2.3.2}%
-\contentsline {paragraph}{{(ii) Proof of small list size}}{90}{Item.42}%
-\contentsline {section}{\numberline {B.4}{Proof of~\Cref {thm:inner_stage_guarantees}}}{91}{section.2.4}%
-\contentsline {paragraph}{{(i) Proof of error statement}}{91}{section.2.4}%
-\contentsline {paragraph}{{(ii) Proof of list size}}{92}{Item.44}%
-\contentsline {paragraph}{{Conclusion}}{94}{equation.2.4.2}%
-\contentsline {subsection}{\numberline {B.4.1}{Auxiliary lemmas and proofs}}{94}{subsection.2.4.1}%
-\contentsline {section}{\numberline {B.5}{Proof of outer stage algorithm guarantees in~\Cref {sec:outer_stage_formulated}}}{97}{section.2.5}%
-\contentsline {subsection}{\numberline {B.5.1}{Proof of~\Cref {thm:outer-stage-init-guarantees}}}{97}{subsection.2.5.1}%
-\contentsline {paragraph}{{Proof of Theorem~\ref {item:M_small}}}{97}{subsection.2.5.1}%
-\contentsline {paragraph}{{Proof of Theorem~\ref {item:outer_stage_large_S_mi}}}{97}{subsection.2.5.1}%
-\contentsline {paragraph}{{Proof of Theorem~\ref {item:first_iter_small_or_large}}}{98}{subsection.2.5.1}%
-\contentsline {paragraph}{{Proof of Theorem~\ref {item:outer_stage_S_mi_no_others}}}{98}{subsection.2.5.1}%
-\contentsline {paragraph}{{Proof of Theorem~\ref {item:outer_stage_S_mi_nonitersect}}}{98}{subsection.2.5.1}%
-\contentsline {subsection}{\numberline {B.5.2}{Proof of~\Cref {thm:outer_stage_guarantees}}}{98}{subsection.2.5.2}%
-\contentsline {paragraph}{{Proof of~Theorem~\ref {item:outer_stage_U_small}}}{99}{subsection.2.5.2}%
-\contentsline {paragraph}{{Proof of~Theorem~\ref {item:outer_stage_S_gi}}}{100}{subsection.2.5.2}%
-\contentsline {paragraph}{{Proof of~Theorem~\ref {item:outer_stage_not_S_gi_small}}}{100}{subsection.2.5.2}%
-\contentsline {paragraph}{{Proof of~Theorem~\ref {item:outer_stage_else}}}{101}{subsection.2.5.2}%
-\contentsline {section}{\numberline {B.6}{Proof of ~\Cref {lemma:it_lb_ours}}}{102}{section.2.6}%
-\contentsline {subsection}{\numberline {B.6.1}{Case b): For the Gaussian inliers }}{102}{subsection.2.6.1}%
-\contentsline {subsection}{\numberline {B.6.2}{Case a): For distributions with \(t\)-th sub-Gaussian moments}}{103}{subsection.2.6.2}%
-\contentsline {section}{\numberline {B.7}{Stability of list-decoding algorithms}}{104}{section.2.7}%
-\contentsline {section}{\numberline {B.8}{Concentration bounds}}{104}{section.2.8}%
-\contentsline {section}{\numberline {B.9}{Experimental details}}{106}{section.2.9}%
-\contentsline {paragraph}{{Adversarial line and adversarial clusters}}{106}{section.2.9}%
-\contentsline {paragraph}{{Data Distribution}}{106}{figure.caption.18}%
-\contentsline {paragraph}{{Attack distributions}}{106}{figure.caption.19}%
-\contentsline {paragraph}{{Implementation details}}{108}{Item.52}%
-\contentsline {paragraph}{{Hyper-parameter search and experiment execution}}{108}{figure.caption.20}%
-\contentsline {paragraph}{{Evaluation details}}{109}{figure.caption.21}%
-\contentsline {subsection}{\numberline {B.9.1}{Variation of \(w_{\mathrm {low}}\)}}{110}{subsection.2.9.1}%
-\contentsline {subsection}{\numberline {B.9.2}{Computational resources}}{110}{subsection.2.9.2}%
-\contentsline {chapter}{\numberline {C}{Appendix of Greedy}}{113}{chapter.3}%
-\contentsline {section}{\numberline {C.1}{Auxiliary lemmas}}{113}{section.3.1}%
-\contentsline {section}{\numberline {C.2}{Main tool for the case \(mp \lesssim \qopname \relax o{log}n\) and Proof of Lemma~\ref {lemma:mp<logn_conquering_logn}}}{116}{section.3.2}%
-\contentsline {section}{\numberline {C.3}{Proof of lemma \ref {lemma:find_one_col_lb}}}{119}{section.3.3}%
+\contentsline {section}{\numberline {1.1}{Greedy algorithms for the random hitting set problem}}{2}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}{Hitting set}}{2}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}{Random integer and linear programs}}{3}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}{Greedy algorithm}}{4}{subsection.1.1.3}%
+\contentsline {subsection}{\numberline {1.1.4}{Main contributions}}{5}{subsection.1.1.4}%
+\contentsline {section}{\numberline {1.2}{Lovász number for random circulant graphs}}{7}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}{Lovász number}}{7}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}{Random circulant graphs}}{8}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}{Proof strategy}}{8}{subsection.1.2.3}%
+\contentsline {section}{\numberline {1.3}{Lower bounds for online private learning}}{10}{section.1.3}%
+\contentsline {paragraph}{{Main Result}}{11}{section.1.3}%
+\contentsline {section}{\numberline {1.4}{Robust mixture learning}}{13}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}{Robust mean estimation}}{13}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {1.4.2}{Clustering and list-decodable mean estimation}}{14}{subsection.1.4.2}%
+\contentsline {subsection}{\numberline {1.4.3}{Mixture learning with corruptions}}{16}{subsection.1.4.3}%
+\contentsline {paragraph}{{Contributions}}{17}{subsection.1.4.3}%
+\contentsline {section}{\numberline {1.5}{Notation}}{19}{section.1.5}%
+\contentsline {chapter}{\numberline {2}{Greedy heuristics}}{21}{chapter.2}%
+\contentsline {section}{\numberline {2.1}{Main contributions}}{22}{section.2.1}%
+\contentsline {section}{\numberline {2.2}{Notation and conventions}}{22}{section.2.2}%
+\contentsline {section}{\numberline {2.3}{Related Work}}{23}{section.2.3}%
+\contentsline {section}{\numberline {2.4}{Preliminary Bounds}}{24}{section.2.4}%
+\contentsline {section}{\numberline {2.5}{Algorithmic solutions}}{26}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}{Challenges of \(\texttt {Greedy}\xspace \) analysis and \(\texttt {BlockGreedy}\xspace \) algorithm}}{26}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}{Reduction from \(\texttt {BlockGreedy}\xspace \) to \(\texttt {Greedy}\xspace \)}}{30}{subsection.2.5.2}%
+\contentsline {section}{\numberline {2.6}{Discussion and Open Questions}}{32}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}{Summary of our results and proof techniques.}}{32}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {2.6.2}{Multiplicative vs. additive integrality gaps}}{33}{subsection.2.6.2}%
+\contentsline {subsection}{\numberline {2.6.3}{Analysis of a linear program solution.}}{33}{subsection.2.6.3}%
+\contentsline {chapter}{\numberline {3}{Lovasz number}}{35}{chapter.3}%
+\contentsline {section}{\numberline {3.1}{Preliminaries}}{35}{section.3.1}%
+\contentsline {section}{\numberline {3.2}{Proof of main theorem}}{36}{section.3.2}%
+\contentsline {section}{\numberline {3.3}{Discussion}}{41}{section.3.3}%
+\contentsline {section}{\numberline {3.4}{Useful inequalities}}{42}{section.3.4}%
+\contentsline {chapter}{\numberline {4}{Lower bounds for private online learning}}{43}{chapter.4}%
+\contentsline {section}{\numberline {4.1}{Preliminaries}}{43}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}{Online Learning}}{43}{subsection.4.1.1}%
+\contentsline {paragraph}{{Littlestone dimension}}{44}{equation.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}{Differential Privacy}}{45}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}{Related work}}{46}{section.4.2}%
+\contentsline {section}{\numberline {4.3}{Lower bound under concentration assumption}}{48}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}{Main Result}}{49}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}{Examples of \(\beta \operatorname {-concentrated}\) online learners for \(\mathrm {Point}_N\)}}{54}{subsection.4.3.2}%
+\contentsline {section}{\numberline {4.4}{Discussion}}{55}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}{Connection to~\Gls {dp} under continual observation}}{56}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}{Beyond concentration assumption}}{57}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}{Pure differentially private online learners}}{57}{subsection.4.4.3}%
+\contentsline {subsection}{\numberline {4.4.4}{Open problems}}{58}{subsection.4.4.4}%
+\contentsline {chapter}{\numberline {5}{Robust mixture learning}}{61}{chapter.5}%
+\contentsline {section}{\numberline {5.1}{Introduction}}{61}{section.5.1}%
+\contentsline {paragraph}{{Contributions}}{63}{section.5.1}%
+\contentsline {section}{\numberline {5.2}{Settings}}{64}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}{List-decodable mixture learning under adversarial corruptions}}{64}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}{Mean estimation under adversarial corruptions}}{66}{subsection.5.2.2}%
+\contentsline {paragraph}{{Robust mean estimation}}{66}{subsection.5.2.2}%
+\contentsline {paragraph}{{List-decodable mean estimation}}{66}{subsection.5.2.2}%
+\contentsline {section}{\numberline {5.3}{Main results}}{66}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}{Upper bounds for list-decodable mixture learning}}{68}{subsection.5.3.1}%
+\contentsline {paragraph}{{Gaussian case}}{69}{theorem.5.3.3}%
+\contentsline {paragraph}{{Comparison with prior work}}{70}{theorem.5.3.4}%
+\contentsline {subsection}{\numberline {5.3.2}{Information-theoretical lower bounds and optimality}}{70}{subsection.5.3.2}%
+\contentsline {section}{\numberline {5.4}{Algorithm sketch}}{71}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}{Inner stage: list-decodable mean estimation with unknown inlier fraction}}{72}{subsection.5.4.1}%
+\contentsline {subsection}{\numberline {5.4.2}{Two-stage meta-algorithm}}{73}{subsection.5.4.2}%
+\contentsline {subsection}{\numberline {5.4.3}{Outer stage: separating inlier clusters}}{75}{subsection.5.4.3}%
+\contentsline {section}{\numberline {5.5}{Related work}}{75}{section.5.5}%
+\contentsline {paragraph}{{List-decodable mean estimation}}{75}{section.5.5}%
+\contentsline {paragraph}{{Robust mean estimation and mixture learning}}{76}{section.5.5}%
+\contentsline {paragraph}{{Robust clustering}}{76}{section.5.5}%
+\contentsline {section}{\numberline {5.6}{Discussion and future work}}{76}{section.5.6}%
+\contentsline {chapter}{\numberline {A}{Appendix of Greedy}}{81}{chapter.1}%
+\contentsline {section}{\numberline {A.1}{Auxiliary lemmas}}{81}{section.1.1}%
+\contentsline {section}{\numberline {A.2}{Main tool for the case \(mp \lesssim \qopname \relax o{log}n\) and Proof of Lemma~\ref {lemma:mp<logn_conquering_logn}}}{88}{section.1.2}%
+\contentsline {chapter}{\numberline {B}{Appendix of Robust}}{95}{chapter.2}%
+\contentsline {section}{\numberline {B.1}{Examples}}{95}{section.2.1}%
+\contentsline {paragraph}{{\(k\) inlier cluster, \(c\) outlier clusters.}}{95}{section.2.1}%
+\contentsline {paragraph}{{Big + small inlier clusters}}{95}{equation.2.1.1}%
+\contentsline {section}{\numberline {B.2}{Inner and outer stage algorithms and guarantees}}{96}{section.2.2}%
+\contentsline {subsection}{\numberline {B.2.1}{Detailed setting}}{96}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {B.2.2}{Inner stage algorithm and guarantees}}{97}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {B.2.3}{Outer stage algorithm and guarantees}}{100}{subsection.2.2.3}%
+\contentsline {section}{\numberline {B.3}{Proof of~\Cref {thm:informal}}}{103}{section.2.3}%
+\contentsline {subsection}{\numberline {B.3.1}{General theorem statement}}{103}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {B.3.2}{Proof of~\Cref {thm:main-technical} }}{104}{subsection.2.3.2}%
+\contentsline {paragraph}{{(i) Proof of error statement}}{105}{subsection.2.3.2}%
+\contentsline {paragraph}{{(ii) Proof of small list size}}{106}{Item.49}%
+\contentsline {section}{\numberline {B.4}{Proof of~\Cref {thm:inner_stage_guarantees}}}{107}{section.2.4}%
+\contentsline {paragraph}{{(i) Proof of error statement}}{107}{section.2.4}%
+\contentsline {paragraph}{{(ii) Proof of list size}}{108}{Item.51}%
+\contentsline {paragraph}{{Conclusion}}{110}{equation.2.4.2}%
+\contentsline {subsection}{\numberline {B.4.1}{Auxiliary lemmas and proofs}}{110}{subsection.2.4.1}%
+\contentsline {section}{\numberline {B.5}{Proof of outer stage algorithm guarantees in~\Cref {sec:outer_stage_formulated}}}{113}{section.2.5}%
+\contentsline {subsection}{\numberline {B.5.1}{Proof of~\Cref {thm:outer-stage-init-guarantees}}}{113}{subsection.2.5.1}%
+\contentsline {paragraph}{{Proof of Theorem~\ref {item:M_small}}}{113}{subsection.2.5.1}%
+\contentsline {paragraph}{{Proof of Theorem~\ref {item:outer_stage_large_S_mi}}}{113}{subsection.2.5.1}%
+\contentsline {paragraph}{{Proof of Theorem~\ref {item:first_iter_small_or_large}}}{114}{subsection.2.5.1}%
+\contentsline {paragraph}{{Proof of Theorem~\ref {item:outer_stage_S_mi_no_others}}}{114}{subsection.2.5.1}%
+\contentsline {paragraph}{{Proof of Theorem~\ref {item:outer_stage_S_mi_nonitersect}}}{114}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {B.5.2}{Proof of~\Cref {thm:outer_stage_guarantees}}}{114}{subsection.2.5.2}%
+\contentsline {paragraph}{{Proof of~Theorem~\ref {item:outer_stage_U_small}}}{115}{subsection.2.5.2}%
+\contentsline {paragraph}{{Proof of~Theorem~\ref {item:outer_stage_S_gi}}}{116}{subsection.2.5.2}%
+\contentsline {paragraph}{{Proof of~Theorem~\ref {item:outer_stage_not_S_gi_small}}}{116}{subsection.2.5.2}%
+\contentsline {paragraph}{{Proof of~Theorem~\ref {item:outer_stage_else}}}{117}{subsection.2.5.2}%
+\contentsline {section}{\numberline {B.6}{Proof of ~\Cref {lemma:it_lb_ours}}}{118}{section.2.6}%
+\contentsline {subsection}{\numberline {B.6.1}{Case b): For the Gaussian inliers }}{118}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {B.6.2}{Case a): For distributions with \(t\)-th sub-Gaussian moments}}{119}{subsection.2.6.2}%
+\contentsline {section}{\numberline {B.7}{Stability of list-decoding algorithms}}{120}{section.2.7}%
+\contentsline {section}{\numberline {B.8}{Concentration bounds}}{120}{section.2.8}%
+\contentsline {section}{\numberline {B.9}{Experimental details}}{122}{section.2.9}%
+\contentsline {paragraph}{{Adversarial line and adversarial clusters}}{122}{section.2.9}%
+\contentsline {paragraph}{{Data Distribution}}{122}{figure.caption.20}%
+\contentsline {paragraph}{{Attack distributions}}{122}{figure.caption.21}%
+\contentsline {paragraph}{{Implementation details}}{124}{Item.59}%
+\contentsline {paragraph}{{Hyper-parameter search and experiment execution}}{124}{figure.caption.22}%
+\contentsline {paragraph}{{Evaluation details}}{125}{figure.caption.23}%
+\contentsline {subsection}{\numberline {B.9.1}{Variation of \(w_{\mathrm {low}}\)}}{126}{subsection.2.9.1}%
+\contentsline {subsection}{\numberline {B.9.2}{Computational resources}}{126}{subsection.2.9.2}%
 \vspace {\beforebibskip }
-\contentsline {chapter}{\numberline {}{Bibliography}}{123}{dummy.3}%
+\contentsline {chapter}{\numberline {}{Bibliography}}{129}{dummy.2}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

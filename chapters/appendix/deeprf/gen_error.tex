@@ -1,0 +1,396 @@
+Recall from~\Cref{ass:data+features} that we assume that the feature matrices $X,Z$ are Lipschitz-concentrated in the following sense (considering the vectors space of rectangular matrices equipped with the Frobenius norm): 
+\begin{definition}[Lipschitz concentration]
+    We say that a random vector $x$ in a normed vector space $\mathcal X$ is Lipschitz-concentrated with constant $\mu$ if there exists a constant $C$ such that for all $1$-Lipschitz functions $f\colon \mathcal X\to\R$ it holds that
+    \begin{equation}
+        \Pr{\abs{f(x)-\E f(x)}\ge t} \le C\exp\Bigl(-\frac{t^2}{C\mu^2}\Bigr).
+    \end{equation}
+\end{definition}
+A sufficent condition for Lipschitz concentration is that that the columns $x_i=\f(\x_i)$ are Lipschitz functions of Gaussian random vectors $\x_i$ of bounded covariance $\Omega_0:=\E \x_i\x_i^\top$, c.f.~\Cref{remark suff cond}. Indeed, let $\wt\f(\mathsf{g}):=\f(\sqrt{\Omega_0}\mathsf{g})$ and consider standard Gaussian vectors $\mathsf g_i,\ldots, \mathsf g_n$. We recall that standard Gaussian random vectors are Lipschitz-concentrated with a constant which is independent of the dimension:
+\begin{theorem}[Gaussian concentration]\label{thm:gaussian_concentration}
+    Let $\mathsf g$ be a random vector with independent standard Gaussian entries. Then $\mathsf g$ is Lipschitz-concentrated with constant $\mu=1$.
+\end{theorem}
+Therefore we can stack the Gaussian vectors $\mathsf{g}_1,\ldots,\mathsf{g}_n$ into $\mathsf g\in\R^{np}$ and write $X=X(\mathsf g)=(\wt\f(\mathsf g_1), \ldots, \wt\f(\mathsf g_n))$. Then $X$ is Lipschitz-concentrated with dimension-independent constant by~\Cref{thm:gaussian_concentration}  since for any Lipschitz $f\colon\R^{p\times n}\to\R$ it holds that $\mathsf g\mapsto f(X(\mathsf g))$ is Lipschitz due to 
+\begin{equation}
+    \begin{aligned}
+    \abs{f(X(\mathsf g))-f(X(\mathsf g'))}^2 &\le \norm{X(\mathsf g)-X(\mathsf g)'}_F^2 \\
+    &= \sum_i\norm{\wt\f(\mathsf g_i)-\wt\f(\mathsf g_i') }^2 \\
+    &\lesssim \sum_i \norm{\mathsf g_i-\mathsf g_i'}^2\\
+    &=\norm{\mathsf g-\mathsf g'}^2.
+    \end{aligned}
+\end{equation}
+
+\subsection*{Resolvent concentration}
+It will be useful to introduce also the resolvent of the associated Gram matrix $X^\top X/p$ which is given by
+\begin{equation}
+    \wc G = \Bigl(\frac{X^\top X}{p}+\lambda\Bigr)^{-1}.
+\end{equation}
+The two resolvents are related by the identity
+\begin{equation}\label{res identity XGX = 1-lambda cG}
+    \frac{X^\top G X}{p} = \frac{1}{p}X^\top \Bigl( \frac{XX^\top}{p} +\lambda\Bigr)^{-1} X = \frac{X^\top X}{p} \Bigl( \frac{X^\top X}{p} +\lambda\Bigr)^{-1} = 1 - \lambda \wc G.
+\end{equation}
+Both resolvents $G,\wc G$ are Lipschitz-continuous with respect to the Frobenius norm due to the resovlent identity
+\begin{equation}
+    \begin{aligned}
+        &\Bigl(\frac{XX^\top}{p}+\lambda\Bigr)^{-1} - \Bigl(\frac{YY^\top}{p} + \lambda\Bigr)^{-1} \\
+        &\quad =\Bigl(\frac{XX^\top}{p}+\lambda\Bigr)^{-1} \frac{(Y-X)Y^\top +X(Y-X)^\top}{p} \Bigl(\frac{YY^\top}{p} + \lambda\Bigr)^{-1}\\
+    \end{aligned}
+\end{equation}
+and the bound
+\begin{equation}
+    \norm{GX}\le \sqrt{p\norm{G}+p\lambda\norm{G^2}} \le \sqrt{2p/\lambda},
+\end{equation}
+implying
+\begin{equation}\label{res Lipschitz}
+    \begin{aligned}
+    &\norm{G-G'}_F \le 2 \frac{\mu}{\lambda^{3/2}p^{1/2}}\norm{X-Y}_F, \text{ where} \\
+    &G:=\Bigl(\frac{XX^\top}{p}+\lambda\Bigr)^{-1},\quad \text{ and } \quad  G':= \Bigl(\frac{YY^\top}{p} + \lambda\Bigr)^{-1}.
+    \end{aligned}
+\end{equation}
+Therefore we obtain that
+\begin{equation}\label{conc res}
+    \abs{\braket{A(G-\E G)}} \lesssim \frac{\braket{\abs{A}^2}^{1/2}}{\lambda^{3/2}p}, \quad \abs{\braket{A(\wc G-\E \wc G)}} \lesssim \frac{\braket{\abs{A}^2}^{1/2}}{\lambda^{3/2}p^{1/2}n^{1/2}}
+\end{equation}
+from~\Cref{thm:gaussian_concentration},
+\begin{equation}
+\begin{aligned}
+    \abs{\braket{A (G-G')}} &\le \frac{1}{p} \norm{A}_F \norm{G-G'}_F \\
+    &\le \frac{1}{p} \norm{A}_F \norm{G-G'}_F \\
+    &\le \frac{2\braket{\abs{A}^2}^{1/2}}{\lambda^{3/2}p}\norm{X-Y}_F.
+\end{aligned}
+\end{equation}
+and the analogous estimate for $\wc G-\wc G'$.
+An important special case of~\cref{conc res} is $A$ being rank-one which yields
+\begin{equation}\label{conc res xy}
+    \abs{x^\top G y - \E x^\top G y} \lesssim \frac{\norm{x}\norm{y}}{\lambda^{3/2}p^{1/2}}, \quad \abs{x^\top \wc G y - \E x^\top \wc G y} \lesssim \frac{\norm{x}\norm{y}}{\lambda^{3/2}p^{1/2}}
+\end{equation}
+
+\subsection*{Quadratic form and norm concentration}
+The other important concentration result needed in the proof of~\Cref{thm genRMT informal} is the concentration of quadratic forms, see e.g.\ Theorem 2.3 in~\cite{adamczak2015note}.
+\begin{theorem}
+\label{thm:hanson_wright}
+    If $x$ is a random vector of mean zero satisfying Lipschitz concentration with constant $\mu$, and $A$ is a deterministic matrix, then
+    \begin{equation}
+        \abs{x^\top A x - \E x^\top A x} \lesssim \mu^2 \norm{A}_F.
+    \end{equation}
+\end{theorem}
+
+Finally we need some upper bound on the operator norm of $X/\sqrt{p}$ which can be obtained standard $\epsilon$-net arguments,
+\begin{equation}\label{XX norm bound}
+    \norm{\frac{XX^\top}{n}- \Omega}\prec \frac{p}{n},
+\end{equation}
+see e.g.\ Remark~ 5.40 in~\cite{1011.3027}.
+
+\subsection*{Leave-one-out identities}
+Define the leave-one-out resolvent $G_{-i}=(\lambda+p^{-1}\sum_{j\ne i}x_j x_j^\top)^{-1}$ for which we have the identity
+\begin{equation}\label{loo identity}
+    \begin{split}
+        G &= G_{-i} - \frac{1}{p}\frac{G_{-i}x_i x_i^\top G_{-i}}{1+x_i^\top G_{-i} x_i/p} = G_{-i} - \lambda\frac{G_{-i}x_i x_i^\top G_{-i}}{p}\wc G_{ii} \\
+        G x_i &= G_{-i} x_i \Bigl(1- \frac{1}{p}\frac{ x_i^\top G_{-i}x_i}{1+x_i^\top G_{-i} x_i/p}\Bigr)= \frac{G_{-i} x_i}{1+x_i^\top G_{-i} x_i/p} = \lambda \wc G_{ii} G_{-i}x_i
+    \end{split}
+\end{equation}
+where the denominators can be simplified using
+\begin{equation}
+    -\frac{1}{1+x_i^\top G_{-i}x_i/p}=\frac{x_i^\top G_{-i}x_i}{1+x_i^\top G_{-i}x_i/p} -1 =\frac{x_i^\top G x_i}{p} -1= -\lambda (\wc G)_{ii}
+\end{equation}
+due to~\eqref{res identity XGX = 1-lambda cG}.
+
+\subsection*{Anisotropic Marchenko-Pastur Law}
+We are now ready to prove~\Cref{thm MP}, the anisotropic Marchenko-Pastur Law. In the comparable regime from~\Cref{thm genRMT informal} we will show that 
+\begin{equation}\label{eq MP comp}
+    \abs{\braket{[G(\lambda)-M(\lambda)]A}}\prec\frac{\braket{\abs{A}^2}^{1/2}}{p\lambda^3} \Bigl(1+\frac{p}{n}+\frac{n}{p}\Bigr).
+\end{equation}
+\begin{proof}[Proof of~\Cref{thm MP}]
+For the resolvent $G$ we obtain the equation
+\begin{equation}
+    \begin{aligned}
+        I &= \frac{\lambda}{p}\sum_i \Bigl( (\E \wc G_{ii}) \E G_{-i} \Omega + \E (\wc G_{ii}-\E \wc G_{ii}) G_{-i} x_i x_i^\top\Bigr) + \lambda \E G \\
+        &=  \E G \Bigl(\lambda\frac{n}{p}\braket{\E\wc G}  \Omega + \lambda\Bigr) + \frac{\lambda}{p} \sum_i \Bigl(\braket{\E \wc G} (\E G_{-i}-\E G) \Omega  \\
+        &\qquad \qquad \qquad \qquad \qquad \qquad  + \E( \wc G_{ii}-\E \wc G_{ii})G_{-i} x_i x_i^\top\Bigr) \\
+    \end{aligned}
+\end{equation}
+so that
+\begin{equation}
+    \begin{aligned}
+    \E G = \Bigl(\lambda\frac{n}{p}\braket{\E\wc G}\Omega + \lambda\Bigr)^{-1} &+ \frac{\lambda}{p} \sum_i \Bigl(\braket{\E \wc G} (\E G_{-i}-\E G) \Omega \\
+     &+ \E( \wc G_{ii}-\E \wc G_{ii})G_{-i} x_i x_i^\top\Bigr) \Bigl(\lambda\frac{n}{p}\braket{\E\wc G}\Omega + \lambda\Bigr)^{-1}.
+    \end{aligned}
+\end{equation}
+Using the bounds
+\begin{equation}
+    \begin{aligned}
+    \norm{G_{-i} x_i x_i^\top-\E G_{-i} x_i x_i^\top}_F &\le \norm{G_{-i} x_i x_i^\top - G_{-i}\Omega }_F + \norm{ (G_{-i}- \E_{-i} G_{-i})\Omega}_F \\
+    &\prec \frac{1}{\lambda} + \frac{1}{p^{1/2}\lambda^{3/2}},
+    \end{aligned}
+\end{equation}
+\begin{equation}
+    \begin{aligned}
+    \norm{\E G_{-i} - \E G}_F  &= \lambda\abs{\wc G_{ii}}\norm{\frac{G_{-i}x_i x_i^\top G_{-i}}{p}}_F \\
+    &\prec \frac{1}{p}\Bigl(\norm{G_{-i}\Omega G_{-i}}_F + \norm{G_{-i} (x_ix_i^\top-\Omega)G_{-i} }_F\Bigr)\\
+    &\prec \frac{1}{p^{1/2}\lambda^2},
+    \end{aligned}
+\end{equation}
+and $\abs{\wc G_{ii}-\E \wc G_{ii}} \prec \frac{1}{p^{1/2}\lambda^{3/2}}$ from~\Cref{conc res xy}
+we thus obtain
+\begin{equation}
+    \norm{\E G(\lambda) - M(\lambda,\braket{\E\wc G})}_F \prec \frac{n}{p^{3/2}\lambda^3},\quad M(\lambda,m):=\Bigl( \lambda\frac{n}{p}m\Omega + \lambda\Bigr)^{-1}.
+\end{equation}
+
+Note that while $M(\lambda,\braket{\E \wc G})$ is a deterministic matrix, it still depends on the expected trace of $\wc G$ explicitly. However, we claim that
+\begin{equation}\label{scalar claim}
+    \abs{m-\braket{\E\wc G}} \lesssim \frac{m}{p\lambda^3},
+\end{equation}
+proving
+\begin{equation}\label{local law G}
+    \begin{aligned}
+    &\norm{\E G - M}_F \\
+    &\quad \lesssim \frac{1}{p^{1/2}\lambda^{3/2}} + \frac{n}{p^{3/2}\lambda^3} + \norm{M(\lambda,\braket{\E\wc G})-M(\lambda,m)}_F \\
+    &\quad \lesssim \frac{1}{p^{1/2}\lambda^{3}}\Bigl(1+\frac{n}{p}+\frac{p}{n}\Bigr).
+    \end{aligned}
+\end{equation}
+Now~\Cref{eq MP comp} follows directly together with the concentration estimate~\Cref{conc res}. 
+\end{proof}
+
+\subsection*{Multi-Resolvent Deterministic Equivalents}
+The key for proving~\Cref{thm genRMT informal} is extending the anisotropic Marchenko-Pastur to mutli-resolvent expressions, which we summarize in the following proposition. For simplicity we carry the precise error term in the comparable regime only in the first statement, the other ones being similar. 
+\begin{proposition}\label{prop multi res}~
+    \begin{enumerate}
+        \item\label{GXZ} For any $A\in\R^{k\times p}$ we have\footnote{In a slight abuse of notation we use the $O(\cdots)$ notation in the sense of ``$\prec$''}
+        \begin{equation}
+            \frac{1}{\sqrt{kp}} \braket{GXZ^\top A} =\frac{\lambda m n}{\sqrt{kp}}\braket{M\Phi A} + O\br{\frac{n}{k^{1/2}p^{3/2}\lambda^3}\Bigl(1+\frac{n}{p}+\frac{p}{n}\Bigr)}
+        \end{equation}
+        \item\label{GOmG} For any $A\in\R^{p\times p}$ we have more generally
+        \begin{subequations}
+            \begin{align}
+                \braket{A G \Omega G} & = \frac{\braket{ AM \Omega M}}{1- \frac{n}{p}(m\lambda)^2 \braket{\Omega M \Omega M}} + O\br{\frac{\braket{\abs{A}^2}^{1/2}}{p\lambda^7}}                                                                         \\
+                \intertext{while for any $A,B\in\R^{p\times p}$ we have}
+                \braket{A G B G}      & = \braket{ AM B M} + \frac{n}{p}(m\lambda)^2 \frac{\braket{ AM \Omega M}\braket{\Omega M B M}}{1- \frac{n}{p}(m\lambda)^2 \braket{\Omega M \Omega M}} \\
+                &\qquad \qquad \qquad + O\br{\frac{\braket{\abs{A}^2}^{1/2}\norm{B}}{p\lambda^7}}
+            \end{align}
+        \end{subequations}
+        \item\label{XGomXG} For any $A\in\R^{p\times p}$ we have
+        \begin{equation}
+            \braket{\frac{X^\top G\Omega GX A}{p}} =  \frac{\lambda^2m^2  \braket{ \Omega M \Omega M}}{1- \frac{n}{p}(m\lambda)^2 \braket{\Omega M \Omega M}}\braket{A} + O\br{\frac{\braket{\abs{A}^2}^{1/2}}{p\lambda^7}}
+        \end{equation}
+        \item\label{ZXGOmGXZ} Finally, for any $A\in\R^{p\times p}$ we have
+        \begin{equation}
+            \begin{split}
+                &\braket{\frac{ZX^{\top}G\Omega G XZ^{\top}A}{kp}} \\
+                &\quad = (m\lambda)^2\frac{n}{k}\frac{\braket{A\Bigl(\bigl( \Psi-2\frac{n}{p}\lambda m\Phi^\top M \Phi\bigr)\braket{ \Omega M \Omega M}+\frac{n}{p}\Phi^\top M\Omega M \Phi  \Bigr)}}{1- \frac{n}{p}(m\lambda)^2 \braket{\Omega M \Omega M}}\\
+                \\ & \quad + O\br{\frac{\braket{\abs{A}^2}^{1/2}}{p\lambda^7}}
+            \end{split}
+        \end{equation}
+    \end{enumerate}
+\end{proposition}
+Before turning to the proof of~\Cref{prop multi res}, we demonstrate how~\Cref{prop multi res} implies~\Cref{thm genRMT informal}.
+\begin{proof}[Proof of~\Cref{thm genRMT informal}]
+    By applying~\Cref{prop multi res} to the terms of~\Cref{eq:gen err def} we obtain
+    \begin{equation}
+        \begin{split}
+            \mathcal E_\mathrm{gen}&=\frac{\fast^\top\Psi\fast}{k} + \frac{\fast^\top Z X^\top G\Omega GX Z^\top \fast }{k p^2}
+            +  \frac{n}{p}\braket{\frac{X^\top G\Omega GX\Sigma}{p}} -2 \frac{\fast^\top \Phi^\top G X Z^\top \fast}{kp}\\
+            &= \frac{1}{k}\fast\biggl(\Psi + (m\lambda)^2\frac{n}{p}\frac{\bigl( \Psi-2\frac{n}{p}\lambda m\Phi^\top M \Phi\bigr)\braket{ \Omega M \Omega M}+\frac{n}{p}\Phi^\top M\Omega M \Phi  }{1- \frac{n}{p}(m\lambda)^2 \braket{\Omega M \Omega M}} - 2\lambda m\frac{ n}{p}\Phi^\top M\Phi \biggr)\fast\\
+            &\qquad +\braket{\Sigma}  \frac{ (\lambda m)^2\frac{n}{p} \braket{ M\Omega M\Omega  }}{1-\frac{n}{p}(\lambda m)^2\braket{\Omega M\Omega M}}+ O\br{\frac{\norm{\fast}^2}{p^{1/2}\lambda^7}}.
+        \end{split}
+    \end{equation}
+    It remains to show that the matrix in the brackets can be simplified to the expression in~\Cref{thm genRMT informal}. For the last term in the numerator of the fraction we use
+    \begin{equation}
+        m\lambda \frac{n}{p} M\Omega M= M -\lambda M^2,
+    \end{equation}
+    so that the bracket, after simplifying, becomes
+    \begin{equation}
+        \begin{split}
+            \frac{\Psi -m\lambda\frac{n}{p}\Phi^\top (M+\lambda M^2) \Phi  }{1- \frac{n}{p}(m\lambda)^2 \braket{\Omega M \Omega M}},
+        \end{split}
+    \end{equation}
+    just as claimed.
+\end{proof}
+\begin{proof}[Proof of~\Cref{prop multi res}]
+    We begin with the proof of~\Cref{GXZ}. First note that $\braket{GXZ^\top A}$ is a Lipschitz function of the Gaussian randomness $d$ used to construct $X$ and $Z$. Indeed, denoting $G,X,Z$ evaluated at another realization of the Gaussian randomness by $G',X',Z'$ we have
+    \begin{equation}
+        \begin{split}
+            \braket{GXZ^\top A} - \braket{G' X' (Z')^\top A} &= \braket{(G-G')XZ^\top A} + \braket{G'(X-X')Z^\top A}+\braket{G' X' (Z-Z')^\top A} \\
+            &= O\br{\frac{\norm{X-X'}_F \norm{X}\norm{Z}\braket{\abs{A}^2}^{1/2}}{\lambda^{3/2}p} + \frac{(\norm{X-X'}_F\norm{Z}+\norm{X}\norm{Z-Z'}_F)\braket{\abs{A}^2}^{1/2}}{p\lambda } },
+        \end{split}
+    \end{equation}
+    so that on the high probability event (recall~\Cref{XX norm bound}) that $\norm{X}\prec \sqrt{p}, \norm{Z}\prec\sqrt{k}$ it follows that $\braket{GXZ^\top A}$ is Lipschitz with constant $\braket{\abs{A}^2}^{1/2}/p\lambda^{3/2}$. By estimating the complement of this high probability event trivially we can conclude
+    \begin{equation}
+        \abs{\frac{1}{\sqrt{kp}}\braket{GXZ^\top A}- \frac{1}{\sqrt{kp}}\braket{\E GXZ^\top A}} \prec \frac{\braket{\abs{A}^2}^{1/2}}{p\lambda^{3/2}}.
+    \end{equation}
+    For the expectation we write out $XZ^\top$ and use~\cref{loo identity} we obtain
+    \begin{equation}
+        \begin{split}
+            \frac{1}{\sqrt{kp}}G XZ^{\top} &=\frac{1}{\sqrt{kp}}\sum_i Gx_iz_i^\top=\frac{1}{\sqrt{kp}}\sum_i \lambda\wc G_{ii} G_i x_iz_i^\top.
+        \end{split}
+    \end{equation}
+    With
+    \begin{equation}
+        \begin{split}
+            \frac{\lambda}{\sqrt{kp}}\E\sum_i (\wc G)_{ii} \braket{G_i x_i z_i^\top A} &= \frac{\lambda}{\sqrt{kp}}\sum_i \Bigl((\E\wc G_{ii}) \braket{\E G_i x_i z_i^\top A} + O\br{\sqrt{\Var \wc G_{ii}}\sqrt{\Var \braket{G_i x_i z_i^\top A}}}\Bigr)\\
+            &= \frac{\lambda}{\sqrt{kp}}\sum_i (\E\wc G_{ii}) \braket{\E G_i \Phi A} + O\br{\frac{n}{k^{1/2}p^{3/2}\lambda^2}}\\
+            & = \frac{\lambda m n}{\sqrt{kp}}\braket{M\Phi A} + O\br{\frac{n}{k^{1/2}p^{3/2}\lambda^3}\Bigl(1+\frac{n}{p}+\frac{p}{n}\Bigr)}
+        \end{split}
+    \end{equation}
+    due to~\Cref{local law G}, $\Var \wc G_{ii}\lesssim \frac{1}{p\lambda^{3}}$ and
+    \begin{equation}
+        \Var \braket{G_{-i} x_i z_i^\top A} \lesssim \frac{1}{p^2}\E_{-i} \norm{A G_{-i}}_F^2 + \Var_{-i} \braket{ G_{-i}\Phi A} \lesssim \frac{\braket{\abs{A}^2}}{p\lambda^3}
+    \end{equation}
+    by~\cref{conc res}, this concludes the proof of~\Cref{GXZ}.
+
+    We now turn to the proof of~\Cref{GOmG}. First note that by Lipschitz concentration we have
+    \begin{equation}\label{AGBG lipschitz}
+        \abs{\braket{AGBG-\E AGBG}} \lesssim \frac{\norm{A}\braket{\abs{B}^2}^{1/2}}{p\lambda^{5/2}}
+    \end{equation}
+    due to
+    \begin{equation}
+        \abs{\braket{A G B G}- \braket{AG' B G' } }\le \abs{\braket{A (G-G')BG}} + \abs{\braket{AG'B(G-G')}} \le 2\frac{\norm{A}\norm{B}_F}{p\lambda} \norm{G-G'}_F
+    \end{equation}
+    and~\cref{res Lipschitz}.
+
+    It is useful to expand $G$ around $M$ as in
+    \begin{equation}
+        \begin{split}
+            G= M+\lambda M \Omega G\frac{n}{p}\braket{m-\wc G} -  M\frac{XX^\top}{p}G+ \lambda M\Omega G \frac{n}{p}\braket{\wc G} = M-  M\frac{XX^\top}{p}G+ \lambda \braket{\wc G} M\Omega G \frac{n}{p} + O\br{ \frac{1}{p\lambda^3} } M\Omega G
+        \end{split}
+    \end{equation}
+    using~\cref{scalar claim} in the second step. Consequently we obtain
+    \begin{equation}\label{GAGB exp}
+        \begin{split}
+            \braket{GAGB} &= \braket{MAGB} - \braket{M\frac{XX^\top}{p}G AGB} + \frac{n\lambda}{p}\braket{\wc G} \braket{M\Omega G AGB} + O\br{\frac{\braket{\abs{A}^2}^{1/2}\braket{\abs{B}^2}^{1/2}}{p \lambda^6}}\\
+            & =\braket{MAMB} -\frac{1}{p} \sum_i (\braket{M x_i x_i^\top G AG B}-\lambda\wc G_{ii}\braket{M\Omega GAGB})  + O\br{\frac{\norm{B}\braket{\abs{A}^2}^{1/2}}{p\lambda^6}} \\
+            %& = \braket{MAMB} -\frac{\lambda}{p} \sum_i \wc G_{ii} (\braket{M x_i x_i^\top G_{-i} AG B}-\braket{M\Omega GAGB})  + O\br{\frac{\norm{A}\braket{\abs{B}^2}^{1/2}}{p\lambda^6}} \\
+            & = \braket{MAMB} -\frac{\lambda}{p} \sum_i \wc G_{ii} (\braket{M x_i x_i^\top G_{-i} AG_{-i} B}-\braket{M\Omega GAGB})  + O\br{\frac{\norm{B}\braket{\abs{A}^2}^{1/2}}{p\lambda^6}}\\
+            &\quad + \frac{\lambda^2}{p} \sum_i \wc G_{ii}^2 \frac{x_i^\top G_{-i} AG_{-i}x_i}{p}\frac{x_i^\top G_{-i} B M x_i}{p},
+        \end{split}
+    \end{equation}
+    using~\cref{loo identity} in the third step. The second term of~\cref{GAGB exp} can be estimated in expectation using
+    \begin{equation}
+        \begin{split}
+            \frac{\lambda}{p}\E\sum_i\wc G_{ii} \braket{ M x_i x_i^\top G_{-i} AG_{-i} B} &= \frac{\lambda}{p}\sum_i\Bigl((\E\wc G_{ii}) \braket{\E M\Omega G_{-i} A G_{-i}B} + O\br{\sqrt{\Var \wc G_{ii}}\sqrt{\Var \braket{ M x_i x_i^\top G_{-i} AG_{-i} B}}\Bigr)}\\
+            &=\frac{\lambda}{p}\sum_i(\E\wc G_{ii}) \braket{\E M\Omega G A GB} + O\br{\frac{n\norm{B}\braket{\abs{A}^2}^{1/2}}{p^2\lambda^{4}} } \\
+            &= \frac{\lambda}{p}\E\sum_i \wc G_{ii} \braket{ M\Omega G A GB} + O\br{\frac{n\norm{B}\braket{\abs{A}^2}^{1/2}}{p^2\lambda^{4}} }
+        \end{split}
+    \end{equation}
+    since $\Var \wc G_{ii}\lesssim \frac{1}{p\lambda^{3}}$,
+    \begin{equation}
+        \Var\braket{ M x_i x_i^\top G_{-i} A G_{-i} B } \lesssim \frac{1}{p^2}\E_{-i} \norm{G_{-i}A G_{-i} B M}_F^2 + \Var_{-i} \braket{M\Omega G_{-i} A G_{-i}B} \lesssim\frac{\norm{B}^2\braket{\abs{A}^2}}{p\lambda^6}(1+\frac{1}{p\lambda}).
+    \end{equation}
+    %due to $\Var f = \E_{-i}(\Var_i f) + \Var_{-i}(\E_i f)$
+    and
+    \begin{equation}
+        \norm{G-G_i} \lesssim \frac{1}{p\lambda^2}, \quad \braket{M\Omega G_{-i} A G_{-i} B}= \braket{M\Omega G A G B} + O\br{\frac{\norm{B}\braket{\abs{A}^2}^{1/2}}{p\lambda^4}}.
+    \end{equation}
+    For the last term of~\Cref{GAGB exp} we have
+    \begin{equation}
+        \begin{split}
+            \frac{x_i^\top G_{-i} AG_{-i}x_i}{p} &= \braket{\Omega G_{-i} A G_{-i}} + O\br{\frac{1}{p}\norm{G_{-i}AG_{-i}}_F}= \braket{\Omega G A G} + O (\frac{\braket{\abs{A}^2}^{1/2}}{p^{1/2}\lambda^2})\\
+            \frac{x_i^\top G_{-i} B M x_i}{p} &= \braket{\Omega G_{-i} B M} + O\br{\frac{1}{p}\norm{G_{-i}BM}_F}= \braket{\Omega M B M} + O (\frac{\braket{\abs{B}^2}^{1/2}}{p^{1/2}\lambda^2}),
+        \end{split}
+    \end{equation}
+    so that with
+    \begin{equation}
+        \begin{split}
+            \E\wc G_{ii}^2 \frac{x_i^\top G_{-i} AG_{-i}x_i}{p}\frac{x_i^\top G_{-i} B M x_i}{p} &= (\E \wc G_{ii}^2) \Bigl(\E \frac{x_i^\top G_{-i} A G_{-i}x_i}{p}\Bigr) \Bigl(\E \frac{x_i^\top G_{-i} B M x_i}{p}\Bigr) + O\br{\frac{\braket{\abs{A}^2}^{1/2}\braket{\abs{B}^2}^{1/2}}{p\lambda^7}}\\
+            &=(\E \wc G_{ii}^2) \braket{\E \Omega G A G} \braket{ \E \Omega G B M} + O\br{\frac{\braket{\abs{A}^2}^{1/2}\braket{\abs{B}^2}^{1/2}}{p\lambda^7}}
+        \end{split}
+    \end{equation}
+    and
+    \begin{equation}
+        \frac{1}{p}\sum_i \wc G_{ii}^2 = \frac{n}{p}m^2 +2 \frac{n}{p}m \braket{\wc G-m} + \frac{1}{p}\sum_i (\wc G_{ii}-m)^2= \frac{n}{p}m^2 +O\br{\frac{1}{p\lambda^5} + \frac{n}{p^2\lambda^3}}
+    \end{equation}
+    we arrive at
+    \begin{equation}
+        \frac{\lambda^2}{p} \E\sum_i \wc G_{ii}^2 \frac{x_i^\top G_{-i} AG_{-i}x_i}{p}\frac{x_i^\top G_{-i} B M x_i}{p} = \frac{n}{p}(m\lambda)^2 \braket{\Omega M B M} \braket{\E \Omega G A G} + O\br{\frac{\braket{\abs{A}^2}^{1/2}\braket{\abs{B}^2}^{1/2}}{p\lambda^6}}.
+    \end{equation}
+    Choosing $B=\Omega$ it follows that
+    \begin{equation}
+        \braket{GA G \Omega}(1 - \frac{n}{p}\lambda^2 m^2 \braket{\Omega M \Omega M}) = \braket{MA M \Omega}   + O\br{\frac{\braket{\abs{A}^2}^{1/2}}{p\lambda^6}},
+    \end{equation}
+    so that the final claim~\Cref{GOmG} follows upon division.
+
+    Turning to the proof of~\Cref{XGomXG} we first note that by~\cref{loo identity} we have
+    \begin{equation}
+        \begin{split}
+            \E\Bigl(\frac{X^\top G\Omega GX}{p}\Bigr)_{ii} &= \lambda^2 \E\wc G_{ii}^2 \braket{\E\Omega G_{-i}\Omega G_{-i}} + O\br{\frac{1}{p}\sqrt{\Var \wc G_{ii}^2 } \sqrt{\Var x_i^\top G_{-i}\Omega G_{-i} x_i}}\\
+            &= \lambda^2 \E \wc G_{ii}^2 \frac{\braket{ \Omega M \Omega M}}{1- \frac{n}{p}(m\lambda)^2 \braket{\Omega M \Omega M}} + O\br{\frac{1}{p\lambda^7}},
+        \end{split}
+    \end{equation}
+    so that by a Lipschitz concentration argument as in~\Cref{AGBG lipschitz} we obtain for the diagonal part $A_d$ of $A=A_d+A_o$ that
+    \begin{equation}
+        \braket{\frac{X^\top G\Omega GX}{p}A_d} = \frac{\lambda^2m^2  \braket{ \Omega M \Omega M}}{1- \frac{n}{p}(m\lambda)^2 \braket{\Omega M \Omega M}}\braket{A_d} + O\br{\frac{\braket{\abs{A_d}^2}^{1/2}}{p\lambda^7}}.
+    \end{equation}
+    For the off-diagonal part we use~\cref{loo identity} twice to obtain
+    \begin{equation}
+        \begin{split}
+            \Bigl(\frac{X^\top G\Omega GX}{p}\Bigr)_{ij} &= \frac{\lambda^{2}\wc G_{ii}\wc G_{jj}}{p} x_i^\top G_{-i}\Omega G_{-j} x_j\\
+            & = \frac{\lambda^{2}\wc G_{ii}\wc G_{jj}}{p} x_i^\top G_{-ij}\Omega G_{-ij} x_j + \frac{\lambda^{4}\wc G_{ii}^2\wc G_{jj}^2}{p^3} x_i^\top G_{-ij} x_jx_j^\top G_{-ij}\Omega G_{-ij} x_ix_i^\top G_{-ij} x_j\\
+            &\quad - \frac{\lambda^{3}\wc G_{ii}^2\wc G_{jj}}{p^2} x_i^\top G_{-ij}\Omega G_{-ij}x_ix_i^\top G_{-ij} x_j  - \frac{\lambda^{3}\wc G_{ii}\wc G_{jj}^2}{p^2} x_i^\top G_{-ij}x_jx_j^\top G_{-ij}\Omega G_{-ij} x_j.
+        \end{split}
+    \end{equation}
+    The second term can be estimated trivially by $p^{-3/2}\lambda^{-4}$, while for the first, third and fourth terms the trivial estimates of $p^{-1/2}\lambda^{-2}$, $p^{-1} \lambda^{-3}$ and $p^{-1/2}\lambda^{-3}$ do not suffice. For those we use the expectation and decompose $\wc G_{ii}=m+(\wc G_{ii}-m)$, $\wc G_{jj}=m+(\wc G_{jj}-m)$ to obtain
+    \begin{equation}
+        \E \frac{\lambda^{2}\wc G_{ii}\wc G_{jj}}{p} x_i^\top G_{-ij}\Omega G_{-ij} x_j= \E \frac{\lambda^{2}(\wc G_{ii}-m)(\wc G_{jj}-m)}{p} x_i^\top G_{-ij}\Omega G_{-ij} x_j = O\br{\frac{1}{\lambda^2 p^{3/2}}}
+    \end{equation}
+    and
+    \begin{equation}
+        \E\frac{\lambda^{3}\wc G_{ii}^2\wc G_{jj}}{p^2} x_i^\top G_{-ij}\Omega G_{-ij}x_ix_i^\top G_{-ij} x_j = \E \frac{\lambda^{3}(\wc G_{ii}^2\wc G_{jj}-m^3)}{p^2} x_i^\top G_{-ij}\Omega G_{-ij}x_ix_i^\top G_{-ij} x_j = O\br{\frac{1}{p^{3/2}\lambda^{7/2}}}
+    \end{equation}
+    using that, say, $x_j$ is centered and independent of $x_i, G_{-ij}$. By combining these estimates we obtain
+    \begin{equation}
+        \E \abs{\Bigl(\frac{X^\top G\Omega GX}{p}\Bigr)_{ij}} = O\br{\frac{1}{p^{3/2}\lambda^4}},
+    \end{equation}
+    concluding the proof of~\Cref{XGomXG}.
+
+    We now turn to the proof of~\eqref{ZXGOmGXZ} which follows a similar strategy as the proof of~\Cref{GOmG}. First we note that by a Lipschitz concentration argument as in~\Cref{AGBG lipschitz} it is sufficient to approximate the expectation of $ZX^\top G \Omega G X Z^\top$.
+    By writing out $ZX^\top$ and $X Z^\top$ and using~\cref{loo identity} twice we obtain
+    \begin{equation}\label{ZXGGXZ exp}
+        \begin{split}
+            \frac{1}{kp}ZX^{\top}G\Omega G XZ^{\top} &= \frac{1}{kp}\sum_{ij} z_i x_i^\top G \Omega G x_j z_j^\top\\
+            &= \frac{1}{kp} \sum_i (\lambda \wc G_{ii})^2 z_i x_i^\top G_{-i} \Omega G_{-i} x_i z_i^\top + \frac{1}{kp} \sum_{i\ne j} (\lambda \wc G_{ii})(\lambda \wc G_{jj}) z_i x_i^\top G_{-i} \Omega G_{-j} x_j z_j^\top.
+        \end{split}
+    \end{equation}
+    For the first term of~\Cref{ZXGGXZ exp} we have
+    \begin{equation}
+        \begin{split}
+            \frac{n}{kp}\E\braket{Az_i x_i^\top G_{-i} \Omega G_{-i} x_i z_i^\top} &= \frac{n}{k^2p} (\E z_i^\top A z_i) (\E x_i^\top G_{-i} \Omega G_{-i} x_i)+O\br{\frac{n}{k^2p} \sqrt{\Var z_i^\top A z_i}\sqrt{\Var x_i^\top G_{-i} \Omega G_{-i} x_i} }\\
+            &= \frac{n}{k} \braket{A\Psi} \E \braket{\Omega G_{-i}\Omega G_{-i}} + O\br{\frac{n\braket{\abs{A}^2}^{1/2}}{p^{1/2}k^{3/2}\lambda^2}}\\
+            &= \frac{n}{k} \braket{A\Psi}\frac{\braket{ \Omega M \Omega M}}{1- \frac{n}{p}(m\lambda)^2 \braket{\Omega M \Omega M}} + O\br{\frac{n\braket{\abs{A}^2}^{1/2}}{pk\lambda^3}(1+\sqrt{p/k})}
+        \end{split}
+    \end{equation}
+    using~\Cref{GOmG} in the ultimate step. For the second term in the right hand side of~\Cref{ZXGGXZ exp} we expand both $G_{-i}$ and $G_{-j}$ around $G_{-ij}$ using~\Cref{loo identity} to
+    \begin{equation}\label{xxGOmGxxA}
+        \begin{split}
+            \braket{z_i x_i^\top G_{-i} \Omega G_{-j} x_j z_j^\top A} &\approx \braket{z_i x_i^\top \Bigl(G_{-ij}- \lambda m G_{-ij}\frac{x_jx_j^\top}{p}G_{-ij}\Bigr) \Omega \Bigl(G_{-ij}-m\lambda G_{-ij}\frac{x_ix_i^\top}{p}G_{-ij}\Bigr) x_j z_j^\top A}\\
+            & = \braket{z_i x_i^\top G_{-ij} \Omega G_{-ij} x_j z_j^\top A} + (\lambda m)^2 \braket{z_i x_i^\top  G_{-ij}\frac{x_jx_j^\top}{p}G_{-ij} \Omega  G_{-ij}\frac{x_ix_i^\top}{p}G_{-ij} x_j z_j^\top A}\\
+            &\quad - \lambda m \braket{z_i x_i^\top G_{-ij}\Omega G_{-ij}\frac{x_ix_i^\top}{p}G_{-ij} x_j z_j^\top A} - \lambda m \braket{z_i x_i^\top G_{-ij}\frac{x_jx_j^\top}{p}G_{-ij} \Omega G_{-ij} x_j z_j^\top A}.
+        \end{split}
+    \end{equation}
+    Here in the first line we replaced $(\wc G_{-i})_{jj}$ and $(\wc G_{-j})_{ii}$ by $m$ which results in an error term negligible compared to the other error terms. The first term of~\Cref{xxGOmGxxA} can, in expectation, be approximated by
+    \begin{equation}
+        \E\braket{z_i x_i^\top G_{-ij} \Omega G_{-ij} x_j z_j^\top A} = \E\braket{\Phi^\top G_{-ij} \Omega G_{-ij} \Phi A} = \frac{\braket{\Phi^\top M\Omega M \Phi A}}{1-\frac{n}{p}(m\lambda)^2 \braket{\Omega M \Omega M}} + O\br{\frac{\braket{\abs{A}^2}^{1/2}}{p\lambda^7}},
+    \end{equation}
+    using~\Cref{GOmG} in the ultimate step. The third term of~\Cref{xxGOmGxxA} can be approximated by
+    \begin{equation}
+        \begin{split}
+            &\lambda m \E \braket{z_i x_i^\top G_{-ij}\Omega G_{-ij}\frac{x_ix_i^\top}{p}G_{-ij} x_j z_j^\top A}\\
+            &\quad= \frac{1}{kp}\lambda m(x_i^\top G_{-ij} \Phi Az_i) (x_i^\top G_{-ij}\Omega G_{-ij} x_i)\\
+            &\quad = \lambda m \E_{-ij}\Bigl(\braket{\Phi^\top G_{-ij}\Phi A} \braket{\Omega G_{-ij}\Omega G_{-ij}} + O\br{\sqrt{\Var_i \frac{x_i^\top G_{-ij} \Phi Az_i}{k}}\sqrt{\Var_i \frac{x_i^\top G_{-ij}\Omega G_{-ij} x_i}{p}} }\Bigr) \\
+            &\quad= \lambda m \frac{\braket{\Phi^\top M \Phi A} \braket{\Omega M\Omega M}}{1-\frac{n}{p}(m\lambda)^2 \braket{\Omega M \Omega M}} + O\br{\frac{\braket{\abs{A}^2}}{\lambda^{7}p}\Bigl(1+\sqrt{\frac{p}{k}}\Bigr)}
+        \end{split}
+    \end{equation}
+    and the fourth term is exactly the same by symmetry. Here in the ultimate step we used
+    \begin{equation}
+        \Var_i \frac{x_i^\top G_{-ij}\Omega G_{-ij} x_i}{p} \lesssim \frac{1}{p^2}\norm{G_{-ij}\Omega G_{-ij}}_F^2\lesssim\frac{1}{p\lambda^2}, \quad \Var_i \frac{x_i^\top G_{-ij}\Phi A z_i}{k}\lesssim \frac{\braket{\abs{A}^2}}{\lambda k}
+    \end{equation}
+    and~\Cref{local law G,GOmG}.
+    Finally, for the second term of~\Cref{ZXGGXZ exp} we use the simple bound
+    \begin{equation}
+        \begin{split}
+            &\braket{z_i x_i^\top  G_{-ij}\frac{x_jx_j^\top}{p}G_{-ij} \Omega  G_{-ij}\frac{x_ix_i^\top}{p}G_{-ij} x_j z_j^\top A} \\
+            &\quad = \frac{1}{kp^2} (x_i^\top  G_{-ij} x_j)(x_j^\top G_{-ij} \Omega  G_{-ij} x_i) (x_i^\top G_{-ij} x_j) (z_j^\top A z_i) \\
+            & \quad = O\br{\frac{1}{kp^2} \norm{G_{-ij}}_F \norm{G_{-ij}\Omega G_{-ij}}_F \norm{G_{-ij}}_F \norm{A}_F} = O\br{\frac{\braket{\abs{A}^2}^{1/2}}{k^{1/2}p^{1/2}\lambda^4}}.
+        \end{split}
+    \end{equation}
+    By combining all the above estimates we conclude the proof of~\Cref{ZXGOmGXZ}.
+\end{proof}
+
+

@@ -1,5 +1,5 @@
 
-\subsection{Proof of main theorem}
+\section{Proof of main theorem}
 
 Let $G$ be a circulant graph. As noted in~\cite{magsino2019linear}, for circulant graphs the SDP formulation of the Lovász number can be rewritten as the following linear program:
 
@@ -119,7 +119,7 @@ We show that each entry of \(g\) is small with high probability. Indeed, for any
 \begin{equation}
 \begin{aligned}
 &\Pr(\abs{g_k} > 1 + 4 \sqrt{n \log n}) = \Pr(\abs{\langle f_k, b \rangle} > 1 + 4 \sqrt{n \log n}) \\
-&\quad \leq \Pr\left(\abs*{\sum_{j = 1}^{(n - 1) / 2}X_j} > 2 \sqrt{n \log n}\right) \leq \frac{2}{n^2},
+&\quad \leq \Pr\left(\abs{\sum_{j = 1}^{(n - 1) / 2}X_j} > 2 \sqrt{n \log n}\right) \leq \frac{2}{n^2},
 \end{aligned}
 \end{equation}
 where \(X_j \coloneqq \Re(F_{kj})b_j \in [-1, 1]\), and the last step follows from Hoeffding's inequality~(\Cref{lem:hoeffding}).
@@ -196,7 +196,8 @@ namely, an upper bound on the \(\norm{y}_2\).
 \end{proof}
 
 \begin{remark}[Alternative proof technique]
-\Cref{lem:rip} also follows from an intermediate step in the proof of RIP of the subsampled Fourier matrix in~\cite{haviv2017restricted}. More specifically, in our notation \cite[Theorem~3.1]{haviv2017restricted} implies that $\|\wh F x\| \ge (1 - \varepsilon) \| F x\|^2_2 - C \varepsilon / k \| x \|_1^2$ with high probability, and since $x \in \ker \wh F$, it follows that $\|x\|_2 \le \frac{ \log^{2}n}{\sqrt{n}}$.
+\Cref{lem:rip} also follows from an intermediate step in the proof of RIP of the subsampled Fourier matrix in~\cite{haviv2017restricted}. 
+More specifically, in our notation \cite{haviv2017restricted},~Theorem~3.1 implies that $\|\wh F x\| \ge (1 - \varepsilon) \| F x\|^2_2 - C \varepsilon / k \| x \|_1^2$ with high probability, and since $x \in \ker \wh F$, it follows that $\|x\|_2 \le \frac{ \log^{2}n}{\sqrt{n}}$.
 \end{remark}
 
 Now we present the proof of our main result.

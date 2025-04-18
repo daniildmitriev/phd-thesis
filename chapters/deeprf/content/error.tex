@@ -1,0 +1,139 @@
+Under~\Cref{ass:labels,ass:data+features} the generalization error from~\Cref{eq:gen err def} is given by
+\begin{equation}\label{eq:gen_err}
+    \begin{aligned}
+        \mathcal E_\mathrm{gen}(\lambda) = \frac{\theta_\ast^\top\Psi\theta_\ast}{k} &+ \frac{\theta_\ast^\top Z X^\top G\Omega GX Z^\top \theta_\ast }{k p^2} \\
+        & +  \frac{n}{p}\braket{\frac{X^\top G\Omega GX\Sigma}{p}} -2 \frac{\theta_\ast^\top \Phi^\top G X Z^\top \theta_\ast}{kp},
+    \end{aligned}
+\end{equation}
+in terms of the \emph{resolvent} $G=G(\lambda):=(XX^\top/p+\lambda)^{-1}$.
+
+Our main result is a rigorous asymptotic expression for~\Cref{eq:gen_err}. To that end define, $m(\lambda)$ to be the unique solution to the equation
+\begin{equation}\label{eq m def}
+    \frac{1}{m(\lambda)}=\lambda +\braket{\Omega \Bigl( I + \frac{n}{p} m(\lambda)\Omega\Bigr)^{-1}},
+\end{equation}
+and define
+\begin{equation}\label{eq M def}
+    M(\lambda)=\Bigl( \lambda + \frac{n}{p}\lambda m(\lambda)\Omega\Bigr)^{-1}
+\end{equation}
+which is the \emph{deterministic equivalent} of the resolvent, $M(\lambda)\approx G(\lambda)$, see~\Cref{thm MP} later. The fact that~\Cref{eq m def} admits a unique solution $m(\lambda)>0$ which is continuous in $\lambda$ follows directly from continuity and monotonicity. Moreover, from
+\begin{equation*}
+    0\le \braket{\Omega \Bigl( I + \frac{n}{p} m\Omega\Bigr)^{-1}} \le \min\set{\braket{\Omega}, \frac{\rank \Omega}{n}\frac{1}{m}}
+\end{equation*}
+we obtain the bounds
+\begin{equation}
+    \max\set{\frac{1}{\lambda+\braket{\Omega}},\frac{1-\frac{\rank\Omega}{n}}{\lambda}} \le m(\lambda) \le \frac{1}{\lambda}.
+\end{equation}
+We also remark that $m(\lambda)$ depends on $\Omega$ only through its eigenvalues $\omega_1,\ldots,\omega_p$, while $M(\lambda)$ depends on the eigenvectors. The asymptotic expression~\Cref{eq Egen rmt} for the generalization error derived below depends on the eigenvalues of $\Omega$, the overlap of the eigenvectors of $\Omega$ with the eigenvectors of $\Phi$, and the overlap of the eigenvectors of $\Psi,\Phi$ with $\theta_\ast$.
+
+\begin{theorem}\label{thm genRMT informal}
+    Under~\Cref{ass:labels}, \Cref{ass:data+features} and \Cref{ass:dimensions} for fixed $\lambda>0$ we have the asymptotics
+    \begin{equation}\label{E gen thm eq}
+        \mathcal E_\mathrm{gen}(\lambda) = \mathcal E_\mathrm{gen}^\mathrm{rmt}(\lambda) + O_\prec\Bigl(\frac{1}{\sqrt{n}}\Bigr),
+    \end{equation}
+    in the proportional $n\sim k\sim p$ regime, where
+    \begin{equation}\label{eq Egen rmt}
+        \begin{aligned}
+           \mathcal E_\mathrm{gen}^\mathrm{rmt}(\lambda)=&\frac{1}{k}\theta_\ast^\top \frac{ \Psi-\frac{n}{p} m\lambda \Phi (M+\lambda M^2)\Phi^\top}{1-\frac{n}{p}(\lambda m)^2\braket{\Omega M\Omega M}}\theta_\ast \\
+           &\quad + \braket{\Sigma}  \frac{ (\lambda m)^2\frac{n}{p} \braket{ \Omega M\Omega M }}{1-\frac{n}{p}(\lambda m)^2\braket{\Omega M\Omega M}}.
+        \end{aligned}
+    \end{equation}
+    In the general case of comparable parameters we have the asymptotics with a worse error of\footnote{This allows to identify the leading order of the generalization error as long as the ratio of the largest and smallest parameter is much smaller than the square-root of the smallest one.}
+    \[
+        \frac{1}{\sqrt{\min\set{n,p,k}}}\Bigl(1 + \frac{\max\set{n,p,k}}{\min\set{n,p,k}}\Bigr).
+    \]
+\end{theorem}
+\begin{remark}[Relation to previous results]
+    We focus on the misspecified case as this presents the main novelty of the present work. In the wellspecified case $Z=X$ our model essentially reduces to linear regression with data distribution $x=\f(\x)$. There has been extensive research on the generalization error of linear regression, see e.g.\ in~\cite{2303.01372,Dobriban2015HighDimensionalAO,2103.09177,2210.08571} and the references therein. 
+    \begin{enumerate}[label=(\alph*)]
+        \item We confirm Conjecture 1 of~\cite{Loureiro2021CapturingTL} under~\cref{ass:data+features}. The expression for the error term in~\Cref{thm genRMT informal} matches the expression obtained in~\cite{Loureiro2021CapturingTL} for a Gaussian covariates teacher-student model. 
+        \item Independently and concurrently to the current work~\cite{2312.09194} (partially confirming a conjecture made in~\cite{louart2018random}) obtained similar results under different assumptions. Most importantly~\cite{2312.09194} considers one-layer unstructured random feature models and computes the \emph{empirical generalization error} for a deterministic data set, while we consider general Lipschitz features of random data, and compute the generalization error. 
+        \item In the unstructured random feature model~\cite{Mei2021GeneralizationEO,2008.06786} obtained an expression for the generalization error under the assumption that the target model is linear or rotationally invariant. 
+    \end{enumerate}
+\end{remark}
+The novelty of~\Cref{thm genRMT informal} compared to many of the previous works is, besides the level of generality, two-fold:
+\begin{enumerate}[label=(\roman*)]
+    \item\label{gen error det equ} We obtain a deterministic equivalent for the generalization error involving the population covariance $\Phi$ and the sample covariance $XZ^\top$ in the general misspecified setting.
+    \item\label{anisotropic det equ} Our deterministic equivalent is \emph{anisotropic}, allowing to evaluate~\Cref{eq:gen_err} for \emph{fixed} targets $\theta_\ast$ and structured noise covariance $\Sigma\ne I$.
+\end{enumerate}
+Some of the previous rigorous results on the generalization error of ridge regression have been limited to the well-specified case, $X=Z$, since in this particular case the second term of~\Cref{eq:gen_err} can be simplified to 
+\begin{equation}
+    \frac{XX^\top}{p} G\Omega G \frac{XX^\top}{p} = (1-\lambda G)\Omega(1-\lambda G).
+\end{equation}
+When computing deterministic equivalents for terms as $G\Omega G$, some previous results have relied on the ``trick'' of differentiating a generalized resolvent matrix $\wt G(\lambda,\lambda'):=(XX^\top/p + \lambda'\Omega + \lambda)^{-1}$ with respect to $\lambda'$. Our approach is more robust and not limited to expressions which can be written as certain derivatives. 
+
+To illustrate~\Cref{anisotropic det equ}, the conventional approach in the literature to approximating e.g.\ the third term on the right hand side of~\Cref{eq:gen_err} in the case $\Sigma=I$ would be to use the cyclicity of the trace to obtain
+\begin{equation}\label{old approach}
+    \begin{split}
+        \frac{1}{p^2}\Tr X^\top G\Omega G X &= \frac{1}{p}\Tr G \frac{X X^\top}{p} G\Omega \\
+        &= \braket{ G\Omega} -\lambda \braket{G^2\Omega}.
+    \end{split}
+\end{equation}
+Then upon using~\Cref{eq m def} and $\braket{G\Omega}\approx\braket{M\Omega}$, the first term of~\Cref{old approach} can be approximated by $1/(\lambda m(\lambda))-1$, while for the second term it can be argued that this approximation  also holds in derivative sense to obtain
+\[\braket{G^2 \Omega}=-\frac{\dif}{\dif\lambda}\braket{G\Omega} \approx -\frac{\dif}{\dif\lambda} \frac{1}{\lambda m(\lambda)} = \frac{\lambda m'(\lambda)+m(\lambda)}{(\lambda m(\lambda))^2}
+\]
+By differentiating~\Cref{eq m def}, solving for $m'$ and simplifying, it can be checked that this result agrees with the second term of~\Cref{eq Egen rmt} in the special case $\Sigma=I$. However, it is clear that any approach which only relies on \emph{scalar} deterministic equivalents is inherently limited in the type of expressions which can be evaluated. Instead, our approach involving \emph{anisotropic deterministic equivalents} has no inherent limitation on the structure of the expressions to be evaluated.
+
+An alternative to evaluating rational expressions of $X,Z$, commonly used in similar contexts, is the technique of \emph{linear pencils}~\cite{2008.06786, 2312.09194}. The idea here is to represent rational functions of $X,Z$ as blocks of inverses of larger random matrices which depend linearly $X,Z$. The downside of linear pencils is that even for simple rational expressions the linearizations become complicated, sometimes even requiring the use of computer algebra software for the analysis\footnote{For instance~\cite{2008.06786} used block matrices with up to $16\times 16$ blocks in order to evaluate the asymptotic test error.} In comparison we believe that our approach is more direct and flexible.
+
+\subsection{Proof of~\Cref{thm genRMT informal}}
+We present the proof of~\Cref{thm genRMT informal} in details in~\Cref{appendix gen error}. The main steps and ingredients for the proof of~\Cref{thm genRMT informal} consist of the following:
+\begin{description}
+    \item[Concentration:] As a first step we establish \emph{concentration estimates} for Lipschitz functions of $X,Z$ and its columns. A key aspect is the concentration of quadratic forms in the columns $x_i:=\f(\x_i)$ of $X$:
+        \begin{equation*}
+            \abs{x_i^\top A x_i - \E x_i^\top A x_i}= \abs{x_i^\top A x_i-\Tr \Omega A}\prec \norm{A}_F
+        \end{equation*}
+        which follows from the Hanson-Wright inequality~\cite{1409.8457}. The concentration step is very similar to analagous considerations in previous works~\cite{chouard2022quantitative,1702.05419} but we present it for completeness. The main property used extensively in the subsequent analysis is that traces of resolvents with deterministic observables concentrate as
+        \begin{equation}\label{concentration AG}
+            \abs{\braket{A[G(\lambda)-\E G(\lambda)]}} \prec \frac{\braket{\abs{A}^2}^{1/2}}{n\lambda^{3/2}}.
+        \end{equation}
+    \item[Anisotropic Marchenko-Pastur Law:] 
+    As a second step we prove an anisotropic Marchenko-Pastur law for the resolvent $G$, of the form:
+        \begin{theorem}\label{thm MP}
+            For arbitrary deterministic matrices $A$ we have the high-probability bound
+            \begin{equation}\label{mp main eq}
+                \abs{\braket{(G(\lambda)-M(\lambda)A}} \prec \frac{\braket{\abs{A}^2}}{n\lambda^3},
+            \end{equation}
+            in the proportional $n\sim p$ regime\footnote{See the precise statement in the comparable regime in~\Cref{eq MP comp} later}.
+        \end{theorem}
+        \begin{remark}
+            Tracial Marchenko-Pastur laws (case $A=I$ above) have a long history, going back to~\cite{marcenkopastur} in the isotropic case $\Omega=I$,~\cite{SILVERSTEIN1995331} in the general case with separable covariance $x=\sqrt{\Omega}z$ and~\cite{baizhou} under quadratic form concentration assumption. Anisotropic Marchenko-Pastur laws under various conditions and with varying precision have been proven e.g.\ in~\cite{RUBIO2011592,chouard2022quantitative,louart2018random,10.1007/s00440-016-0730-4}.
+        \end{remark}        
+        For the proof of~\Cref{thm MP} the resolvent $\wc G:=(X^\top X/p+\lambda)^{-1}\in\R^{n\times n}$ of the \emph{Gram matrix} $X^\top X$ plays a key role. The main tool used in this step are the commonly used \emph{leave-one-out identities}, e.g.
+        \begin{equation}\label{Gx loo}
+            Gx_i=\lambda\wc G_{ii} G_{-i}x_i, \quad G_{-i}:=\Bigl(\sum_{j\ne i}\frac{x_jx_j^\top}{p} + \lambda \Bigr)^{-1}
+        \end{equation}
+        which allow to decouple the randomness due the $i$-th column from the remaining randomness. 
+        Such identities are used repeatedly to derive the approximation
+        \begin{equation}\label{EG approx MG}
+            \E G \approx \Bigl(\frac{n}{p}\lambda \braket{\E \wc G}\Omega + \lambda\Bigr)^{-1}
+        \end{equation}
+        in Frobenius norm, which, together with the relation $1-\lambda\braket{\wc G}=\frac{p}{n}\bigl(1-\lambda\braket{G}\bigr)$ between the traces of $G$ and $\wc G$, yields a self-consistent equation
+        for $\braket{\wc G}$. This self-consistent equation is an approximate version of~\Cref{eq m def}, justifying the definition of $m$. The \emph{stability} of the self-consistent equation then implies the averaged asymptotic equivalent
+        \begin{equation}
+            \abs{m-\braket{\E\wc G}}\lesssim\frac{1}{n\lambda^2}.
+        \end{equation}
+        and therefore by~\Cref{EG approx MG} finally
+        \begin{equation}
+            \norm{M-\E G}_F \lesssim \frac{1}{n^{1/2}\lambda^3},
+        \end{equation}
+        which together with~\Cref{concentration AG} implies~\Cref{thm MP}.
+
+        Compared to most previous anisotropic deterministic equivalents as in~\cite{10.1007/s00440-016-0730-4} we measure the error of the approximation~\Cref{mp main eq} with respect to the Frobenius norm of the observable $A$. As in the case of unified local laws for Wigner matrices~\cite{2203.01861} this idea renders the separate handling of quadratic form bound unnecessary, considerably streamlining the proof. To illustrate the difference note that specializing $A$ to be rank-one $A=xy^\top$ in
+        \[
+            \begin{split}
+                \abs{y^\top(G-M)x}=\abs{\Tr(G-M)A}&\prec \begin{cases}\norm{A} \\ \braket{\abs{A}^2}^{1/2}
+                \end{cases}
+            \end{split}
+        \]
+        results in a trivial estimate $\norm{x}\norm{y}$ in the case of the spectral norm, and in the optimal estimate $\norm{x}\norm{y}/\sqrt{p}$ in the case of the Frobenius norm.
+
+    \item[Anisotropic Multi-Resolvent Equivalents: ] The main novelty of the current work lies in~\Cref{prop multi res} which asymptotically evaluates the expressions on the right-hand-side of~\Cref{eq:gen_err}. A key property of the deterministic equivalents is that the approximation is \emph{not} invariant under multiplication. E.g.\ for the last term in~\Cref{eq:gen_err} we have the approximations $G\approx M$ and $\frac{1}{n}XZ^\top=\frac{1}{n}\sum x_i z_i^\top \approx \Phi$, while for the product the correct deterministic equivalent is
+        \begin{equation}
+            G \frac{X Z^\top}{n} \approx \lambda m M\Phi,
+        \end{equation}
+        i.e.\ the is an additional factor of $m\lambda$. In this case the additional factor can be obtained from a direct application of the leave-one-out identity~\Cref{Gx loo} to the product $G\frac{XZ^\top}{n}$, but the derivation of the multi-resolvent equivalents requires more involved arguments. When expanding the multi-resolvent expression $\braket{GAGB}$ we obtain an approximative self-consistent equation of the form 
+\begin{equation*}
+   \braket{GAGB}\approx \braket{MAMB} + \frac{n}{p}(m\lambda)^2 \braket{M B M \Omega} \braket{G A G\Omega}.
+\end{equation*}
+Using a stability analysis this yields a deterministic equivalent for the special form $\braket{GAG\Omega}$ which then can be used for the general case. The second term of~\Cref{eq:gen_err} requires the most careful analysis due to the interplay of the multi-resolvent expression and the dependency among $Z,X$. 
+\end{description}

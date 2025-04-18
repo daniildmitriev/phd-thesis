@@ -1,0 +1,180 @@
+\subsection{Hitting set}
+
+$\hs$ is a classical problem in combinatorial optimization which, for a given ground set $\mathcal{X}\coloneqq\set{1,...,n}$ and a collection $\mathcal{C} \coloneqq \set{\mathcal{S}_1,...,\mathcal{S}_m}$ of subsets of $\mathcal{X}$, asks to identify the smallest set $\mathcal{S}\subseteq \mathcal{X}$ that intersects every subset in $\mathcal{C}$. 
+$\hs$ arises naturally from the study of \emph{Minimum Vertex Covers on Hypergraphs} ($\mvch$), upon viewing hyperedges as subsets and vertices as elements of the ground set. 
+This is also known as the \emph{Set Cover} problem \cite{paschos1997survey}, which has a rich history in worst-case computational complexity theory, including appearing as one of Karp's 21 NP-complete problems. 
+An important question regards the behaviour of natural random instances of $\hs$ where each element of the ground set is independently assigned to any subset with probability $p$.
+Such problem formulation is motivated, among others, by applications such as group testing \cite{iliopoulos2021group}. 
+A classical theorem of Lovász \cite{lovasz1975ratio} gives an upper bound on the integrality gap in this problem which grows with the degree of the underlying hypergraph, i.e., the maximum number of subsets intersecting any one element. 
+This bound was shown to be tight in the worst-case, but leaves much to be desired from an average-case perspective.
+
+In this chapter, we characterize the average-case integrality gap present in random $\hs$ and prove that, with high probability, Lovász's greedy algorithm \cite{lovasz1975ratio} finds the minimal (up to a multiplicative constant) hitting set in polynomial time. 
+
+\subsection{Random integer and linear programs}
+We consider the following integer programming ($\ip$) formulation of the problem,
+\begin{equation}
+\label{def:ip}
+\valip:=  
+\begin{cases}
+\begin{aligned}
+& \min_{x \in \R^n}
+& & \norm{\x}_1 \\
+& \text{subject to}
+& &  \A\x \geq \mathbf{1} , \: \x \in \set{0,1}^n,
+\end{aligned}
+\end{cases}
+\end{equation}
+where the $i$-th row of $\A \in \set{0,1}^{m\times n}$ provides a binary encoding of the membership of the elements of $\mathcal{X}$ in the set $\mathcal{S}_i$ and $\mathbf{1} := (1, \ldots, 1) \in \mathbb{R}^m$. With the vertex cover formulation of the problem at hand, we note that $\A$ consists of the incidence matrix of the underlying hypergraph.
+In particular, the constraint \(\A\x \geq \mathbf{1}\) ensures that each set in $\mathcal{C}$ is hit by a prescribed candidate solution vector. A natural convex relaxation is obtained by allowing fractional solutions, and may be expressed as the following linear program ($\lp$),
+\begin{equation}
+\label{def:lp}
+\vallp:=
+\begin{cases}
+\begin{aligned}
+& \underset{\x}{\text{minimize}}
+& & \norm{\x}_1 \\
+& \text{subject to}
+& & \A\x \geq \mathbf{1}, \:  \x \in [0,1]^n.
+\end{aligned}
+\end{cases}
+\end{equation}
+Whilst clearly $\vallp\leq \valip$, tightness need not hold in general. In fact, for $m = n$ and $\A \in \set{0,1}^{n\times n}$ chosen such that each row and column contains exactly $k$ ones, for some fixed $1 < k < n$, an optimal solution is provided by $\x^*_{\texttt{LP}}=\left(1/k,...,1/k\right)$, which is not integral, thus leading to a strictly smaller objective whenever $n / k$ is not an integer. This evidences the existence of a multiplicative \emph{integrality gap}, as we define next.
+\begin{definition}
+    Given solutions \(\valip\) and \(\vallp\) to~\Cref{def:ip} and~\Cref{def:lp} respectively, we define \emph{multiplicative integrality gap} as follows:
+    \begin{equation}
+        \ipgap \coloneqq \frac{\valip}{\vallp}.
+    \end{equation}
+\end{definition}
+In \cite{lovasz1975ratio}, Lovász proved an essentially optimal worst-case upper bound on the $\hs$ multiplicative integrality gap: $\ipgap \leq 1+\log \dmax$, where $\dmax$ corresponds to the maximum degree in the underlying hypergraph. 
+This is obtained by analysing the \greedy algorithm (Algorithm~\ref{alg:greedy}), 
+which constructs a vertex cover by sequentially adding vertices with the highest degree amongst the uncovered edges, 
+and will be discussed in more detail in the next sections \dd{in Chapter Bla}. 
+However, in many natural examples, the maximum degree $\dmax$ grows with the number of vertices in the hypergraph, thus leading to progressively worse bounds for increasingly large hypergraphs. Besides being arguably the most natural candidate for solving $\hs$, the greedy algorithm has been shown to be the best possible polynomial time approximation algorithm \cite{slavik1996tight} for the worst-case instances of this classical problem. 
+
+Despite extensive work conducted on $\hs$ in the last decades, a gap remains in our understanding of the typical performance of linear programming and the greedy algorithm on random problem instances. 
+We hence pose the following questions: 
+
+\begin{enumerate}
+    \item Are there integrality gaps in random instances of $\hs$? 
+    \item Can near-optimal solutions be found efficiently? 
+\end{enumerate}
+
+\noindent
+In the present work \dd{add Chapter}, we provide answers to the above questions 
+\emph{with high probability} (w.h.p.) in a non-asymptotic sense, 
+in the setting where the cardinality $n$ of the ground set $\mathcal{X}$ 
+is large but finite. 
+We prove the absence of integrality gaps up to constants in a wide regime of $n,m,p$, by conducting an average case analysis of an algorithm that outputs integral covers of matching size to the fractional ones. 
+In addition, a rigorous analysis of the greedy routine will follow by a straightforward reduction. 
+
+\subsection{Greedy algorithm}
+
+\begin{algorithm}[!t]
+    \caption{\greedy}\label{alg:greedy}
+    \begin{algorithmic}[1]
+    \State \(\mathcal{I} \gets \{I_1, \ldots, I_n\} \) \Comment{Inclusion sets}
+    \State \(U \gets [m]\)
+    \State \(t \gets 0\)
+    \While{\(|U| > 0\)}
+        \State \(P \gets \mathrm{argmax}_{I \in \mathcal{I}}\bigl|I \cap U\bigr| \) \Comment{Greedy step}
+        \State \(\mathcal{I} \gets \mathcal{I} \setminus \{P\}\)
+        \State \(U \gets U \setminus P\)
+        \State \(t \gets t + 1\)
+    \EndWhile
+    \State \(\valgr \gets t\)
+    \State \Return \(\valgr\)
+    \end{algorithmic}
+    \end{algorithm}
+
+The core principle of \greedy,~\Cref{alg:greedy}, is to construct a feasible solution in steps, by sequentially adding to the candidate solution an element which hits the largest number of remaining sets. 
+In the chosen setting, where elements are added to sets with equal probability and independently of each other, we have precise estimates on the number of subsets hit by an element which is {\it picked first}. 
+In fact, the size of this set is given by the maximum of independent Binomial random variables, which is analysed in \Cref{sec:bounds}. 
+However, this very first step introduces nontrivial dependencies amongst the remaining matrix columns and significantly complicates keeping track of the marginal gains of each subsequent element addition to the candidate solution.
+
+
+
+
+In order to circumvent this issue, we introduce a modified greedy routine, which we refer to as the \bgreedy\ algorithm, where the elements of the ground set $[n]$ are split into separate sets of a given size, which we call blocks. 
+At the \(t\)-th iteration, the algorithm picks the element hitting the largest number of remaining sets across \textit{the first} \(t\) \textit{blocks only}. 
+By choosing the size of the blocks appropriately, we have that at each iteration $t$ one is guaranteed to find a solution of near-optimal size within the set of newly-included independent columns. 
+
+\noindent
+
+\bgreedy is detailed in Algorithm~\ref{alg:block_greedy}, whilst informally, it works as follows.
+\begin{enumerate}
+\item Let \(K\) be the size of the solution (suggested by theoretical analysis);
+\item Uniformly at random split \(n\) columns into \(K\) blocks with \(n / K\) columns per block;
+\item Start with an empty set of possible choices of columns;
+\item At the \(t\)-th iteration, first add the columns
+from the \(t\)-th block (Step~\ref{step:adding_new_block} \dd{Fix reference here and next}).
+Then, perform one greedy step on the current
+set of possible choices (Step~\ref{step:greedy_step});
+\item If after \(K\) iterations of the algorithm, some subsets remain uncovered, we use  a trivial covering, i.e., covering each subset by a separate column.
+\end{enumerate}
+Note that the first selection of the element which hits the most number of subsets again introduces dependencies. 
+However, the columns that are in the newly added block are independent of everything else at time \(t\).
+
+\begin{figure}[!t]
+    \centering
+  \begin{tikzpicture}
+    \begin{axis}[ymin = 0, ymax = 0.45, axis lines=middle, height=6cm, width=10cm,
+    legend style={
+      at={(1,1)}
+      },
+    axis line style={->},
+    x label style={at={(axis description cs:0.96,-0.14)},anchor=south},
+    y label style={at={(axis description cs:-0.05,0.9)},anchor=south},
+    xlabel={\large $m(n)$},
+    ylabel={\large $p(n)$},
+    xtick={1.58, 3.98, 10, 25.11},
+    xticklabels={ $n^{0.1}$,
+                 $n^{0.3}$,
+                 $n^{0.5}$, 
+                 $n^{0.7}$},
+    ytick={0.01,0.039,0.1,0.25,0.63},
+    yticklabels={ $1 / n^{0.9}$,
+                 $1 / n^{0.7}$,
+                 $1 / n^{0.5}$,
+                 $1 / n^{0.3}$,
+                 $1 / n^{0.1}$},]
+        \addplot[thick, color=red, smooth, name path = inv, domain = 1:40, line width=2pt] {1.5/x};
+        \addplot[name path = floor, draw = none] coordinates {(1,0) (40,0)};
+        \addplot[fill=red, 
+        fill opacity=0.2] fill between[of = inv and floor];
+        \path[name path=axis] (axis cs:0,40) -- (axis cs:40,40);
+        \addplot[fill = blue, fill opacity=0.3] fill between[of= inv and axis];
+        \legend{\large $ mp \sim \log n$}
+    \node[below, text=red!30!black,font=\bfseries] at (15, 0.06) {\valbgr \(\sim\) \valip \(\sim\) \vallp \(\sim m / \dmax\)};
+    \node[above, text=blue!80!black, font=\bfseries] at (20,0.2) {\valbgr \(\sim\) \valip \(\sim \log\left(\frac{mp}{\log n}\right) / p \)};
+    \node[above, text=blue!80!black, font=\bfseries] at (22, 0.13) {\vallp \(\sim 1/p\)};
+\end{axis}
+\end{tikzpicture}
+\caption{Transition between the sparse and the dense regime for different values of the average inclusion set size $mp$.}
+    \label{fig:phase_diagram}
+\end{figure}
+
+\subsection{Main contributions}
+
+Given a collection of sets \(\mathcal{C} := \set{\mathcal{S}_1,...,\mathcal{S}_m}\), we define inclusion sets $I_j := \set{i \in [m]\: : \: j \in \mathcal{S}_i}$, for $j \in [n]$, which in the \(\mvch\) formulation of the problem at hand correspond to the set of hyperedges incident to any given vertex. 
+Furthermore, we let \(\dmax \coloneqq \max_{j \in [n]} \card{I_j}\). 
+Throughout, we use the notation $\text{val}_{\mathtt{Gr}}$, $\valbgr$ to denote the size of the hitting set returned by $\greedy$ and $\bgreedy$ respectively. 
+Below we provide an informal description of the main results (also shown in~\Cref{fig:phase_diagram}) which hold with high probability, 
+where $A(n) \sim B(n)$ denotes that $c A(n) \leq B(n) \leq C A(n)$ for large enough $n$ and for some constants $c, C > 0$: 
+\paragraph*{\textbf{Sparse Regime} ($mp \ll \log n$):}
+We show that \(\ipgap \sim 1\) in the sparse regime by proving that the \bgreedy algorithm succeeds in reaching the \lp lower bound of $\frac{m}{\dmax}$.
+\[ \valbgr \sim \valip \sim \vallp \sim \frac{m}{\dmax}. \]
+
+% \vspace{0.3em}
+
+\paragraph*{\textbf{Dense Regime} ($mp \gg \log n$):}
+We prove that \(\ipgap \sim \log \frac{mp}{\log n}\) in the dense regime. We show that the \bgreedy algorithm performs as well as \ip in this regime, i.e.
+\[ \frac{1}{p} \log\left(\frac{mp}{\log n}\right) \sim \valbgr \sim \valip \gg \vallp \sim \frac{1}{p} \sim \frac{m}{\dmax}. \] 
+
+% \vspace{0.3em}
+
+\paragraph*{\textbf{Threshold Regime} ($mp \sim \log n$):} This regime smoothly interpolates between the sparse and dense ones, with \(\ipgap \sim 1\). 
+The scaling for all quantities of interest is $m / \dmax \sim 1/p$.
+
+% \vspace{0.3em}
+
+\paragraph*{\textbf{Greedy}:} We prove that $\valgr \sim \valip$ when $\frac{\log 1 / p}{\log n} < 1/2$. 

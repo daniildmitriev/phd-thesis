@@ -1,13 +1,164 @@
 \chapter{Introduction}
 \label{ch:introduction}
 
-\dictum[Immanuel Kant]{%
-  Sapere aude! Habe Mut, dich deines eigenen Verstandes zu bedienen! }%
-\vskip 1em
+This thesis covers several problems in mathematical optimization and learning theory.
+Optimization is a vast field which plays a crucial role in the technological progress throughout the history.
+It was first formalized as a separate subfield at the intersection of mathematics and theoretical computer science in the 20\(^\text{th}\) century, and since then stays an incredibly active area of research.
+The main driver for the development of mathematical optimization back then were practical problems in operational research, such as logistics and resource allocation.
+Nowadays, optimization methods are the bedrock of the rapid advances in modern machine learning. 
 
-\begin{otherlanguage}{ngerman}
-Die ältesten Bestimmungen der wahren Grösse der Moleküle hat die kinetische
-Theorie der Gase ermöglicht, während die an Flüssigkeiten beobachteten
-physikalischen Phänomene bis jetzt zur Bestimmung der Molekülgrössen nicht
-gedient haben. \dots
-\end{otherlanguage}
+Learning theory studies when is it possible to learn from the data, and what is the most optimal way to do so.
+It provides a theoretial foundation behind the machine learning algorithms and lies at the intersection of mathematics, statistics, and theoretical computer science.
+
+It is well-known that there exist optimization problems that are fundamentally difficult to solve.
+As an example, finding the largest clique of a graph is a prototipical problem considered to be \emph{hard}, formally defined via \emph{NP-hardness} \dd{add citation, KARP}.
+Also, intuitively and somewhat orthogonally, the more parameters the optimization problem has (the larger the optimization space is), the harder it is to optimize over them.
+However, as it turns out if the optimization problem is \textit{random}, 
+and optimization space is high-dimensional, it becomes possible to argue about the optimal solutions and prove that efficient algorithms can achieve or approximate them.
+This is also known as \emph{blessings of dimensionality}, the phenomenon closely studied by high-dimensional probability and modern theoretical computer science.
+
+First part of the thesis is devoted to two different optimization problems and is guided by the following questions:
+\begin{enumerate}
+  \item Can we solve the optimization problem efficiently?
+  \item How well can we approximate a hard optimization problem with an efficient algorithm?
+  \item What are the properties of the optimal or approximate solution?
+\end{enumerate}
+\noindent
+Second part of the thesis covers two problems in learning theory under the assumption and all or part of data is \emph{worst-case}, i.e., 
+is picked in a worst possible (adversarial) way.
+
+% In the second part of the thesis, we discuss a problem of \emph{Mixture learning} under the presence of adversarial data.
+
+The thesis is organized as follows. 
+The remaining part of this chapter contains a brief introduction to the topics discussed in the thesis.
+\dd{Add Chapter} discusses the random hitting set problem and the possible greedy heuristics.
+In \dd{Add Chapter} we study a classical graph problem of estimating the Lovász number, and bound its expected value over a class of highly structured graphs.
+% \dd{Add Chapter} is devoted to the optimization problem in deep learning, namely to the random feature model.
+The second part of the thesis, \dd{add Chapter} presents the robust mixture learning problem.
+Finally, \dd{add Chapter} presents several open problems which arose during my PhD together with the discussion.
+% Correctly treating data with contains outliers is a classical topic, which was initiated by \dd{add citation}.
+% Recently, a lot of attention is focus on developing efficient algorithms which work with high-dimensional data.
+% Following this line of work, we prove a novel result in robust mixture learning.
+
+% Concretely, we see on the example of classical TCS problem, \(\hs\), 
+% which provably cannot be solved efficiently, that when the feasible set of solutions is random, 
+% a simple algortihms start to perform much better than what is expected from the worst-case analysis.
+
+% Next, also a classical graph problem of computing Lovász number is studied. 
+
+
+% Optimization is a fundamental problem, which follows the history of humanity in the form of resource allocation, construction, and trading.
+% A basic question that optimization aims to solve is the following:
+% \begin{center}
+% Given a \textit{feasible set} of solutions and an optimization \textit{objective}, what is the optimal value of the objective?
+% \end{center}
+% Sometimes we refer to the feasible set as the constraint set, and to the objective as the cost function.
+% If the feasible set is obtained by intersection of linear constraints (i.e., halfspaces), and the objective is linear, 
+% it is a well-known setting of \textit{linear optimization}. 
+% Linear optimization was developed in the 20th century, when breakthrough algorithms, such as simplex and ellipsoid method were developed.
+% Recently, with the advance of machine learning field, the non-linear optimization plays an increasingly large role. 
+
+% We refer to the pair of feasible solution set and objective as a problem instance, 
+% and the problem is meant as a set of problem instances. 
+% As an example, consider the \textit{vertex cover} problem:
+% Given a graph \(G = (V, E)\), the goal is to find a smallest set \(S\) of vertices, 
+% such that each edge has at least one of its endpoints in \(S\). 
+% Our feasible set of solutions are all possible vertex covers for a given graph, 
+% and the objective is the size of the vertex cover; the goal is to minimize the objective. 
+% For given \(n\), it is straightforward to construct examples where the size of the vertex cover must be \(n / 2\).
+% Indeed, if the graph is a perfect matching, then each edge must have a distint vertex covering it.
+% Such examples are commonly referred as worst-case examples.
+% Furthermore, the vertex cover problem is a classical example of an NP-hard problem, 
+% which implies that there is no efficient algorithm that finds an optimal solution.
+% A celebrated greedy algorithm can solve vertex cover with a factor 2 approximation.
+
+% In contrast to worst-case examples, there exists a random-case analysis of a problem.
+% A probability distribution is imposed on the problem, which can make worst-case problem instances to be exponentially unlikely.
+% Here, one of the quantities of interest is the expected behavior of the algorithm given the probability distribution.
+% In the context of a vertex cover problem, a classical example would be an Erdős-Rényi random graph model.
+
+% One of the aims of this thesis is to study on a several examples how the randomness assumptions affect the optimization problems.
+% In~\Cref{sec:greedy}, we look at the hypergraph version of the vertex cover problem. 
+% We study the relation between the optimal value, the linear relaxation, and the algorithmic solution.
+% One of our goals is to bound the performance of the greedy algorithm. 
+% Recall that the greedy algorithm is a purely deterministic algorithm.
+% We proceed by studying a randomized version, called BlockGreedy, and by connecting the performance of the algorithms to each other.
+% In~\Cref{sec:lovasz}, we study a problem of bla.
+% In~bla, we study a random feature model.
+
+% As another example, where the inputs are sampled from a random distribution, but have some structure, 
+% we study the problem of robust mixture learning in~\Cref{chap:robust}.
+
+% Next, we give a brief introduction to the topics studied in this thesis.
+
+
+\section{Greedy algorithms for the random hitting set problem}
+\input{chapters/introduction/content/greedy}
+
+
+\section{Lovász number for random circulant graphs}
+\input{chapters/introduction/content/lovasz}
+
+% \section{Deep random feature model}
+% \input{chapters/introduction/content/deeprf}
+% \subsection{High-dimensional regression}
+% \subsection{Random matrix theory}
+% \subsection{Random feature model}
+
+\section{Lower bounds for online private learning}
+\input{chapters/introduction/content/online}
+
+\section{Robust mixture learning}
+\input{chapters/introduction/content/robust}
+
+
+% Finally, in bla, we present several open problems which arise from the topics discussed in the thesis.
+
+\section{Notation}\label{sec:notation}
+
+\paragraph*{Set theory}
+For integers $k \in \mathbb{N}$, we write\footnote{In~\Cref{chap:lovasz}, with abuse of notation, we write \([n] \coloneqq \set{0, \ldots, n - 1}\). Furthermore, we index there vectors and matrices by \([n]\).} $[k]:=\set{1,...,k}$. 
+We let \(\N\) and \(\R\) denote the set of natural and real numbers respectively.  
+\paragraph*{Asymptotic notation}
+We adopt the following standard notation: \(f \lesssim g\), \(f = O(g)\), and \(g = \Omega(f)\) mean that \(f(n) \leq Cg(n)\) for some universal constant \(C > 0\) for all \(n\) large enough.
+% By $\lesssim$, $\gtrsim$ we denote inequalities up to multiplicative constants. 
+We let $A \sim B$ or \(A = \Theta(B)\) denote that $A \lesssim B \lesssim A$ for large enough $n$.  
+For deterministic functions $h(n), w(n)$, we let $h \ll w, h \gg w$ denote that $h/w \to 0, w/h \to 0$ respectively, as $n \to \infty$. 
+% The notation for other inequalities is defined analogously.
+% We use the standard asymptotic notation, $O(\cdot), \Omega(\cdot)$, and $\Theta(\cdot)$ to describe the order of the growth of functions.
+
+\paragraph*{Linear algebra}
+We denote vectors, matrices by Roman letters $\x, \A \in \mathbb{R}^k, \mathbb{R}^{k \times k}$, respectively, for some $k \in \mathbb{N}$. 
+
+\noindent
+For a vector \(x \in \R^n\) and a scalar \(c \in \R\), we write \(x \geq c\) (resp. \(x \leq c\)) if \(x_i \geq c\) (resp. \(x_i \leq c\)) for all \(i \in [n]\).
+
+\noindent
+For a vector \(x \in \R^n\), we denote 
+\begin{equation}
+\begin{aligned}
+  \norm{x}_1 \coloneqq \sum_{k \in [n]} \abs{x_k}, \quad 
+  \norm{x}_2 \coloneqq \left(\sum_{k \in [n]} x_k^2\right)^{1/2}, \text{ and }
+  \norm{x}_{\infty} \coloneqq \max_{k \in [n]}\abs{x_k}
+\end{aligned}
+\end{equation}
+For a centered random vector \(x \in \R^d\) we denote its \emph{sub-Gaussian norm} as
+\begin{equation}
+        \norm{x}_{\psi_2} \coloneqq \inf_{\sigma 
+        \geq 0} \set{\E \exp^{\braket{v, x}} \leq \exp^{\frac{\norm{v}^2 \sigma^2}{2}}\ \forall\, v \in \R^d}.
+\end{equation}
+\noindent
+For square matrices $A\in\R^{n\times n}$ we denote the averaged trace by $\braket{A}:=n^{-1}\Tr A$, and for rectangular matrices $A\in\R^{n\times m}$ we denote the Frobenius norm by $\norm{A}_F^2:=\sum_{ij}\abs{a_{ij}}^2$, and the operator norm by $\norm{A}$. 
+
+\paragraph*{Probability}
+We use \(\Pr, \E\), and \(\text{Var}\) to denote probability, expectation, and variance, respectively.  
+For possibly random functions \(f(n), g(n)\), we let \(\{f \lesssim g\}\) denote a sequence of events \(\{f(n) \leq C g(n)\}\) for some constant \(C > 0\) independent of \(n\). 
+Consequently, \(\Pr(f \lesssim g)\) is viewed as a function of \(n\).
+We say that a sequence of events $\set{A_n}$ holds \emph{with high probability} (w.h.p.) with respect to a probability measure $\Pr$ if there exists a constant $c > 0$, independent of $n$, such that $\Pr(A_n) \geq 1-n^{-c}$, for large enough values of $n$.
+
+For families of non-negative random variables $X(n),Y(n)$ we say that $X$ is \emph{stochastically dominated} by $Y$, and write $X\prec Y$, if for all $\epsilon,D$ it holds that $\Pr(X(n)\ge n^{\epsilon} Y(n))\le n^{-D}$ for $n$ sufficiently large. 
+\paragraph*{Graph theory}
+For \(n \in \N\), we denote by \(G = (V, E)\) a graph with vertex set \(V = [n]\) 
+and edge set \(E \subseteq (V \times V) \setminus \{(k, k) \text{ for } k \in V\}\).
+For a graph \(G = (V, E)\) we define its complement \(\overline{G} = (V, E')\),
+where \(E' = \{(u, v) \text{ s.t. } u \neq v \text{ and } (u, v) \notin E\}\).

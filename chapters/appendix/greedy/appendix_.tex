@@ -1,0 +1,446 @@
+\chapter{Appendix of Greedy}
+\section{Auxiliary lemmas}\label{appendix:aux_lemmas}
+%
+\begin{lemma}[Lower Bound in Lemma \ref{lemma:lp_lb_ub}]
+\label{lemma:lp_lb} We have that
+\[\vallp \geq \frac{m}{\dmax}.\]
+\end{lemma}
+\begin{proof}
+Let $\x^*_{\texttt{LP}} = (\x_1^*, \x_2^*, \ldots, \x_m^*)$ be an optimal solution for (\ref{def:lp}). Since $\A \x^*_{\texttt{LP}} \geq \mathbf{1}$ entrywise, by summing all entries we obtain that  
+\[
+m \leq \sum_{i} \x^*_i X_i \leq \dmax\sum_i \x^*_i = \dmax \vallp.
+\]
+which upon rearranging yields the desired result.
+\end{proof}
+\noindent
+In addition to the above, we have the following elementary upper bound on \vallp, which holds both in the sparse and dense regime. 
+\begin{lemma}[Upper Bound in Lemma \ref{lemma:lp_lb_ub}]
+\label{lemma:lp_ub}
+    There exists $c > 0$, independent of $n$, such that
+    \begin{equation*}
+    \Pr\left(\vallp \lesssim \frac{1}{p}\right) \geq 1 - \exp\left(-cn^{1-\delta}\right).
+\end{equation*}
+This also implies that \(\Pr(\ip \text{ is feasible}) \geq 1 - \exp\left(-cn^{1-\delta}\right).\)
+\end{lemma}
+\begin{proof}
+    Consider the candidate feasible solution \(\hat{\x} := \frac{1}{\tilde{C} np} \mathbf{1}\), for some constant $0<\tilde{C}<1$. The following results from applying a union bound over constraints and the standard Chernoff bound.
+    \begin{align*}
+        \Pr\br{\hat{\x} \: \text{not feasible}} & = \Pr\br{\exists i \in [m]: \br{\A \hat{\x}}_i < 1} \\
+        & \leq m \Pr\br{\text{Bin}(n,p)< \tilde{C}np} \\
+        & \leq n^C \exp\br{-\frac{(1-\tilde{C})^2np}{2}}\\
+        & \leq \exp\br{-c n^{1-\delta}}.
+    \end{align*}
+The desired conclusion follows by considering the complementary event to the one above and noting that $\left \|\hat{\x}\right\|_1 \sim 1/p$. Note that the event \(\{\hat{\x} \text{ is feasible for } \lp\}\) implies the event \(\{\ip \text{ is feasible}\}\).
+\end{proof}
+%
+\begin{lemma}[Lambert \(W\) function, \cite{hoorfar2008inequalities}]\label{lambert}
+For any $x\geq e$, there holds that
+\begin{align}\label{lambert_bounds}
+    \log x - \log\log x + \frac{\log \log x}{2\log x}\leq W_0(x) \leq \log x - \log\log x + \frac{e}{e-1}\frac{\log \log x}{\log x}.
+\end{align}
+In particular,
+\begin{align}\label{lambert_asymptotics}
+    W_0(x) = \log x - \log \log x + o(1), \quad \text{as} \quad x \rightarrow \infty.
+\end{align}
+In addition, for any $x \geq 1/e$, the following identity is satisfied
+\begin{align}\label{lambert_variational}
+    W_0(x) = \log \frac{x}{W_0(x)}.
+\end{align}
+\end{lemma}
+%
+\begin{proof}[Proof of Lemma~\ref{lemma:first_moment_mp_large}]
+Fix \(D \geq 1\).
+Let \[Z_k := \lvert\left\{  \x \in \left \{0,1\right\}^m : \A\x \geq \mathbf{1}, \|\x\|_1 = k \right \}\rvert \]
+ be the number of feasible solutions of norm exactly $k$. Clearly, \(Z_k \leq Z_{k+1}\) for any \(k \geq 0\). We also have that
+\begin{align*}
+    \mathbb{E}Z_k & = \sum_{\|\x\| = k}\Pr\left({(\A\x)_i \geq 1, \forall i\in [m]}\right) = \binom{n}{k}\left(1-(1-p)^k\right)^m.
+\end{align*}
+We will now show that for \(k \ll \frac{1}{p}\log\left(\frac{mp}{\log n}\right)\), we have \(\mathbb{E} Z_{k} \leq n^{-D}\). Using that \(p \leq 1/2\) from Assumption~\ref{asmpt:A_np_m.d} and that for \(x \in (0, \frac{1}{2})\), we have \((1 - x)^y \geq e^{-2xy}\), we can bound
+    \begin{equation*}
+    \begin{aligned}
+        \mathbb{E} Z_k &= \binom{n}{k} (1 - (1 - p)^k)^m \leq n^k \left(1 - e^{-2pk}\right)^m \\
+        &\leq n^k e^{-m e^{-2pk}} = \exp \left\{k \log n - m e^{-2pk}\right\}.
+    \end{aligned}
+    \end{equation*}
+Therefore, \(\mathbb{E}Z_k \leq n^{-D}\) will follow from 
+\begin{equation}
+\label{eq:fmm1}
+    2pk e^{2pk} \leq -2Dpe^{2pk} + \frac{2mp}{\log n}.
+\end{equation}
+upon multiplying both sides of the latter inequality by \(\frac{\log n}{2p e^{2pk}}\) and exponentiating. Since \(k \ll \frac{1}{p} \log \left(\frac{mp}{\log n}\right)\), we also have that \(k \leq k_{\ast} \coloneqq \frac{1}{2p} W_0 \left(\frac{mp}{D \log n}\right) \) for \(n\) large enough. For \(k = k_{\ast}\),
+the left hand side of~(\ref{eq:fmm1}) is equal to \(\frac{mp}{D \log n}\), while the right hand side is lower bounded by \(\frac{mp}{\log n}\). Since \(D \geq 1\), we recover that \(\mathbb{E}Z_k \leq n^{-D}\). Note that for \(n\) large enough, \(\valip \ll \frac 1 p \log \frac{mp}{\log n}\) implies that \(Z_{k_{\ast}} > 0\). Therefore, applying Markov's inequality, we get that 
+\begin{equation}
+\begin{aligned}
+\Pr\left(\valip \ll \frac{1}{p} \log \left(\frac{mp}{\log n}\right)\right) \leq \Pr\left(Z_{k_{\ast}} > 0\right) \leq \mathbb{E} Z_{k_{\ast}} \leq n^{-D},
+\end{aligned}
+\end{equation}
+and the proof follows by considering the complementary events. Note that using similar derivations, one can also show that for \(k^{\ast} \coloneqq \frac{1}{p}\log\left(\frac{1}{\delta}\frac{mp}{\log n}\right)\), where \(\delta\) is defined in Assumption~\ref{asmpt:A_np_m.d}, we have \(\mathbb{E} Z_{k^{\ast}} \geq 1\).
+\end{proof}
+%
+\begin{proof}[Proof of Lemma \ref{lemma:maximal_ineq}]
+For ease of notation, let us define $b_n := \frac{\log n}{mp},\: b_n^*:= \frac1e\br{b_n-1}$, $g_n := \frac{\log{n}}{\log\br{\log n / mp}}$. We begin by proving the desired upper bound. By Jensen's inequality and bounding the maximum of positive values by their sum, for any $\lambda > 0$, we obtain
+\begin{align*}
+    \mathbb{E}\max_{i  \in [n]} X_i & \leq \frac1\lambda \log \mathbb{E}\exp \left(\lambda \max_{i \in [n]} X_i\right) \\
+    &=\frac1\lambda \log \mathbb{E}\left(\max_{i \in [n]} \exp\left(\lambda X_i\right)\right) \\
+    &\leq \frac1\lambda \log \sum_{i \in [n]} \mathbb{E}\exp(\lambda X_i).
+\end{align*}
+Finally, computing the moment generating function of binomial random variables, together with the inequality $1-x\leq e^{-x}$ yields 
+\begin{align*}
+    \mathbb{E}\max_{i  \in [n]} X_i = \frac{\log{n} + m\log{(1 - p(1-e^\lambda))}}{\lambda} \leq \frac{\log{n} - mp(1 - e^\lambda)}{\lambda}. 
+\end{align*}
+In the regime where $mp \gtrsim \log n$, we may choose $\lambda > 0$ arbitrary, independent of $n$, from which it immediately follows that $\E \max_{i  \in [n]} X_i \lesssim mp$. \\
+\noindent 
+For $mp \ll \log n$, we proceed by differentiating the last line in the above display and setting the resulting expression to zero. From this, we may choose $\lambda$ as the solution of the following.
+\[e^{\lambda -1}\br{\lambda -1} = b_n^*\]
+Under the present assumptions, this is expressed in terms of the Lambert W function as $\lambda = 1+W_0(b_n^*)$, so that by (\ref{lambert_variational}), we obtain
+\begin{align*}
+    \E \max_{i \in [n]} X_i \leq \frac{\log n\br{1-\frac{1}{b_n}+\frac{b_n^*}{b_n} \frac{e}{W_0(b_n^*)}}}{1+W_0(b_n^*)} \sim g_n. 
+\end{align*}
+In the dense $mp \gtrsim \log{n}$ regime, a matching lower bound is easily obtained by noting that $\E \max_{i \in [n]} X_i \geq \E X_1 = mp$. \\
+\noindent 
+To deal with the sparse regime, let $\tau = 1/16$. From Markov's inequality, 
+\begin{align*}\label{markov_initial}
+\mathbb{E} \max_{i \in [n]} X_i &\geq  \tau g_n \Pr\br{\max_{i \in [n]} X_i = \lceil \tau g_n \rceil} = \tau g_n \br{1-\br{1-\Pr\br{X_1 = \lceil \tau g_n \rceil}}^n}.
+\end{align*}
+Hence, applying Lemma  \ref{lemma:mp<logn_conquering_logn}, for $n$ large enough, 
+\begin{align*}
+   \mathbb{E} \max_{i \in [n]} X_i  \geq \tau g_n \br{1-\br{1-n^{-1/2}}^n} \geq (\tau/2) g_n, 
+\end{align*}
+thus providing a matching lower bound for the sparse regime.
+
+In the intermediate threshold regime \(mp \sim \log n\), the average and maximum of $X_i$'s become of the same order, that is $mp \sim \edmax \sim \log n$. The smooth transition follows by noting that in this regime, $b_n, b_n^*, W_0(b_n^*)\sim 1$.
+\end{proof}
+%
+\begin{lemma}\label{lemma:chernoff}(Chernoff Bound - upper tail)
+Let $X_1, ..., X_n$ be independent random variables taking values in $\set{0, 1}$, $X$ denote their sum and $\mu = \E X$. Then for any $\delta > 0$,
+    \begin{align*}
+        \Pr\br{X \geq (1+\delta)\mu}\leq e^{-\delta^2 \mu / (2+\delta)}.
+    \end{align*}
+\end{lemma}
+
+
+\noindent
+In order to deal with concentration of $\dmax$ around its expectation, we state the following useful result on tensorization of variance. We introduce notation \(\text{Var}_i\) and \(\E_i\), where subscript $i$ indicates conditioning on each component of an underlying random vector, except for the $i$-th one.
+\begin{lemma}[Theorem 2.3, \cite{van2014probability}]\label{lemma:tensorization_var}
+Let $X_1,...,X_n$ be independent random variables and for each function $f:\mathbb{R}^n \rightarrow \mathbb{R}$, define 
+\[\text{Var}_i f(x_1,...,x_n) := \text{Var}\left(x_1,...,x_{i-1},X_i,x_{i+1},...,x_n\right).\]
+Then, there holds that 
+\[\text{Var} \left(f\br{X_1,...,X_n}\right ) \leq \E \sum_{i = 1}^n \text{Var}_i f\br{X_1,...,X_n}\]
+\end{lemma}
+
+
+\begin{lemma}[Concentration for $\dmax$]\label{lemma:d_max_concentration}
+    Let $X_1, \ldots, X_n  \overset{\underset{\mathrm{iid}}{}}{\sim} Bin(m,p)$. Then, for any $t > 0$, 
+    \begin{align*}
+        \Pr\br{\left |\dmax-\E \dmax\right|> t}\leq \frac{mp}{t^2}.
+    \end{align*}
+\end{lemma}
+\begin{remark}
+    Note that in all regimes of $m, p$ satisfying Assumption \ref{asmpt:A_np_m}, choosing $t \sim {\E \dmax}$ is sufficient to deduce from the previous lemma that $\dmax\sim \edmax$ w.h.p..
+\end{remark}
+\begin{proof}
+    Proceeding by Chebyschev's inequality, it suffices to show that $\text{Var}(\dmax\leq mp$. By Lemma~\ref{lemma:tensorization_var}, we have that 
+    \begin{align*}
+        \text{Var}(\dmax) & \leq \E \sum_{i = 1}^n \E_i\br{ \dmax - \E_i \dmax}^2\\
+        & = \E \sum_{i = 1}^n \E_i\left[\br{ \dmax - \E_i \dmax}^2\mid \dmax = X_i \right]\Pr \br{\dmax = X_i} \\
+        & +  \E \sum_{i = 1}^n \E_i\left[\br{ \dmax - \E_i \dmax}^2\mid \dmax \neq X_i \right]\Pr \br{\dmax \neq X_i} \\
+        & = \frac1n\E \sum_{i = 1}^n \text{Var}X_i \\
+        & \leq mp,
+    \end{align*}
+which is as required.
+\end{proof}
+%
+\begin{proof}[Proof of Lemma \ref{lemma:d_max_concentration_whp}]
+    Let us consider the sparse and dense regimes separately. \\
+    \noindent
+    In the dense regime for $mp \gtrsim \log n$, there exist constants $c_1, c_2, c_3 > 0$ such that $c_1 mp \leq \E \max_{i \in [n]} X_i\leq c_2 mp$, as argued in Lemma  \ref{lemma:maximal_ineq}, and $mp\geq c_3\log n$. We apply the union and Chernoff bounds as in Lemma~\ref{lemma:chernoff} to obtain, for any $t \geq 1/c_1$,
+    \begin{align*}
+        \Pr \br{\max_{i \in [n]}X_i \geq t \cdot \E \max_{i\in [n]} X_i} &\leq n \Pr\br{X_1 \geq t c_1 mp} \\
+        &\leq n \exp\br{-\frac{(tc_1-1)^2mp}{1+tc_1}} \\
+        &\leq  n \exp\br{-\frac{c_3(tc_1-1)^2 \log n}{1+tc_1}}.
+    \end{align*}
+    It now suffices to choose $t$ as a function of $c_1, c_3$ such that $\frac{c_3(tc_1-1)^2 }{1+tc_1} > 1$. By rearranging and solving the resulting quadratic equation, it follows immediately that any $t > \frac{1}{c_1} + \frac{1+\sqrt{1+8c_3}}{2c_3c_1} > \frac{1}{c_1}$ suffices. Hence, there exist universal constants $c, \tilde{c}$, such that the desired conclusion holds. \\
+    \noindent
+    We now consider the sparse regime $mp \ll \log n$, where by Lemma  \ref{lemma:maximal_ineq} there exists $c_4 > 0$ such that $mp \leq c_4 \log n / \log \br{\frac{\log n}{\log mp}}$. Notice that for any $\lambda > 0$, $\max_{i \in [n]}X_i \leq \frac{1}{\lambda} \log \sum_{i = 1}^n e^{\lambda X_i}$. We apply Markov's inequality to obtain, for any $t > 0$,
+    \begin{align*}
+        \Pr\br{\max_{i \in [n]}X_i\geq t \cdot  \E \max_{i \in [n]}X_i}  & \leq \Pr\br{\sum_{i = i}^n e^{\lambda X_i} \geq e^{\lambda t \E \max_{i \in [n]}X_i}} \\
+        & \leq \frac{n \E e^{\lambda  X_1}}{\exp\br{\lambda  t \: \E \max_{i\in  [n]}X_i}} \\
+        & = \frac{n\br{1-p+pe^{\lambda}}^m}{\exp\br{\lambda  t \:  \E \max_{i\in  [n]}X_i}} \\
+        & \leq \exp\br{\log n + mp\br{e^{\lambda}-1}-\frac{\lambda t \: c_4 \log n}{\log\br{\frac{\log n}{mp}}}},
+    \end{align*}
+    where we used that $1 + x < e^x$ to obtain the last inequality. Finally, by choosing $t = 3/c_4$ and $\lambda = \log\br{\log n / mp}$, we obtain
+    \begin{align*}
+        \Pr\br{\max_{i \in [n]}X_i\geq \frac{3}{c_4} \cdot  \E \max_{i \in [n]}X_i} \leq \frac{1}{n}.
+    \end{align*}
+\end{proof}
+%
+
+%
+\begin{lemma}[Asymptotic expression for binomial probability mass function]
+\label{lemma:binom_lb}
+%
+~\\~
+    Let \(a \equiv a(n)\) and \(b \equiv b(n)\) be such that
+    \begin{enumerate}
+        \item \(1 \ll b \ll \sqrt{a}\),
+        \item \(p \ll 1\). 
+    \end{enumerate}
+    If \(b \geq C ap\) for \(C > 1\), then 
+    \begin{equation}
+    \label{eq:binom_lb_small_b}
+        \log \Pr(\mathrm{Bin}(\ceil a, p) = \ceil b) \geq -\left(b \log \frac{b}{a p} - b + ap\right) (1 + o(1)),
+    \end{equation}
+    If also \(b \gg ap\), we have that 
+    \begin{equation}
+    \label{eq:binom_lb_large_b}
+        \log \Pr(\mathrm{Bin}(\ceil a, p) = \ceil b) \geq -\left(b \log \frac{b}{a p}\right) (1 + o(1)),
+    \end{equation}
+Furthermore, all bounds remain valid upon replacing \(\ceil a\) to \(\floor a\).
+\end{lemma}
+\begin{proof}
+    \begin{align*}
+\Pr(\mathrm{Bin}(\ceil a, p) = \lceil b \rceil) &= {\ceil a \choose \lceil b \rceil} p^{\lceil b \rceil}(1 - p)^{\ceil a - \lceil b \rceil} \\
+&\overset{(i)}{\geq} \frac{(\ceil a p)^{  \ceil{b}  }}{4 (  \ceil{b}  )!} (1 - p)^{\ceil a -   \ceil{b}  } \\
+&\overset{(ii)}{\geq} \frac{1}{\ceil b} \left(\frac{\ceil a e p}{  \ceil{b}  } \right)^{  \ceil{b}  } (1 - p)^{\ceil a -   \ceil{b}  } \\
+&\overset{(iii)}{\geq} \frac{1}{\ceil b} \left(\frac{\ceil a e p}{  \ceil{b}  } \right)^{  \ceil{b}  } e^{-\ceil a p} (1 - p)^{\ceil a p - \ceil{b} },
+\end{align*}
+where $(i)$ is due to ${n \choose k} \geq \frac{n^k}{4k!}$ for $0 \leq k \leq \sqrt{n}$, $(ii)$ is due to $n! \leq \frac{n}{4}(n/e)^n$ for $n$ large enough, and $(iii)$ is due to $(1 + x/n)^n \geq e^x (1 - x^2/n)$ for $|x|\leq n$.
+After taking the logarithm, we get 
+\begin{align*}
+    &\log \Pr(\mathrm{Bin}(\ceil a, p) = \lceil b \rceil) \\
+    &\quad \geq - \left(\ceil b \log \frac{\ceil b}{\ceil a  p} - \ceil b + \ceil a p +  \log \ceil{b} - (\ceil a p - \ceil b) \log (1 - p) \right).
+\end{align*}
+If \(b \geq C \ceil a p\) for \(C > 1\), we have that 
+\begin{equation*}
+    b \log \frac{b}{ap} - b + ap \geq \gamma b \gg 1, \qquad \text{for } \gamma := \frac{1}{C} + \log C - 1 > 0.
+\end{equation*}
+Since \(b \gg 1\), we have
+\begin{equation*}
+\frac{\ceil b \log \frac{\ceil b}{\ceil a p} - \ceil b + \ceil a p}{ b \log \frac{b}{ap} - b + ap} = 1 + o(1).
+\end{equation*}
+Now, since also \(\log \ceil b \ll b\) and \((\ceil a p - \ceil b) \log (1 - p) \ll b\) for \(p \ll 1\), we have that
+\begin{equation*}
+    \log \Pr(\mathrm{Bin}(\ceil a, p) = \ceil b) \geq - \left(b \log \frac{b}{ap} - b + ap\right)(1 + o(1)).
+\end{equation*}
+If additionally \(b \gg ap\), then 
+\begin{equation*}
+    \frac{b \log \frac{b}{ap} - b + ap}{b \log \frac{b}{ap}} = 1 + o(1),
+\end{equation*}
+and, finally,
+\begin{equation*}
+    \log \Pr(\mathrm{Bin}(\ceil a, p) = \lceil b \rceil) \geq - \left(b \log \frac{b}{ap}\right)(1 + o(1)).
+\end{equation*}
+Under our assumptions, \(1 \ll b \ll \sqrt{a}\), the same bounds hold for \(\log \Pr(\mathrm{Bin}(\floor a, p) = \floor b)\).
+\end{proof}
+
+\begin{lemma} [Binomial Monotonicity] \label{lemma:binomial_monotonicity}
+Let $S_m \sim \mathrm{Bin}(m, p)$. Then for $r \geq mp$, we have that $\Pr(S_m = r + 1) \leq \Pr(S_m = r)$ and \(\Pr(S_{m-1} = r) \leq \Pr(S_{m} = r)\).
+\end{lemma}
+%
+\begin{proof}
+The proof follows a similar argument as that presented in \cite{bunke_feller_1969}.  
+\begin{align*}
+\frac{\Pr(S_m = r + 1)}{\Pr(S_m = r)} &= \frac{ {m \choose r+1} p^{r+1} (1 - p)^{m - r - 1} }{ {m \choose r} p^r (1 - p)^{m - r} } \\
+&= \frac{ \frac{m!}{(r + 1)! (m - r - 1)!} p^{r + 1} (1-p)^{m - r - 1}}{ \frac{m!}{r! (m - r)!} p^r (1-p)^{m - r}} \\
+&= \frac{(m - r) p }{(r + 1) (1-p)} \leq 1. 
+\end{align*}
+Similar arguments show that \(\Pr(S_{m-1} = r) \leq \Pr(S_{m} = r)\).
+\end{proof}
+
+\vspace{1em}
+
+\section{Main tool for the case \(mp \lesssim \log n\) and Proof of Lemma~\ref{lemma:mp<logn_conquering_logn}}\label{app:geom_alg}
+
+\begin{lemma}
+\label{lemma:geom_alg}
+    If \(mp \lesssim \log n\), then, for any \(\varepsilon > 0\), there exist constants \(\tau > 0\) and \(1 < \alpha < \beta\), such that, for \(k \lesssim \log n\) and for any \(\tilde m\), satisfying \(\beta^{-k-1}m \leq \tilde m \leq \beta^{-k} m\), for all \(n\) large enough,
+    \begin{equation*}
+        \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha / \beta)^{k} \tau \edmax\bigr\rceil \biggr) \geq n^{-\varepsilon}.
+    \end{equation*}
+\end{lemma}
+\begin{proof}
+    The proof is essentially a careful application of Lemma~\ref{lemma:binom_lb}.
+    Let \(\tau, \alpha, \beta\) be constants to be fixed later and \(\tilde m = \floor{\beta^{-k-1}m}\). Depending on whether we have \(mp \ll \log n\) or \(mp \sim \log n\), different terms will dominate the asymptotic expression from Lemma~\ref{lemma:binom_lb}.
+
+    \noindent
+    We start with the case \(mp \ll \log n\). From Lemma~\ref{lemma:maximal_ineq}, this implies that \(mp \ll \edmax \ll \log n\). Here we can fix \(\alpha \equiv 2\) and \(\beta \equiv 3\). Applying~(\ref{eq:binom_lb_large_b}) for \(a = 3^{-k-1}m\) and \(b = (2/3)^k \tau \edmax\), we have:
+    \begin{align*}
+        &\log \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (2/3)^k \tau \edmax\bigr\rceil \biggr) \\
+        &\quad \geq - (2/3)^k \tau \edmax \log \left(\frac{2^k 3 \tau \edmax}{ mp}\right) (1 + o(1))
+    \end{align*}
+    Recall that our goal is to show \(\log \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (2/3)^k \tau \edmax\bigr\rceil \biggr) \geq -\varepsilon \log n\). We first show that there exists \(\tau > 0\) satisfying the following two inequalities:
+    \begin{equation}
+    \begin{aligned}
+        &(i) \qquad (2/3)^k \tau (\log 3 + k \log 2 ) \frac{\edmax}{\log n} &\leq \quad \frac{\varepsilon}{4}, \\
+        &(ii) \qquad (2/3)^k \tau \frac{\edmax}{\log n} \log \left(\frac{\edmax}{mp}\right) &\leq \quad \frac{\varepsilon}{4}.
+    \end{aligned}
+    \end{equation}
+    Indeed, since \(\edmax \ll \log n\) and \(k \ll (3/2)^k\), inequality \((i)\) will be satisfied for any \(\tau > 0\) for \(n\) large enough. 
+    For \((ii)\) we need to use explicit bound for \(\edmax\), in particular from Lemma~\ref{lemma:maximal_ineq} we know that there exists \(C > 0\), such that \(\edmax \leq C \log n / (\log \log n - \log mp)\) for \(n\) large enough. 
+    Plugging this into \((ii)\), we get for \(k = 0\),
+    \begin{align*}
+        &\tau \frac{\mathbb{E}\dmax}{\log n}\log\left(\frac{\mathbb{E}\dmax}{mp}\right) \\
+        &\quad \leq \frac{\tau C (\log C + \log \log n - \log (\log \log n - \log mp) - \log mp)}{\log \log n - \log mp} \\
+        &\quad = \tau C + o(1).
+    \end{align*}
+    For \(\tau = \varepsilon / (8C)\), \((ii)\) holds for \(k = 0\) for \(n\) large enough. By increasing \(k\) we only decrease left hand side of \((ii)\), therefore, the same value of \(\tau\) works for any \(k \geq 0\). 
+
+    \noindent
+    Finally, by adding \((i)\) and \((ii)\) we showed that, for \(n\) large enough, 
+    \begin{equation*}
+    \log \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha/2)^k \tau \edmax\bigr\rceil \biggr) \geq - \frac{\varepsilon}{2}\log n (1 + o(1)) > -\varepsilon \log n,
+    \end{equation*}
+    which finishes the proof for the case \(mp \ll \log n\).
+
+    \noindent
+    Now we focus on the case \(mp \sim \log n\). Here we apply~(\ref{eq:binom_lb_small_b}) for the values \(a = {\beta}^{-k-1}m\) and \(b = (\alpha / \beta)^k \tau \edmax\) keeping in mind the condition \(b \geq Cap\) with \(C > 1\). 
+    We have
+    \begin{equation*}
+    \begin{aligned}
+         &\log \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha / \beta)^k \tau \edmax\bigr\rceil \biggr) \\
+         &\quad \geq - \Big((\alpha / \beta)^k \tau \edmax \log \big(\frac{\beta \alpha^k \tau \edmax}{ mp}\big) \\
+         &\quad \qquad - (\alpha / \beta)^k \tau \edmax + \beta^{-k-1}mp\Big)(1 + o(1)) 
+    \end{aligned}
+    \end{equation*}
+    We pick \(\tau = \gamma mp / \edmax\), for some constant \(\gamma > 1\) to be specified later. Note that this way condition for applying~(\ref{eq:binom_lb_small_b}), \(\frac{b}{ap} \geq C > 1\), is satisfied since \(\frac{b}{ap} \geq \frac{\tau \edmax}{mp} = \gamma > 1\). This simplifies the latter expression to the following:
+       \begin{equation*}
+    \begin{aligned}
+         &\log \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha / \beta)^k \gamma mp\bigr\rceil \biggr) \\
+         &\quad \geq - mp\left((\alpha / \beta)^k \gamma \log \bigl(\beta \gamma \alpha^k\bigr) - (\alpha / \beta)^k \gamma + \beta^{-k-1}\right)(1 + o(1)) 
+    \end{aligned}
+    \end{equation*}
+Since in this regime we have \(mp \leq D \log n\) for some \(D > 0\), for \(n\) large enough, it is enough to show 
+\begin{equation*}
+   (\alpha / \beta)^k \gamma \log \bigl(\beta \gamma \alpha^k\bigr) - (\alpha / \beta)^k \gamma + \beta^{-k-1} \leq \varepsilon / (2D).
+\end{equation*}
+We first show that there exist constants \(1 < \alpha < \beta\) and \(\gamma > 1\), depending on \(\varepsilon\) and \(D\), satisfying the following two inequalities for any \(k \geq 0\):
+\begin{equation*}
+    \begin{aligned}
+        &(i) \qquad (\alpha/\beta)^k \left(\gamma \log \beta \gamma - \gamma + \frac{1}{\alpha^k \beta}\right) &\leq \quad \frac{\varepsilon}{4D}, \\
+        &(ii) \qquad (\alpha/\beta)^k k \log \alpha & \leq \quad \frac{\varepsilon}{4D}.
+    \end{aligned}
+\end{equation*}
+Note that left hand side of \((i)\) decreases as \(k\) increases, therefore, it is enough to look at \(k = 0\). We need to show that there exist \(\beta, \gamma > 1\), depending on \(\varepsilon, D\) such that
+\begin{equation*}
+    f(\beta, \gamma) := \gamma \log \beta \gamma - \gamma + \frac{1}{\beta} \leq \frac{\varepsilon}{4D}.
+\end{equation*}
+Note that \(\frac{\partial f}{\partial \beta} = \gamma / \beta - 1 / \beta^2 > 0\) and \(\frac{\partial f}{\partial \gamma} = \log \beta \gamma > 0\) as long as \(\beta \gamma > 1\). Since \(f(1, 1) = 0\), we can find \(\beta, \gamma > 1\), close enough to 1, such that \(f(\beta, \gamma) \leq \varepsilon / (4D)\).
+We use these values of \(\beta\) and \(\gamma\) (or, equivalently, \(\tau\)). Since \(k \ll (\beta / \alpha)^k\), there exists \(\alpha \in (1, \beta)\), such that \((ii)\) holds. Summing \((i)\) and \((ii)\) shows that, for \(n\) large enough,
+\begin{align*}
+    \log \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha / \beta)^k \gamma mp\bigr\rceil \biggr) &\geq - \frac{\varepsilon mp}{2D}(1 + o(1)) \\
+    &\geq - \frac{\varepsilon \log n}{2} (1+o(1)) \\
+    &\geq -\varepsilon \log n.
+\end{align*}
+    We proved that for \(mp \lesssim \log n\), for any \(\varepsilon > 0\), for \(n\) large enough, there exists \(\tau, \alpha, \beta\), such that
+       \begin{equation*}
+        \mathrm{Pr}\biggl(\mathrm{Bin}(\floor {\beta^{-k-1} m}, p) = \lceil(\alpha/\beta)^k \tau \mathbb{E}\dmax\rceil \biggr) \geq n^{-\varepsilon}.
+    \end{equation*}
+    Since \(\beta^{-k-1}mp < \beta^{-k}mp < \lceil(\alpha/\beta)^k \tau \mathbb{E}\dmax\rceil\), from binomial monotonicity, Lemma~\ref{lemma:binomial_monotonicity}, we have that for any \(\tilde m\) such that \(\beta^{-k - 1} m \leq \tilde m \leq \beta^{-k} m\),
+    \begin{equation*}
+    \Pr\Bigl(\mathrm{Bin}(\tilde m, p) = \lceil(\alpha / \beta)^k \tau \mathbb{E}\dmax\rceil \Bigr) \geq n^{-\varepsilon}.
+    \end{equation*}
+
+In order to deal with the more delicate sparse regime throughout the paper where $mp \ll \log n$, we apply the following technical lemma. 
+%
+\begin{lemma}
+\label{lemma:mp<logn_conquering_logn}
+For $mp \ll \log{n}$, $\varepsilon > 0$, and $n$ large enough, we have 
+\begin{equation*}
+\Pr\left(\mathrm{Bin}(m, p) = \left\lceil{\frac{\varepsilon}{8} \frac{\log{n}}{\log\br{\log n / mp}}}\right\rceil \right) \geq n^{-\varepsilon}.
+\end{equation*}
+\end{lemma}
+%
+\end{proof}
+\begin{proof}[Proof of Lemma~\ref{lemma:mp<logn_conquering_logn}]
+We follow the argument in Lemma~\ref{lemma:geom_alg} with \(k = 0\) and \(\edmax\) replaced by \(\log n / (\log \log n - \log mp)\). Note that in the proof of Lemma~\ref{lemma:geom_alg}, in the case \(mp \ll \log n\), we only used that \(mp \ll \edmax \ll \log n\) and \(\edmax \leq C \log n / (\log \log n - \log mp)\) for some \(C > 0\). Since both these properties remain true upon replacing \(\edmax\) with \(\log n / (\log \log n - \log mp)\), the proof follows. Since \(\tau = \varepsilon / (8C)\), in the setting of Lemma~\ref{lemma:mp<logn_conquering_logn}, and \(C = 1\) in this argument, we pick \(\tau = \varepsilon / 8\).
+\end{proof}
+\begin{lemma}
+    \label{lemma:find_one_col_lb}
+        Let $\varepsilon > 0$. Consider the following choices of \(f_1, f_2, \ldots\):
+        \begin{equation*}
+            \begin{aligned}
+                &(i) \quad  \text{if } mp \lesssim \log n, \text{ for some constants } \tau > 0 \text{ and } 1 < \alpha < \beta, \\
+                &\qquad \qquad f_t = \left\lceil\left(\alpha / \beta \right)^k \tau\mathbb{E}\dmax\right\rceil \\
+                &\qquad \qquad \qquad \text{where } k \text{ is such that} \quad \beta^{-k-1}m < m - F_{t-1} \leq \beta^{-k}m; \\
+                &(ii) \quad  \text{if } mp \gg \log n, \  \text{and }\ \log mp \ll \log n, \\
+                &\qquad \qquad f_t =  \ceil{mp(1-p)^{t-1}} \quad \text{if} \quad t \leq t^* \coloneqq \left\lceil \frac{1}{p}\log  \left(\frac{mp}{\log n}\right)\right \rceil,\\
+                &\qquad \qquad f_t = \tilde{f}_{t - t^*}, \quad \text{otherwise,} \\
+                &\qquad \qquad \qquad \text{where } \tilde{f}_t \text{ is the sequence from the case } mp \lesssim \log n; \\
+                &(iii) \quad  \text{otherwise, i.e., when } \log mp \gtrsim \log n, \\
+                &\qquad \qquad f_t = \ceil{mp(1-p)^{t - 1}}.
+            \end{aligned}
+        \end{equation*}
+    
+        \noindent
+        Then, there exists \(K\), such that 
+        \begin{equation}
+        \label{eq:cover_size}
+        \begin{aligned}
+            &(i) \qquad &F_K \geq m - K; \\
+            &(ii) \qquad &\text{if } mp \lesssim \log n, &\text{ then } K \sim \vallp; \\
+            & \qquad \quad \  &\text{if } mp \gg \log n, &\text{ then } K \sim \valip.
+        \end{aligned}
+        \end{equation} 
+        
+        \noindent
+        Furthermore, for this sequence \(f_t\) (which depends on \(\varepsilon\)), for any \(t \leq K\),
+        \begin{equation}
+            \Pr (\mathrm{Bin}(m - F_{t - 1}, p) \geq f_t) \geq n^{-\varepsilon}.
+        \end{equation} 
+    
+    \noindent
+        Note that the implicit constants in the statements \(K \sim \vallp\) or \(K \sim \valip\) depend on \(\varepsilon\).
+    \end{lemma}
+\begin{proof}
+We proceed in the proof by first showing that there exists \(\tilde K\), such that \(m - F_{\tilde K} \lesssim \tilde K\), and then, by increasing \(\tilde K\) by a multiplicative factor, we find \(K\) such that \(m - F_K \leq K\).
+\subsection*{Case \(mp \lesssim \log n\)} 
+From Lemma~\ref{lemma:geom_alg}, there exist constants \(\tau > 0\), \(\alpha, \beta\) with \(1 < \alpha < \beta\), such that, for any \(\tilde m\), satisfying \(\beta^{-k-1}m \leq \tilde m \leq \beta^{-k} m\), for all \(n\) large enough,
+    \begin{equation*}
+        \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha / \beta)^{k} \tau \edmax\bigr\rceil \biggr) \geq n^{-\varepsilon}.
+    \end{equation*}
+Recall that in this case \(f_t  = \bigl\lceil (\alpha / \beta)^{k} \tau \edmax\bigr\rceil\), where \(k\) is such that \(\beta^{-k-1}m \leq m - F_{t-1} \leq \beta^{-k} m\) and \(F_t = \sum_{s = 1}^t f_s\). From Lemma~\ref{lemma:geom_alg} we have that \(\Pr(\mathrm{Bin}(m - F_{t-1}, p) = f_t) \geq n^{-\varepsilon}\). Our goal is to prove that there exists \(s \lesssim \vallp \sim m / \edmax\), such that \(m - F_s \lesssim s\). 
+
+\begin{lemma} \label{lemma:one_step_beta}
+    Let \(t^{(k)} := \frac{\beta - 1}{\beta\tau} \frac{m}{\edmax} \alpha^{-k}\). 
+    \begin{equation*}
+        \begin{aligned}
+            \text{If} \qquad &m - F_{t-1} \leq \beta^{-k} m  \\
+            \text{then} \qquad &m - F_{t+t^{(k)}-1} \leq \beta^{-k-1} m.
+        \end{aligned}
+    \end{equation*}
+    Informally, if after \(t - 1\) steps of \bgreedy, at most \(\beta^{-k} m\) subsets are uncovered, then after \(t + t^{(k)} - 1\) steps, at most \(\beta^{-k-1}m\) subsets remain uncovered.
+\end{lemma}
+\begin{proof}
+    Let \(s \geq t\). As long as \(m - F_{s - 1} > \beta^{-k-1}m\), we will always have \(f_s = \bigl\lceil (\alpha / \beta)^{k} \tau \edmax\bigr\rceil\). We proceed by contradiction. Assume that \(m - F_{t + t^{(k)} - 1} > \beta^{-k-1}m\). This implies that for all \(s \in [t - 1, t + t^{(k)} - 1]\), we have \(f_s = f := \bigl\lceil (\alpha / \beta)^{k} \tau \edmax\bigr\rceil\). Therefore, 
+    \begin{equation*}
+    F_{t + t^{(k)} - 1} - F_{t - 1} = t^{(k)} f \geq \frac{m(\beta - 1)}{\beta^{k+1}} = \beta^{-k}m - \beta^{-k-1}m,
+    \end{equation*}
+    and 
+    \begin{equation*}
+    \begin{aligned}
+    m - F_{t + t^{(k)} - 1} &= m - F_{t - 1} - \left(F_{t + t^{(k)} - 1} - F_{t - 1}\right) \\
+    & \leq \beta^{-k}m - (\beta^{-k}m - \beta^{-k-1}m) = \beta^{-k-1}m.
+    \end{aligned}
+    \end{equation*}
+    Therefore, we must have \(m - F_{t + t^{(k)} - 1} \leq \beta^{-k-1}m\).
+\end{proof}
+\noindent
+Note that we always have \(\beta^{-1}m \leq m - F_0 = m\).
+If we consecutively apply Lemma~\ref{lemma:one_step_beta} starting with \(k = 0\), then, for \(v(k) \coloneqq \sum_{s=0}^k t^{(s)}\) we have \(m - F_{v(k) - 1} \leq \beta^{-k-1} m\). Therefore, for \(k := \frac{\log \edmax}{\log {\beta}}\), we have \(m - F_{v(k) - 1} \leq \frac{m}{\edmax}\). We can bound
+\begin{equation*}
+v(k) \leq \sum_{s = 0}^{\infty} t^{(k)} = \frac{\beta - 1}{\beta \tau (\alpha - 1)} \frac{m}{\edmax} \sim \frac m \edmax.
+\end{equation*}
+From Lemma~\ref{lemma:d_max_concentration_whp} we have \(\dmax \lesssim \edmax\) with high probability. Together with Lemma~\ref{lemma:lp_lb} this implies \(\vallp \geq \frac{m}{\dmax} \gtrsim \frac m \edmax\).
+Now, if we pick \(\tilde K \coloneqq v(k) \lesssim \frac m \edmax \), we have that \(\valbgr \lesssim \frac m \edmax\). Since \(\vallp \leq \valbgr\), we have that \(\tilde K \sim \vallp\) and \(m - F_{\tilde K} \lesssim \tilde K\). 
+
+\subsection*{Case \(mp \gg \log n\)}
+Here, we have that \(\edmax = mp (1 + o(1))\), therefore, picking an element that hits an average number of subsets is approximately the same as picking an element that hits close to maximum number of subsets. From the properties of the mean and the median of the binomial distribution, it follows that \(\Pr(\mathrm{Bin}(\tilde m, p) \geq \ceil{\tilde m p}) \geq 1/3\), for any \(\tilde m\). 
+
+We begin with the case \(\log mp \ll \log n\). This means that \(mp\) cannot grow polynomially in \(n\), but e.g. \(mp \sim \log^2 n\) is possible. In this regime, \(\valip \sim \frac{1}{p} \log \left(\frac{mp}{\log n}\right)\). Let \(K_1 = \ceil{\frac{1}{p} \log \left(\frac{mp}{\log n}\right)}\) and \(f_1, \ldots, f_{K_1}\) be a sequence such that \(f_{s} = \ceil{mp(1-p)^s}\). Then, we have that \(m - F_{K_1} \leq m(1 - p)^{K_1} \leq \frac{1}{p}\log n\). Therefore, \((m - F_{K_1})p \sim \log n\), and we can continue with \(\tilde{f}_t\) from the previous section \(mp \sim \log n\), with \(\tilde{F}_t \coloneqq \sum_{s=1}^t \tilde{f}_t\). For this sequence \(\tilde{f}_1, \ldots, \tilde{f}_{K_2}\), we have have \(K_2 \lesssim \frac{1}{p}\), and \(m - F_{K_1} - \tilde{F}_{K_2} \lesssim \frac{1}{p} \ll \frac{1}{p} \log \left(\frac{mp}{\log n}\right)\). The required statement holds for combined sequences \(f_t\) and \(\tilde{f}_t\) and \(\tilde K \coloneqq K_1 + K_2\). \\
+\noindent
+Finally, we study the case \(\log mp \gtrsim \log n\), which implies that \(\valip \sim \frac{1}{p} \log n\). This case is trivial, as one can pick \(\tilde K = \ceil{\frac{1}{p} \log \left(\frac{mp}{\log n}\right)} \lesssim \valip\) and \(f_1, \ldots, f_{\tilde K}\) a sequence such that \(f_{s} = \ceil{mp(1-p)^s}\). Then, we have that \(m - F_{\tilde K} \leq m(1 - p)^{\tilde K} \leq \frac{1}{p}\log n \lesssim \valip\). 
+
+\subsection*{From \(m - F_{\tilde K} \lesssim \tilde K\) to \(m - F_K \leq K\)}
+Finally, using that \(f_t \geq 1\) by Lemma~\ref{lemma:lp_ub} unless \(F_t = m\), there exists some constant \(C > 0\), such that for \(K \coloneqq C\tilde K\), \(F_K \geq m - K\), which finishes the proof.
+\end{proof}
+

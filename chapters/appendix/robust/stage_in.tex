@@ -9,7 +9,7 @@
         \[\norm{\muhat-\mu^{\ast}} \leq O(g(\alpha - \wmin^2)).\]
 \end{enumerate}
 By~\Cref{lemma:list_init} we have $|M| \leq 1/\wmin^{O(1)}$ and, with probability at least $1-\wmin^{O(1)}$, there exists \((\muhat, \hat \alpha) \in M\) such that \(\hat \alpha \geq \alpha/4\) and \(\norm{\muhat - \mu^{\ast}} \leq f(\hat\alpha)\).
-Then \cref{lemma:not_remove_good} implies that, with probability at least $1-|M|^2\wmin^{O(1)}$, \((\muhat, \hat \alpha)\) will not be removed from \(M\).
+Then \Cref{lemma:not_remove_good} implies that, with probability at least $1-|M|^2\wmin^{O(1)}$, \((\muhat, \hat \alpha)\) will not be removed from \(M\).
 Therefore, either \((\muhat, \hat \alpha) \in L\), or there exists \((\tilde \mu, \tilde \alpha) \in L\)
 such that (i) \(\tilde \alpha \geq \hat \alpha\) and (ii) \(\norm{\tilde \mu-\muhat} \leq 4 \beta(\hat \alpha)\).
 The latter case implies that \(\norm{\tilde \mu - \mu^{\ast}} \leq 40 \psi_t(\alpha/4) + 4f(\alpha/4)\).
@@ -43,7 +43,7 @@ Since all $\hat\alpha_s \geq \amin$, we have that \(\Card{L} \leq 10 / (9\amin) 
 For the rest of the proof we assume that \(\alpha > 9/10\).
 We analyze sets \(J\) and \(T_i\) for \(i \in J\) at the end of execution of~\(\operatorname{ListFilter}\).
 In particular, recall that \(L = \Set{(\muhat_i, \hat \alpha_i),\ i \in J}\).
-Also, at the end of~\cref{alg:constructing_output} we have the following expression for \(T_i\):
+Also, at the end of~\Cref{alg:constructing_output} we have the following expression for \(T_i\):
 \begin{equation*}
     T_i = \bigcap_{j \in J \setminus \Set{i}}\{x \in S, \text{ s.t. } \abs{v_{ij}^{\top}(x - \muhat_i)} \leq \max(\beta(\hat\alpha_i), \beta(\hat\alpha_j))\},
 \end{equation*}
@@ -62,7 +62,7 @@ Note that, because $|T_s| \geq 0.9 \cdot 0.2 n = 0.18n$ and $|C^*| \geq 0.9 n$, 
 \begin{equation*}
     \Card{\Set{x \in C^{\ast} \text{, s.t. } \abs{v_{sj}^{\top}(x - \muhat_s)} \leq \beta(\hat \alpha_s)}} \geq 0.08 \Card{C^{\ast}}.
 \end{equation*}
-Also note that~\cref{lem:conc-one-dir} for radius \(10 \psi_t(1/2) \leq 10 \psi_t(\hat \alpha_s)\) implies that, with exponentially small failure probability,
+Also note that~\Cref{lem:conc-one-dir} for radius \(10 \psi_t(1/2) \leq 10 \psi_t(\hat \alpha_s)\) implies that, with exponentially small failure probability,
 \begin{equation*}
     \Card{\Set{x \in C^{\ast} \text{, s.t. } \abs{v_{sj}^{\top}(x - \mu^{\ast})} \leq \beta(\hat \alpha_s)}} \geq 0.99 \Card{C^{\ast}}.
 \end{equation*}
@@ -74,14 +74,14 @@ then \(\abs{v_{sj}^{\top}(x - \mu^{\ast})} > \beta(\hat \alpha_j)\), implying th
     \label{eq:tq_non_intersect}
     (T_j \cap C^{\ast}) \subseteq \Set{x \in C^{\ast} \text{, s.t. } \abs{v_{sj}^{\top}(x - \mu^{\ast})} > \beta(\hat\alpha_j)}.
 \end{equation}
-However,~\cref{lem:conc-one-dir} tells us that with high probability only a small fraction of points in \(C^{\ast}\) satisfies \(\abs{v_{sj}^{\top}(x - \mu^{\ast})} > \beta(\hat \alpha_j)\).
+However,~\Cref{lem:conc-one-dir} tells us that with high probability only a small fraction of points in \(C^{\ast}\) satisfies \(\abs{v_{sj}^{\top}(x - \mu^{\ast})} > \beta(\hat \alpha_j)\).
 In particular, applying the lemma with radius \(10 \psi_t(\hat \alpha_j)\), we get that with exponentially small failure probability, 
 \begin{equation}
     \label{eq:tq_conc}
     \Card{\Set{x \in C^{\ast} \text{, s.t. } \abs{v_{sj}^{\top}(x - \mu^{\ast})} \leq \beta(\hat\alpha_j)}} 
     \geq \left(1 - \frac{\hat\alpha_j}{50}\right) \Card{C^{\ast}}.
 \end{equation}
-From~\cref{eq:tq_non_intersect,eq:tq_conc} it follows that \(\Card{T_j \cap C^{\ast}} \leq \hat \alpha_j \Card{C^{\ast}}  / 50\).
+From~\Cref{eq:tq_non_intersect,eq:tq_conc} it follows that \(\Card{T_j \cap C^{\ast}} \leq \hat \alpha_j \Card{C^{\ast}}  / 50\).
 Using that \(\Card{T_j} \geq 9\hat \alpha_j n / 10 \geq 9\hat \alpha_j \Card{C^{\ast}} / 10\) by the properties of~\(\operatorname{ListFilter}\), we obtain 
 \begin{equation*}
     9 \hat \alpha_j \Card{C^{\ast}} / 10\leq \Card{T_j} \leq 2 \Card{T_j \cap C^{\ast}} 
@@ -156,7 +156,7 @@ In particular, let
 where we recall \(\beta(\hat\alpha_s) = 10 \psi_t(\hat\alpha_s) + f(\hat\alpha_s)\).
 Note that \(\Card{T_s} \geq \Card{\tilde T_s} - \Card{C^{\ast} \setminus S^{\ast}} 
             \geq \Card{\tilde T_s} - \wmin^2\Card{C^{\ast}}\).
-Also, for any \(\alpha' \leq \hat \alpha_s\), applying~\cref{lem:conc-one-dir} with radius \(10 \psi_t(\alpha')\), 
+Also, for any \(\alpha' \leq \hat \alpha_s\), applying~\Cref{lem:conc-one-dir} with radius \(10 \psi_t(\alpha')\), 
 using that \(\norm{\muhat_s - \mu^{\ast}} \leq f(\hat\alpha_s) \leq f(\alpha')\) and \(t \geq 2\),
 we get that with exponentially small failure probability,
 \begin{equation}
@@ -200,7 +200,7 @@ Using a union bound again, we write
     - \sum_{i < s, i \in J} \Card{C^{\ast} \setminus A_i} 
     - \sum_{i > s, i \in J} \Card{C^{\ast} \setminus B_i}.
 \end{equation*}
-Using~\cref{eq:card_ub}, with exponentially small failure probability, for all \(i \in J\),
+Using~\Cref{eq:card_ub}, with exponentially small failure probability, for all \(i \in J\),
 \begin{equation*}
     \begin{aligned}
     \Card{C^{\ast} \setminus A_i} &\leq (\hat\alpha_s / 50) \Card{C^{\ast}} \quad \text{(for } i < s \text{)} \quad \text{and} \\

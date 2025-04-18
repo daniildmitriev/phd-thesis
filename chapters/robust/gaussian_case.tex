@@ -4,7 +4,7 @@
 For Gaussian inlier distributions, LD-ME and RME base learners with guarantees for~\Cref{asm:algs} have already been developed in prior work. We can thus readily use them in the meta-algorithm to arrive at the following statement with the relative proportions defined in~\Cref{eq:rel_weights}.
 \begin{corollary}[Gaussian case]
 \label{cor:gaussian}
-  Let $d, k, \wmin$ and t be as in \cref{thm:informal}.
+  Let $d, k, \wmin$ and t be as in \Cref{thm:informal}.
     Let \(\cX\) be as in~\Cref{eq:gen_model} with \(D_i(\mu_i) = \cN(\mu_i, I_d)\) with \(\mu_i\)'s satisfying 
     \(\norm{\mu_i - \mu_j} \gtrsim \sqrt{\log 1 / \wmin}\) for all $i \neq j \in [k]$. There exists an algorithm that for \(t = O(\log 1 / \wmin)\), given \(N =  \poly(d^t, (1 / \wmin)^t)\) i.i.d. samples from \(\cX\) and \(\wmin\), runs in \(\poly(N)\) time and outputs a list \(L\) such that with high probability \(\Card{L} = k + O(\varepsilon / \wmin)\) and, for all \(i \in [k]\), there exists \(\muhat \in L\) such that
     \[\norm{\muhat - \mu_i} 

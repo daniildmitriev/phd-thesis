@@ -4,7 +4,7 @@
 \begin{lemma}\label{lemma:chernoff}(Chernoff Bound - upper tail)
 Let $X_1, ..., X_n$ be independent random variables taking values in $\set{0, 1}$, $X$ denote their sum and $\mu = \E X$. Then for any $\delta > 0$,
     \begin{align*}
-        \P\br{X \geq (1+\delta)\mu}\leq e^{-\delta^2 \mu / (2+\delta)}.
+        \Pr\br{X \geq (1+\delta)\mu}\leq e^{-\delta^2 \mu / (2+\delta)}.
     \end{align*}
 \end{lemma}
 
@@ -22,7 +22,7 @@ Then, there holds that
 \begin{lemma}[Concentration for $\dmax$]\label{lemma:d_max_concentration}
     Let $X_1, \ldots, X_n  \overset{\underset{\mathrm{iid}}{}}{\sim} Bin(m,p)$. Then, for any $t > 0$, 
     \begin{align*}
-        \P\br{\left |\dmax-\E \dmax\right|> t}\leq \frac{mp}{t^2}.
+        \Pr\br{\left |\dmax-\E \dmax\right|> t}\leq \frac{mp}{t^2}.
     \end{align*}
 \end{lemma}
 \begin{remark}
@@ -32,8 +32,8 @@ Then, there holds that
     Proceeding by Chebyschev's inequality, it suffices to show that $\text{Var}(\dmax\leq mp$. By Lemma~\ref{lemma:tensorization_var}, we have that 
     \begin{align*}
         \text{Var}(\dmax) & \leq \E \sum_{i = 1}^n \E_i\br{ \dmax - \E_i \dmax}^2\\
-        & = \E \sum_{i = 1}^n \E_i\left[\br{ \dmax - \E_i \dmax}^2\mid \dmax = X_i \right]\P{\dmax = X_i} \\
-        & +  \E \sum_{i = 1}^n \E_i\left[\br{ \dmax - \E_i \dmax}^2\mid \dmax \neq X_i \right]\P{\dmax \neq X_i} \\
+        & = \E \sum_{i = 1}^n \E_i\left[\br{ \dmax - \E_i \dmax}^2\mid \dmax = X_i \right]\Pr \br{\dmax = X_i} \\
+        & +  \E \sum_{i = 1}^n \E_i\left[\br{ \dmax - \E_i \dmax}^2\mid \dmax \neq X_i \right]\Pr \br{\dmax \neq X_i} \\
         & = \frac1n\E \sum_{i = 1}^n \text{Var}X_i \\
         & \leq mp,
     \end{align*}
@@ -52,27 +52,30 @@ which is as required.
     If \(b \geq C ap\) for \(C > 1\), then 
     \begin{equation}
     \label{eq:binom_lb_small_b}
-        \log \P(\mathrm{Bin}(\ceil a, p) = \ceil b) \geq -\left(b \log \frac{b}{a p} - b + ap\right) (1 + o(1)),
+        \log \Pr(\mathrm{Bin}(\ceil a, p) = \ceil b) \geq -\left(b \log \frac{b}{a p} - b + ap\right) (1 + o(1)),
     \end{equation}
     If also \(b \gg ap\), we have that 
     \begin{equation}
     \label{eq:binom_lb_large_b}
-        \log \P(\mathrm{Bin}(\ceil a, p) = \ceil b) \geq -\left(b \log \frac{b}{a p}\right) (1 + o(1)),
+        \log \Pr(\mathrm{Bin}(\ceil a, p) = \ceil b) \geq -\left(b \log \frac{b}{a p}\right) (1 + o(1)),
     \end{equation}
 Furthermore, all bounds remain valid upon replacing \(\ceil a\) to \(\floor a\).
 \end{lemma}
 \begin{proof}
     \begin{align*}
-\P(\mathrm{Bin}(\ceil a, p) = \lceil b \rceil) &= {\ceil a \choose \lceil b \rceil} p^{\lceil b \rceil}(1 - p)^{\ceil a - \lceil b \rceil} \\
+\Pr(\mathrm{Bin}(\ceil a, p) = \lceil b \rceil) &= {\ceil a \choose \lceil b \rceil} p^{\lceil b \rceil}(1 - p)^{\ceil a - \lceil b \rceil} \\
 &\overset{(i)}{\geq} \frac{(\ceil a p)^{  \ceil{b}  }}{4 (  \ceil{b}  )!} (1 - p)^{\ceil a -   \ceil{b}  } \\
 &\overset{(ii)}{\geq} \frac{1}{\ceil b} \left(\frac{\ceil a e p}{  \ceil{b}  } \right)^{  \ceil{b}  } (1 - p)^{\ceil a -   \ceil{b}  } \\
 &\overset{(iii)}{\geq} \frac{1}{\ceil b} \left(\frac{\ceil a e p}{  \ceil{b}  } \right)^{  \ceil{b}  } e^{-\ceil a p} (1 - p)^{\ceil a p - \ceil{b} },
-% &\geq \frac{1}{4\pi \sqrt{ \tau \Delta  }} \left(\frac{e \tilde{m}p}{  \tau \Delta  } \right)^{  \ceil{\tau \Delta}  } e^{-\tilde{m}p} (1 - p)^{\tilde{m}p -   \ceil{\tau \Delta}  },
+% &\geq \frac{1}{4\Pri \sqrt{ \tau \Delta  }} \left(\frac{e \tilde{m}p}{  \tau \Delta  } \right)^{  \ceil{\tau \Delta}  } e^{-\tilde{m}p} (1 - p)^{\tilde{m}p -   \ceil{\tau \Delta}  },
 \end{align*}
 where $(i)$ is due to ${n \choose k} \geq \frac{n^k}{4k!}$ for $0 \leq k \leq \sqrt{n}$, $(ii)$ is due to $n! \leq \frac{n}{4}(n/e)^n$ for $n$ large enough, and $(iii)$ is due to $(1 + x/n)^n \geq e^x (1 - x^2/n)$ for $|x|\leq n$.
 After taking the logarithm, we get 
 \begin{equation*}
-    \log \P(\mathrm{Bin}(\ceil a, p) = \lceil b \rceil) \geq - \left(\ceil b \log \frac{\ceil b}{\ceil a  p} - \ceil b + \ceil a p +  \log \ceil{b} - (\ceil a p - \ceil b) \log (1 - p) \right).
+    \begin{aligned}
+    &\log \Pr(\mathrm{Bin}(\ceil a, p) = \lceil b \rceil) \\
+    &\quad \geq - \left(\ceil b \log \frac{\ceil b}{\ceil a  p} - \ceil b + \ceil a p +  \log \ceil{b} - (\ceil a p - \ceil b) \log (1 - p) \right).
+    \end{aligned}
 \end{equation*}
 If \(b \geq C \ceil a p\) for \(C > 1\), we have that 
 \begin{equation*}
@@ -84,7 +87,7 @@ Since \(b \gg 1\), we have
 \end{equation*}
 Now, since also \(\log \ceil b \ll b\) and \((\ceil a p - \ceil b) \log (1 - p) \ll b\) for \(p \ll 1\), we have that
 \begin{equation*}
-    \log \P(\mathrm{Bin}(\ceil a, p) = \ceil b) \geq - \left(b \log \frac{b}{ap} - b + ap\right)(1 + o(1)).
+    \log \Pr(\mathrm{Bin}(\ceil a, p) = \ceil b) \geq - \left(b \log \frac{b}{ap} - b + ap\right)(1 + o(1)).
 \end{equation*}
 If additionally \(b \gg ap\), then 
 \begin{equation*}
@@ -92,23 +95,23 @@ If additionally \(b \gg ap\), then
 \end{equation*}
 and, finally,
 \begin{equation*}
-    \log \P(\mathrm{Bin}(\ceil a, p) = \lceil b \rceil) \geq - \left(b \log \frac{b}{ap}\right)(1 + o(1)).
+    \log \Pr(\mathrm{Bin}(\ceil a, p) = \lceil b \rceil) \geq - \left(b \log \frac{b}{ap}\right)(1 + o(1)).
 \end{equation*}
-Under our assumptions, \(1 \ll b \ll \sqrt{a}\), the same bounds hold for \(\log \P(\mathrm{Bin}(\floor a, p) = \floor b)\).
+Under our assumptions, \(1 \ll b \ll \sqrt{a}\), the same bounds hold for \(\log \Pr(\mathrm{Bin}(\floor a, p) = \floor b)\).
 \end{proof}
 
 \begin{lemma} [Binomial Monotonicity] \label{lemma:binomial_monotonicity}
-Let $S_m \sim \mathrm{Bin}(m, p)$. Then for $r \geq mp$, we have that $\P(S_m = r + 1) \leq \P(S_m = r)$ and \(\P(S_{m-1} = r) \leq \P(S_{m} = r)\).
+Let $S_m \sim \mathrm{Bin}(m, p)$. Then for $r \geq mp$, we have that $\Pr(S_m = r + 1) \leq \Pr(S_m = r)$ and \(\Pr(S_{m-1} = r) \leq \Pr(S_{m} = r)\).
 \end{lemma}
 %
 \begin{proof}
 The proof follows a similar argument as that presented in \cite{bunke_feller_1969}.  
 \begin{align*}
-\frac{\P(S_m = r + 1)}{\P(S_m = r)} &= \frac{ {m \choose r+1} p^{r+1} (1 - p)^{m - r - 1} }{ {m \choose r} p^r (1 - p)^{m - r} } \\
+\frac{\Pr(S_m = r + 1)}{\Pr(S_m = r)} &= \frac{ {m \choose r+1} p^{r+1} (1 - p)^{m - r - 1} }{ {m \choose r} p^r (1 - p)^{m - r} } \\
 &= \frac{ \frac{m!}{(r + 1)! (m - r - 1)!} p^{r + 1} (1-p)^{m - r - 1}}{ \frac{m!}{r! (m - r)!} p^r (1-p)^{m - r}} \\
 &= \frac{(m - r) p }{(r + 1) (1-p)} \leq 1. 
 \end{align*}
-Similar arguments show that \(\P(S_{m-1} = r) \leq \P(S_{m} = r)\).
+Similar arguments show that \(\Pr(S_{m-1} = r) \leq \Pr(S_{m} = r)\).
 \end{proof}
 
 \section{Main tool for the case \(mp \lesssim \log n\) and Proof of Lemma~\ref{lemma:mp<logn_conquering_logn}}\label{app:geom_alg}
@@ -117,7 +120,7 @@ Similar arguments show that \(\P(S_{m-1} = r) \leq \P(S_{m} = r)\).
 \label{lemma:geom_alg}
     If \(mp \lesssim \log n\), then, for any \(\varepsilon > 0\), there exist constants \(\tau > 0\) and \(1 < \alpha < \beta\), such that, for \(k \lesssim \log n\) and for any \(\tilde m\), satisfying \(\beta^{-k-1}m \leq \tilde m \leq \beta^{-k} m\), for all \(n\) large enough,
     \begin{equation*}
-        \P\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha / \beta)^{k} \tau \edmax\bigr\rceil \biggr) \geq n^{-\varepsilon}.
+        \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha / \beta)^{k} \tau \edmax\bigr\rceil \biggr) \geq n^{-\varepsilon}.
     \end{equation*}
 \end{lemma}
 \begin{proof}
@@ -127,9 +130,12 @@ Similar arguments show that \(\P(S_{m-1} = r) \leq \P(S_{m} = r)\).
     \noindent
     We start with the case \(mp \ll \log n\). From Lemma~\ref{lemma:maximal_ineq}, this implies that \(mp \ll \edmax \ll \log n\). Here we can fix \(\alpha \equiv 2\) and \(\beta \equiv 3\). Applying~(\ref{eq:binom_lb_large_b}) for \(a = 3^{-k-1}m\) and \(b = (2/3)^k \tau \edmax\), we have:
     \begin{equation}
-        \log \P\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (2/3)^k \tau \edmax\bigr\rceil \biggr) \geq - (2/3)^k \tau \edmax \log \left(\frac{2^k 3 \tau \edmax}{ mp}\right) (1 + o(1))
+        \begin{aligned}
+        &\log \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (2/3)^k \tau \edmax\bigr\rceil \biggr) \\
+        &\quad \geq - (2/3)^k \tau \edmax \log \left(\frac{2^k 3 \tau \edmax}{ mp}\right) (1 + o(1))
+        \end{aligned}
     \end{equation}
-    Recall that our goal is to show \(\log \P\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (2/3)^k \tau \edmax\bigr\rceil \biggr) \geq -\varepsilon \log n\). We first show that there exists \(\tau > 0\) satisfying the following two inequalities:
+    Recall that our goal is to show \(\log \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (2/3)^k \tau \edmax\bigr\rceil \biggr) \geq -\varepsilon \log n\). We first show that there exists \(\tau > 0\) satisfying the following two inequalities:
     \begin{equation}
     \begin{aligned}
         &(i) \qquad (2/3)^k \tau (\log 3 + k \log 2 ) \frac{\edmax}{\log n} &\leq \quad \frac{\varepsilon}{4}, \\
@@ -138,14 +144,18 @@ Similar arguments show that \(\P(S_{m-1} = r) \leq \P(S_{m} = r)\).
     \end{equation}
     Indeed, since \(\edmax \ll \log n\) and \(k \ll (3/2)^k\), inequality \((i)\) will be satisfied for any \(\tau > 0\) for \(n\) large enough. For \((ii)\) we need to use explicit bound for \(\edmax\), in particular from Lemma~\ref{lemma:maximal_ineq} we know that there exists \(C > 0\), such that \(\edmax \leq C \log n / (\log \log n - \log mp)\) for \(n\) large enough. Plugging this into \((ii)\), we get for \(k = 0\),
     \begin{equation}
-        \tau \frac{\mathbb{E}\dmax}{\log n}\log\left(\frac{\mathbb{E}\dmax}{mp}\right) \leq \frac{\tau C (\log C + \log \log n - \log (\log \log n - \log mp) - \log mp)}{\log \log n - \log mp} = \tau C + o(1).
+        \begin{aligned}
+        &\tau \frac{\mathbb{E}\dmax}{\log n}\log\left(\frac{\mathbb{E}\dmax}{mp}\right) \\
+        &\quad \leq \frac{\tau C (\log C + \log \log n - \log (\log \log n - \log mp) - \log mp)}{\log \log n - \log mp} \\
+        &\quad = \tau C + o(1).
+        \end{aligned}
     \end{equation}
     For \(\tau = \varepsilon / (8C)\), \((ii)\) holds for \(k = 0\) for \(n\) large enough. By increasing \(k\) we only decrease left hand side of \((ii)\), therefore, the same value of \(\tau\) works for any \(k \geq 0\). 
 
     \noindent
     Finally, by adding \((i)\) and \((ii)\) we showed that, for \(n\) large enough, 
     \begin{equation*}
-    \log \P\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha/2)^k \tau \edmax\bigr\rceil \biggr) \geq - \frac{\varepsilon}{2}\log n (1 + o(1)) > -\varepsilon \log n,
+    \log \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha/2)^k \tau \edmax\bigr\rceil \biggr) \geq - \frac{\varepsilon}{2}\log n (1 + o(1)) > -\varepsilon \log n,
     \end{equation*}
     which finishes the proof for the case \(mp \ll \log n\).
 
@@ -154,14 +164,15 @@ Similar arguments show that \(\P(S_{m-1} = r) \leq \P(S_{m} = r)\).
     We have
     \begin{equation*}
     \begin{aligned}
-         &\log \P\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha / \beta)^k \tau \edmax\bigr\rceil \biggr) \\
-         &\quad \geq - \left((\alpha / \beta)^k \tau \edmax \log \left(\frac{\beta \alpha^k \tau \edmax}{ mp}\right) - (\alpha / \beta)^k \tau \edmax + \beta^{-k-1}mp\right)(1 + o(1)) %\\
+         &\log \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha / \beta)^k \tau \edmax\bigr\rceil \biggr) \\
+         &\quad \geq - \Bigg((\alpha / \beta)^k \tau \edmax \log \Big(\frac{\beta \alpha^k \tau \edmax}{ mp}\Big) \\ 
+         &\qquad \qquad  -(\alpha / \beta)^k \tau \edmax + \beta^{-k-1}mp\Bigg)(1 + o(1)) %\\
     \end{aligned}
     \end{equation*}
     We pick \(\tau = \gamma mp / \edmax\), for some constant \(\gamma > 1\) to be specified later. Note that this way condition for applying~(\ref{eq:binom_lb_small_b}), \(\frac{b}{ap} \geq C > 1\), is satisfied since \(\frac{b}{ap} \geq \frac{\tau \edmax}{mp} = \gamma > 1\). This simplifies the latter expression to the following:
        \begin{equation*}
     \begin{aligned}
-         &\log \P\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha / \beta)^k \gamma mp\bigr\rceil \biggr) \\
+         &\log \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha / \beta)^k \gamma mp\bigr\rceil \biggr) \\
          &\quad \geq - mp\left((\alpha / \beta)^k \gamma \log \bigl(\beta \gamma \alpha^k\bigr) - (\alpha / \beta)^k \gamma + \beta^{-k-1}\right)(1 + o(1)) %\\
     \end{aligned}
     \end{equation*}
@@ -183,7 +194,11 @@ Note that left hand side of \((i)\) decreases as \(k\) increases, therefore, it 
 Note that \(\frac{\partial f}{\partial \beta} = \gamma / \beta - 1 / \beta^2 > 0\) and \(\frac{\partial f}{\partial \gamma} = \log \beta \gamma > 0\) as long as \(\beta \gamma > 1\). Since \(f(1, 1) = 0\), we can find \(\beta, \gamma > 1\), close enough to 1, such that \(f(\beta, \gamma) \leq \varepsilon / (4D)\).
 We use these values of \(\beta\) and \(\gamma\) (or, equivalently, \(\tau\)). Since \(k \ll (\beta / \alpha)^k\), there exists \(\alpha \in (1, \beta)\), such that \((ii)\) holds. Summing \((i)\) and \((ii)\) shows that, for \(n\) large enough,
 \begin{equation*}
-    \log \P\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha / \beta)^k \gamma mp\bigr\rceil \biggr) \geq - \frac{\varepsilon mp}{2D}(1 + o(1)) \geq - \frac{\varepsilon \log n}{2} (1+o(1)) \geq -\varepsilon \log n.
+\begin{aligned}
+    \log \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha / \beta)^k \gamma mp\bigr\rceil \biggr) &\geq - \frac{\varepsilon mp}{2D}(1 + o(1)) \\
+    & \geq - \frac{\varepsilon \log n}{2} (1+o(1)) \\
+    & \geq -\varepsilon \log n.
+\end{aligned}
 \end{equation*}
     We proved that for \(mp \lesssim \log n\), for any \(\varepsilon > 0\), for \(n\) large enough, there exists \(\tau, \alpha, \beta\), such that
        \begin{equation*}
@@ -191,7 +206,7 @@ We use these values of \(\beta\) and \(\gamma\) (or, equivalently, \(\tau\)). Si
     \end{equation*}
     Since \(\beta^{-k-1}mp < \beta^{-k}mp < \lceil(\alpha/\beta)^k \tau \mathbb{E}\dmax\rceil\), from binomial monotonicity, Lemma~\ref{lemma:binomial_monotonicity}, we have that for any \(\tilde m\) such that \(\beta^{-k - 1} m \leq \tilde m \leq \beta^{-k} m\),
     \begin{equation*}
-    \P\Bigl(\mathrm{Bin}(\tilde m, p) = \lceil(\alpha / \beta)^k \tau \mathbb{E}\dmax\rceil \Bigr) \geq n^{-\varepsilon}.
+    \Pr\Bigl(\mathrm{Bin}(\tilde m, p) = \lceil(\alpha / \beta)^k \tau \mathbb{E}\dmax\rceil \Bigr) \geq n^{-\varepsilon}.
     \end{equation*}
 
 \end{proof}
@@ -204,9 +219,9 @@ We proceed in the proof by first showing that there exists \(\tilde K\), such th
 \subsection*{Case \(mp \lesssim \log n\)} 
 From Lemma~\ref{lemma:geom_alg}, there exist constants \(\tau > 0\), \(\alpha, \beta\) with \(1 < \alpha < \beta\), such that, for any \(\tilde m\), satisfying \(\beta^{-k-1}m \leq \tilde m \leq \beta^{-k} m\), for all \(n\) large enough,
     \begin{equation*}
-        \P\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha / \beta)^{k} \tau \edmax\bigr\rceil \biggr) \geq n^{-\varepsilon}.
+        \Pr\biggl(\mathrm{Bin}(\tilde m, p) = \bigl\lceil (\alpha / \beta)^{k} \tau \edmax\bigr\rceil \biggr) \geq n^{-\varepsilon}.
     \end{equation*}
-Recall that in this case \(f_t  = \bigl\lceil (\alpha / \beta)^{k} \tau \edmax\bigr\rceil\), where \(k\) is such that \(\beta^{-k-1}m \leq m - F_{t-1} \leq \beta^{-k} m\) and \(F_t = \sum_{s = 1}^t f_s\). From Lemma~\ref{lemma:geom_alg} we have that \(\P(\mathrm{Bin}(m - F_{t-1}, p) = f_t) \geq n^{-\varepsilon}\). Our goal is to prove that there exists \(s \lesssim \vallp \sim m / \edmax\), such that \(m - F_s \lesssim s\). 
+Recall that in this case \(f_t  = \bigl\lceil (\alpha / \beta)^{k} \tau \edmax\bigr\rceil\), where \(k\) is such that \(\beta^{-k-1}m \leq m - F_{t-1} \leq \beta^{-k} m\) and \(F_t = \sum_{s = 1}^t f_s\). From Lemma~\ref{lemma:geom_alg} we have that \(\Pr(\mathrm{Bin}(m - F_{t-1}, p) = f_t) \geq n^{-\varepsilon}\). Our goal is to prove that there exists \(s \lesssim \vallp \sim m / \edmax\), such that \(m - F_s \lesssim s\). 
 
 \begin{lemma} \label{lemma:one_step_beta}
     Let \(t^{(k)} := \frac{\beta - 1}{\beta\tau} \frac{m}{\edmax} \alpha^{-k}\). 
@@ -242,7 +257,7 @@ From Lemma~\ref{lemma:d_max_concentration_whp} we have \(\dmax \lesssim \edmax\)
 Now, if we pick \(\tilde K \coloneqq v(k) \lesssim \frac m \edmax \), we have that \(\valbgr \lesssim \frac m \edmax\). Since \(\vallp \leq \valbgr\), we have that \(\tilde K \sim \vallp\) and \(m - F_{\tilde K} \lesssim \tilde K\). 
 
 \subsection*{Case \(mp \gg \log n\)}
-Here, we have that \(\edmax = mp (1 + o(1))\), therefore, picking an element that hits an average number of subsets is approximately the same as picking an element that hits close to maximum number of subsets. From the properties of the mean and the median of the binomial distribution, it follows that \(\P(\mathrm{Bin}(\tilde m, p) \geq \ceil{\tilde m p}) \geq 1/3\), for any \(\tilde m\). 
+Here, we have that \(\edmax = mp (1 + o(1))\), therefore, picking an element that hits an average number of subsets is approximately the same as picking an element that hits close to maximum number of subsets. From the properties of the mean and the median of the binomial distribution, it follows that \(\Pr(\mathrm{Bin}(\tilde m, p) \geq \ceil{\tilde m p}) \geq 1/3\), for any \(\tilde m\). 
 
 We begin with the case \(\log mp \ll \log n\). This means that \(mp\) cannot grow polynomially in \(n\), but e.g. \(mp \sim \log^2 n\) is possible. In this regime, \(\valip \sim \frac{1}{p} \log \left(\frac{mp}{\log n}\right)\). Let \(K_1 = \ceil{\frac{1}{p} \log \left(\frac{mp}{\log n}\right)}\) and \(f_1, \ldots, f_{K_1}\) be a sequence such that \(f_{s} = \ceil{mp(1-p)^s}\). Then, we have that \(m - F_{K_1} \leq m(1 - p)^{K_1} \leq \frac{1}{p}\log n\). Therefore, \((m - F_{K_1})p \sim \log n\), and we can continue with \(\tilde{f}_t\) from the previous section \(mp \sim \log n\), with \(\tilde{F}_t \coloneqq \sum_{s=1}^t \tilde{f}_t\). For this sequence \(\tilde{f}_1, \ldots, \tilde{f}_{K_2}\), we have have \(K_2 \lesssim \frac{1}{p}\), and \(m - F_{K_1} - \tilde{F}_{K_2} \lesssim \frac{1}{p} \ll \frac{1}{p} \log \left(\frac{mp}{\log n}\right)\). The required statement holds for combined sequences \(f_t\) and \(\tilde{f}_t\) and \(\tilde K \coloneqq K_1 + K_2\). \\
 \noindent

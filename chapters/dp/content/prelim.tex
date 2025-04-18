@@ -9,7 +9,7 @@ We provide the necessary definitions for both Online Learning and Differential P
     \item adversary \(\cB\) picks \(f^{\ast} \in \hyp\) and a sequence \(x_1, \ldots, x_T \in \cX\)
     \item \textbf{for} \(t = 1, \ldots, T\):
     \begin{itemize}
-        \item learner \(\alg\) outputs a current prediction \(\hat f_t \in \Set{0, 1}^{\cX}\) (see~\cref{def:proper})
+        \item learner \(\alg\) outputs a current prediction \(\hat f_t \in \Set{0, 1}^{\cX}\) (see~\Cref{def:proper})
         \item \(\alg\) receives \((x_t, f^{\ast}(x_t))\)
     \end{itemize}
     \item \textbf{let} \(\regret_{\alg}  = \sum_{t = 1}^T \bI\bc{\hat f_t(x_t) \neq f^{\ast}(x_t)}\)

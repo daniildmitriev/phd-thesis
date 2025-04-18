@@ -100,6 +100,7 @@
 
 \newcommand{\e}{\epsilon}
 \newcommand{\eps}{\epsilon}
+\newcommand{\iid}{\mathrm{i.i.d.}}
 
 %% ROBUST MIXTURE LEARNING PAPER
 
@@ -164,21 +165,21 @@
 \def\valbgr{\text{val}\textsubscript{\texttt{Alg}}\xspace}
 \def\dmax{d_{\mathtt{max}}}
 \def\edmax{\mathbb{E} \dmax}
-\def\x{{\boldsymbol x}}
+\def\x{x}
+\def\ipgap{\texttt{IPGAP}\xspace}
 
-\def\X{{\boldsymbol X}}
-\def\A{{\boldsymbol A}}
-\def\x{{\boldsymbol x}}
-\def\c{{\boldsymbol c}}
-\def\b{{\boldsymbol b}}
-\def\w{{\boldsymbol w}}
-\def\z{{\boldsymbol z}}
-\def\y{{\boldsymbol y}}
-\def\u{{\boldsymbol u}}
-\def\v{{\boldsymbol v}}
-\def\V{{\boldsymbol V}}
-\def\V{{\boldsymbol A}}
-\def\I{{\boldsymbol I}}
+\def\X{X}
+\def\A{A}
+\def\c{c}
+\def\b{b}
+% \def\w{w}
+\def\z{z}
+\def\y{y}
+\def\u{u}
+\def\v{v}
+\def\V{V}
+\def\V{A}
+\def\I{I}
 
 %% LOVASZ PAPER
 
@@ -192,3 +193,39 @@
 \DeclareMathAccent{\wt}{0}{mathx}{"72}
 
 \DeclareMathOperator{\Tr}{Tr}
+
+\newcommand{\dd}[1]{\textcolor{orange}{\textbf{DD: }#1}}
+
+
+%%% DEEP RF PAPER
+
+\usepackage{mathrsfs}
+
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\dif}{d}
+% \newcommand{\x}{\mathsf x}
+% \newcommand{\y}{\mathsf y}
+\newcommand{\di}{d}
+\newcommand{\n}{n}
+\newcommand{\p}{p}
+\newcommand{\w}{\theta}
+\newcommand{\W}{W}
+\newcommand{\f}{\varphi}
+\newcommand{\ff}{\psi}
+\newcommand{\ft}{\psi}
+\newcommand{\fast}{\varphi_\ast}
+\newcommand{\depth}{L}
+\newcommand{\gen}{\rm gen}
+\newcommand{\noise}{\varepsilon}
+\newcommand{\ki}{k}
+\newcommand{\sS}{\mathscr S}
+
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+
+\DeclareFontFamily{U}{mathx}{}
+\DeclareFontShape{U}{mathx}{m}{n}{<-> mathx10}{}
+\DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
+\DeclareMathAccent{\wh}{0}{mathx}{"70}
+\DeclareMathAccent{\wc}{0}{mathx}{"71}
+\DeclareMathAccent{\wt}{0}{mathx}{"72}

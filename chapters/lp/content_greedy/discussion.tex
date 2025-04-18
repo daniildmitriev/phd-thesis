@@ -1,0 +1,35 @@
+\section{Discussion and Open Questions}\label{sec:discussion}
+Our work characterises multiplicative integrality gaps for the random hitting set problem. In this section, we discuss the intuition behind our main results, together with open questions and conjectures.
+\subsection{Summary of our results and proof techniques.}
+We identified that the nature of integrality gaps depends on the size of the inclusion set, also viewed as the sparsity of the underlying hypergraph. 
+In particular, when the average degree of a vertex is small, i.e., when each element belongs to a small number of subsets, we proved that there exists only a constant gap between linear and integer program solutions, together with a simple algorithmic solution. 
+The situation changes when the hypergraph becomes dense, where we show an increasing integrality gap. 
+This separation stems mostly from the property of the binomial distribution, where the maximum of random variables grows identically to the expected value whenever the expected value is large, but is away from it if \(mp \ll \log n\).\\
+\noindent
+ In our analysis of \bgreedy, we track this change of behaviour using a geometric series, which means that the further we are in the execution of the algorithm, the larger the ratio between the element we pick and the average element will be. 
+ This picture coincides exactly with how the binomial distribution will behave if we decrease the average degree: for large instances, it will look approximately as a Gaussian, but when the average degree is small, Poisson approximation starts to dominate, the right tail becomes heavier, and the difference between \(\dmax\) and \(mp\) increases. 
+ Our analysis tracks the transition between Gaussian and Poisson-like behavior.
+\subsection{Multiplicative vs. additive integrality gaps}
+Our result only concerns multiplicative gaps, but the constants in our analysis can be large. This might be a consequence of the generality of the studied problem. 
+For example, if one focuses only on the case of constant \(p\), which immediately implies a very dense instance in our characterization, \cite{telelis2005absolute} proves that a simple algorithm is optimal for approximating the integer program up to a small additive error. 
+Proving similar upper bounds on the constant in more general cases is an interesting open problem. Based on numerical experiments, we formulate the following conjectures.
+
+\begin{conjecture}[Very sparse]
+For \(mp \ll 1\), \(
+    \frac{\valgr}{\vallp} \to 1. \)
+\end{conjecture}
+\begin{conjecture}[Sparse]
+For \(1 \lesssim mp \ll \log n\),
+\(
+    \frac{\valgr}{\valip} \to 1, \text{ and } \frac{\valip}{\vallp} \to C_1 \in (1, 1.5)\).
+\end{conjecture}
+\begin{conjecture}[Dense]
+    For \(mp \gg \log n\), \(
+        \frac{\valgr}{\valip} \to C_2 \in (1, 1.5)\).
+\end{conjecture}
+\subsection{Analysis of a linear program solution.}
+One motivation for studying the gaps between the integer and linear programs together with the solutions of linear programs themselves is to construct a rounding scheme which converts a fractional solution to an integer one. 
+We believe this is another interesting direction for future work. 
+In particular, numerical experiments show that entries which have large value in the fractional solution have a strong tendency to correspond to elements that are picked for the integer solution. 
+This supports the claim that a combination of the greedy and linear programming approach might be fruitful in efficiently solving $\hs$. 
+One approach for further study consists of first solving a linear program, initializing $\x$ with the largest elements in the linear solution, and greedily covering the remaining subsets. 

@@ -10,7 +10,8 @@
 ]{scrreprt}
 \usepackage{etex}
 \reserveinserts{10}
-
+\newcommand\hmmax{0}
+\newcommand\bmmax{0}
 \input{preamble/general}
 \usepackage[final]{pdfpages}
 
@@ -55,16 +56,17 @@
 \include{\dir/main}
 
 \cleardoublepage%
-\def\dir{chapters/dp}
+\def\dir{chapters/lp}
 \include{\dir/main}
 
 \cleardoublepage%
-\def\dir{chapters/robust}
+\def\dir{chapters/dp}
 \include{\dir/main}
 dd
 \cleardoublepage%
-\def\dir{chapters/lp}
+\def\dir{chapters/robust}
 \include{\dir/main}
+
 
 % \cleardoublepage%
 % \def\dir{chapters/sample-chapter}

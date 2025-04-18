@@ -4,11 +4,11 @@
 We now sketch our meta-algorithm specialized to the case of separated Gaussian components $\cN(\mu_i,I_d)$ and provide intuition for how it achieves the guarantees in~\Cref{cor:gaussian}.
 In this section, we only discuss how to obtain an error of $O(\sqrt{\log 1/\tilde{w}_i})$ for each mean when  %assume that 
 \(\e \gtrsim \min_i w_i\).
-We refer to~\cref{sec:inner_stage_appendix} for how to achieve the refined error guarantee of $O(\tilde{\e}_i\sqrt{\log 1/\tilde{\e}_i})$ when $\tilde{\e}_i$ is small.
+We refer to~\Cref{sec:inner_stage_appendix} for how to achieve the refined error guarantee of $O(\tilde{\e}_i\sqrt{\log 1/\tilde{\e}_i})$ when $\tilde{\e}_i$ is small.
 
-As discussed in \cref{sec:comparison_prev_work}, running an out-of-the-box LD-ME algorithm for the sLD problem on our input with parameter $\alpha = \wmin$ would give sub-optimal guarantees.
+As discussed in \Cref{sec:comparison_prev_work}, running an out-of-the-box LD-ME algorithm for the sLD problem on our input with parameter $\alpha = \wmin$ would give sub-optimal guarantees.
 In contrast, our two-stage~\Cref{alg:full_alg}, equipped with the appropriate $\ckLD$ and $\rme$ base learners as depicted in \Cref{fig:alg_diagram}, obtains for each component an error guarantee that is as good as if we had access to the samples \textit{only} from this component and from the outliers. 
-We now give more details about the outer stage,~\Cref{alg:first_stage_techniques}, and inner stage,~\Cref{alg:first_stage_high_level}, and describe on a high-level how they contribute to a short output list with optimal error bound in~\cref{cor:gaussian} for large outlier fractions. 
+We now give more details about the outer stage,~\Cref{alg:first_stage_techniques}, and inner stage,~\Cref{alg:first_stage_high_level}, and describe on a high-level how they contribute to a short output list with optimal error bound in~\Cref{cor:gaussian} for large outlier fractions. 
 
 
 \begin{algorithm}[t]
@@ -78,7 +78,7 @@ Note that
 estimating $\alpha$ from the input samples is impossible by nature. Indeed, we cannot distinguish between potential outlier clusters of arbitrary proportion $\leq 1-\alpha$ and the inlier component.
 Underestimating the size of a large component would inevitably lead to a suboptimal error guarantee.
 We now show how  to overcome this challenge and achieve an error guarantee
-\(O(\sqrt{\log 1 / \alpha})\) for a list size \(1 + O((1 - \alpha) / \amin)\) for the $\cLD$ setting. Here we only outline our algorithm and refer to~\cref{sec:inner_stage_appendix} for the details.
+\(O(\sqrt{\log 1 / \alpha})\) for a list size \(1 + O((1 - \alpha) / \amin)\) for the $\cLD$ setting. Here we only outline our algorithm and refer to~\Cref{sec:inner_stage_appendix} for the details.
 
 \Cref{alg:first_stage_high_level} first produces a large list of estimates corresponding to many potential values of $\alpha$ and then prunes it while maintaining a good estimate in the list.
 In particular, for each $\alphahat \in A \coloneqq \set{\amin,2\amin, \ldots,\lfloor 1/(3\amin) \rfloor \amin}$, we run \(\ckLDA\) with parameter $\alphahat$ to obtain a list of means.

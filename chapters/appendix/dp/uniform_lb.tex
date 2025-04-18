@@ -13,7 +13,7 @@
 % \begin{proof}[of~\Cref{prop:firing-lb}]
 % WLOG, we assume \(\delta > 1/T^2\).
 % For the elements of the input sequence, we denote \(0 \coloneqq (3, 0)\) and \(1 \coloneqq (x^\ast, 1)\).
-% Similar to the proof of~\cref{thm:main-finite}, we proceed by creating sequences \(\tau_i\), with \(\tau_0 = (0, \ldots, 0)\) and \(\tau_i\) containing exactly \(i\) copies of \(1\).
+% Similar to the proof of~\Cref{thm:main-finite}, we proceed by creating sequences \(\tau_i\), with \(\tau_0 = (0, \ldots, 0)\) and \(\tau_i\) containing exactly \(i\) copies of \(1\).
 
 % Assume that there is a scalar sequence \((r_i)\) and a sequence of subset of events \((G_i)\), such that
 % \begin{enumerate}
@@ -93,9 +93,9 @@
 % We can therefore continue this process at least \(\Omega(\log T)\) times, which implies a large number of mistakes as discussed before.
 % \end{proof}
 
-% Proof of~\Cref{prop:firing-lb} resembles the proof of~\cref{thm:main-finite} with several important differences.
+% Proof of~\Cref{prop:firing-lb} resembles the proof of~\Cref{thm:main-finite} with several important differences.
 % The main difficulty comes from the fact that by just looking at the output of the algorithm, it is impossible to say with certainty, whether it `fired' or not.
-% And we need to do this, in order to bound the marginal probability of outputting \(f^\ast\) (which is \(1/2\) if \(\alg\) did not fire and \(1\) if it fired), see~\cref{eq:marginal}.
+% And we need to do this, in order to bound the marginal probability of outputting \(f^\ast\) (which is \(1/2\) if \(\alg\) did not fire and \(1\) if it fired), see~\Cref{eq:marginal}.
 
 % To overcome this issue, instead of splitting the segment into two parts and reiterating in either left or right,
 % we split into three parts and reiterate in the first or the third.

@@ -5,7 +5,7 @@ We now present our main results for list-decodable and robust mixture learning d
 In~\Cref{sec:ub_lb_sep}, we provide algorithmic upper bounds and information-theoretic lower bounds. For the special case of spherical Gaussian mixtures, we show in~\Cref{sec:comparison_prev_work} that we achieve optimality. 
 Our results are constructive as we provide a meta-algorithm for which these bounds hold. 
 
-As depicted in~\cref{fig:alg_diagram}, our meta-algorithm (\Cref{alg:full_alg}) is a two-stage process. The outer stage (\Cref{alg:second_stage_pruning}) reduces the problem to mean estimation by leveraging the mixture structure and splitting the data into a small collection $\cT$ of sets $T$.
+As depicted in~\Cref{fig:alg_diagram}, our meta-algorithm (\Cref{alg:full_alg}) is a two-stage process. The outer stage (\Cref{alg:second_stage_pruning}) reduces the problem to mean estimation by leveraging the mixture structure and splitting the data into a small collection $\cT$ of sets $T$.
 Each set $T \in \cT$ should (i) contain at most one inlier cluster (and few samples from other clusters) and (ii) the total number of outliers across all sets should be at most \(O(\e n)\).
 We then run the inner stage (\Cref{alg:first_stage_high_level}) on sets \(T\), which outputs a mean estimate for the inlier cluster in $T$. First, a \(\cLD\) algorithm identifies the weight of the inlier cluster and returns the result of a \(\ckLD\) base learner with this weight. Then, if the weight is large, we improve the error via an \(\rme\) base learner. 
 A careful filtering procedure in both stages achieves the significantly reduced list size and better error guarantees. 
@@ -44,7 +44,7 @@ We require the base learners to satisfy the following set of assumptions.
     \draw[arrow] (algo1.east) to [out=0,in=180]([yshift=-0.35cm]inner.west);
     \draw[arrow] (algo2.east) to [out=0,in=180]([yshift=-0.75cm]inner.west);
 \end{tikzpicture}
-\caption{Schematic of the meta-algorithm (\Cref{alg:full_alg}) underlying \cref{thm:informal}}
+\caption{Schematic of the meta-algorithm (\Cref{alg:full_alg}) underlying \Cref{thm:informal}}
 \label{fig:alg_diagram}
 \end{figure}
 
@@ -79,7 +79,7 @@ Key quantities that appear in our error bounds are the relative proportion of in
 \tilde w_i = \frac{w_i}{w_i + \varepsilon + \wmin^2} \quad \text{and} \quad \tilde \varepsilon_i = 1 - \tilde w_i.
 \end{equation}
 These quantities reflect that each set \(T\) in the inner stage contains at most one inlier cluster and a small (\(\lesssim \wmin^2\)) fraction of points from other inlier clusters.
-We now present a simplified version of our main result in~\Cref{thm:informal}~(see~\cref{thm:main-technical} for the detailed result) 
+We now present a simplified version of our main result in~\Cref{thm:informal}~(see~\Cref{thm:main-technical} for the detailed result) 
 that allows for a more streamlined presentation of the results using 
 the following `well-behavedness' of \(f\) and \(g\).
 \begin{assumption}
